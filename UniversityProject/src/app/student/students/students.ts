@@ -1,0 +1,214 @@
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
+interface Student { id: string; name: string; email: string; program: string; status: 'Active' | 'Inactive' | 'Graduated'; gpa: number; }
+
+@Component({
+  selector: 'app-students',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  template: `
+    <div class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Student Directory</h1>
+          <p class="text-slate-500 mt-1">Manage enrollments, academic profiles, and statuses.</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 font-semibold flex items-center gap-2 group transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 group-hover:text-slate-600"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Export
+          </button>
+          <button (click)="openModal()" class="px-4 py-2 bg-gradient-to-r from-mit-red to-primary-600 text-white rounded-xl shadow-lg shadow-mit-red/30 hover:shadow-mit-red/50 hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+            Enroll Student
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-panel p-4 flex flex-col md:flex-row gap-4 justify-between items-center animate-fade-in delay-100">
+        <div class="relative w-full md:w-96">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search by name, ID, or email..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:border-mit-red focus:ring-2 focus:ring-mit-red/20 outline-none text-sm text-slate-900 dark:text-white transition-all">
+        </div>
+      </div>
+
+      <div class="glass-panel overflow-hidden animate-fade-in delay-200">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Student</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Program</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">GPA</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-700/50">
+              <tr *ngFor="let s of filteredStudents()" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
+                <td class="px-6 py-4 flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm">
+                    {{ s.name.charAt(0) }}
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-900 dark:text-white leading-none">{{ s.name }}</p>
+                    <p class="text-xs text-slate-500 mt-1">{{ s.id }} &bull; {{ s.email }}</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">{{ s.program }}</td>
+                <td class="px-6 py-4">
+                  <span [ngClass]="{
+                    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800/50': s.status === 'Active',
+                    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700': s.status === 'Inactive',
+                    'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800/50': s.status === 'Graduated'
+                  }" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold border">
+                    {{ s.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">{{ s.gpa | number:'1.2-2' }}</td>
+                <td class="px-6 py-4 text-right">
+                  <button (click)="deleteStudent(s.id)" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Student">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div *ngIf="isModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeModal()"></div>
+      <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Enroll New Student</h3>
+          <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+          </button>
+        </div>
+        
+        <form [formGroup]="studentForm" (ngSubmit)="saveStudent()" class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
+            <input type="text" formControlName="name" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+            <input type="email" formControlName="email" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Program</label>
+            <select formControlName="program" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+              <option value="Computer Science">Computer Science</option>
+              <option value="Business Admin">Business Admin</option>
+              <option value="Data Science">Data Science</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">University</label>
+            <select formControlName="universityId" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+              <option *ngFor="let uni of universities()" [value]="uni.id">{{ uni.name }}</option>
+            </select>
+          </div>
+          
+          <div class="pt-4 flex gap-3 justify-end border-t border-slate-200 dark:border-slate-700 mt-6">
+            <button type="button" (click)="closeModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+            <button type="submit" [disabled]="studentForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">Enroll Student</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `
+})
+export class StudentsComponent implements OnInit {
+  private http = inject(HttpClient);
+  private fb = inject(FormBuilder);
+
+  students = signal<Student[]>([]);
+  universities = signal<any[]>([]);
+  searchQuery = signal('');
+  isModalOpen = signal(false);
+
+  studentForm = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    program: ['Computer Science', Validators.required],
+    universityId: ['', Validators.required]
+  });
+
+  filteredStudents = computed(() => {
+    const q = this.searchQuery().toLowerCase();
+    return this.students().filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q));
+  });
+
+  ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.http.get<Student[]>('http://localhost:3000/students').subscribe(data => {
+      this.students.set(data);
+    });
+    this.http.get<any[]>('http://localhost:3000/universities').subscribe(data => {
+      this.universities.set(data);
+    });
+  }
+
+  openModal() {
+    const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
+    this.studentForm.reset({ program: 'Computer Science', universityId: firstUni });
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
+
+  saveStudent() {
+    if (this.studentForm.valid) {
+      const formValue = this.studentForm.value;
+      const studentId = 'STU-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+      
+      const newStudent: Student = {
+        id: studentId,
+        name: formValue.name!,
+        email: formValue.email!,
+        program: formValue.program!,
+        status: 'Active',
+        gpa: 0.0
+      };
+
+      const newUser = {
+        id: studentId,
+        name: formValue.name,
+        email: formValue.email,
+        password: 'password', // Default password
+        role: 'Student',
+        universityId: formValue.universityId
+      };
+
+      // Atomic-like operation (Sequential for mock DB)
+      this.http.post<Student>('http://localhost:3000/students', newStudent).subscribe(res => {
+        this.http.post('http://localhost:3000/users', newUser).subscribe(() => {
+          this.students.update(s => [...s, res]);
+          this.closeModal();
+        });
+      });
+    }
+  }
+
+  deleteStudent(id: string) {
+    if (confirm('Are you sure you want to remove this student? This will also revoke their login access.')) {
+      this.http.delete(`http://localhost:3000/students/${id}`).subscribe(() => {
+        this.http.delete(`http://localhost:3000/users/${id}`).subscribe(() => {
+          this.students.update(s => s.filter(student => student.id !== id));
+        });
+      });
+    }
+  }
+}

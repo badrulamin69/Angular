@@ -1,0 +1,137 @@
+<div class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Global Overview</h1>
+      <p class="text-slate-500 mt-1">Monitor all universities, active users, and system health.</p>
+    </div>
+    
+    <div class="flex gap-3">
+      <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export Report
+      </button>
+      <button class="px-4 py-2 bg-mit-red text-white rounded-lg shadow-lg shadow-mit-red/30 hover:bg-primary-600 transition-colors font-bold flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Onboard University
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Card 1 -->
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-mit-red"><path d="M2 22h20"/><path d="M4 22V10l8-8 8 8v12"/><path d="M9 22v-8h6v8"/><path d="M8 12h8"/><path d="M8 16h8"/></svg>
+      </div>
+      <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Universities</p>
+      <div class="flex items-end gap-3">
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white">{{ stats()?.totalUniversities || 0 }}</h3>
+        <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          +12%
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group delay-100">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Students</p>
+      <div class="flex items-end gap-3">
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white">{{ (stats()?.totalStudents || 0) | number:'1.0-0' }}</h3>
+        <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          +5.4%
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group delay-200">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Revenue</p>
+      <div class="flex items-end gap-3">
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white">${{ ((stats()?.totalRevenue || 0) / 1000000) | number:'1.1-2' }}M</h3>
+        <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          +18%
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group delay-300">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+      </div>
+      <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Users</p>
+      <div class="flex items-end gap-3">
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white">{{ (stats()?.activeUsers || 0) | number:'1.0-0' }}</h3>
+        <span class="text-slate-400 text-sm font-medium mb-1 flex items-center">
+          Right Now
+          <span class="w-2 h-2 rounded-full bg-emerald-500 ml-2 animate-pulse"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts & Tables Area -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+    <div class="lg:col-span-2 glass-panel p-6 animate-fade-in delay-200">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold text-lg text-slate-900 dark:text-white">Platform Growth</h3>
+        <select class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm font-medium px-3 py-1.5 focus:ring-2 focus:ring-mit-red">
+          <option>Last 12 Months</option>
+          <option>Last 30 Days</option>
+          <option>This Year</option>
+        </select>
+      </div>
+      <!-- Placeholder for Chart.js -->
+      <div class="h-72 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+        <span class="text-slate-400">Growth Chart Simulation (Chart.js)</span>
+      </div>
+    </div>
+
+    <div class="glass-panel p-6 animate-fade-in delay-300">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold text-lg text-slate-900 dark:text-white">System Logs</h3>
+        <button class="text-sm font-bold text-mit-red hover:text-primary-600 transition-colors">View All</button>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <div class="w-2 h-2 mt-1.5 rounded-full bg-emerald-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">New university boarded: Stanford</p>
+            <p class="text-xs text-slate-500">2 minutes ago</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-2 h-2 mt-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">Database backup completed</p>
+            <p class="text-xs text-slate-500">1 hour ago</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-2 h-2 mt-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">High traffic warning: AWS Node 3</p>
+            <p class="text-xs text-slate-500">3 hours ago</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-2 h-2 mt-1.5 rounded-full bg-mit-red flex-shrink-0"></div>
+          <div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">Payment gateway error</p>
+            <p class="text-xs text-slate-500">5 hours ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

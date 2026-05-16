@@ -1,0 +1,79 @@
+<section class="py-24 relative overflow-hidden bg-brand-light dark:bg-brand-dark">
+  <div class="container mx-auto px-4 md:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">Academic Ecosystem Architecture</h2>
+      <p class="text-lg text-slate-600 dark:text-slate-400">An MIT-inspired systems visualization of our perfectly mapped, infinitely scalable university data model.</p>
+    </div>
+
+    <!-- Hierarchy Visualization -->
+    <div class="relative max-w-5xl mx-auto p-8 rounded-3xl glass-card border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl">
+      <!-- Background Grid -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] rounded-3xl z-0"></div>
+      
+      <div class="relative z-10 flex flex-col items-center space-y-8">
+        
+        <!-- Level 1: University -->
+        <div class="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-200 text-white dark:text-slate-900 shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+          <div class="absolute inset-0 bg-mit-red/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+            <span class="text-xl font-bold tracking-wide">University Enterprise</span>
+          </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="h-8 w-px bg-gradient-to-b from-slate-400 to-transparent relative">
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-mit-red animate-ping"></div>
+        </div>
+
+        <!-- Level 2: Faculties -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          <div class="px-6 py-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg text-center hover:border-mit-red/50 dark:hover:border-primary-500/50 transition-colors cursor-pointer group">
+            <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-mit-red dark:group-hover:text-primary-400 transition-colors">Faculty of Science</h3>
+          </div>
+          <div class="px-6 py-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg text-center hover:border-mit-red/50 dark:hover:border-primary-500/50 transition-colors cursor-pointer group">
+            <div class="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-mit-red dark:group-hover:text-primary-400 transition-colors">Faculty of Engineering</h3>
+            
+            <!-- Sub-tree for Engineering -->
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-[400px] mt-4 flex flex-col items-center">
+              <!-- Connector -->
+              <div class="h-6 w-px bg-gradient-to-b from-slate-400 to-transparent"></div>
+              
+              <!-- Department -->
+              <div class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-xl mt-2 relative z-20">
+                <div class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Departments</div>
+                <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+                  <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 text-xs font-semibold whitespace-nowrap">Computer Science</span>
+                  <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 text-xs font-semibold whitespace-nowrap">Electrical Eng.</span>
+                </div>
+                
+                <!-- Inner structure -->
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3 text-left">
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+                    Programs (BSc, MSc, PhD)
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    Semesters & Courses
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Students & Faculty
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="px-6 py-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg text-center hover:border-mit-red/50 dark:hover:border-primary-500/50 transition-colors cursor-pointer group">
+            <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-mit-red dark:group-hover:text-primary-400 transition-colors">Faculty of Business</h3>
+          </div>
+        </div>
+        
+        <!-- Spacing for the dropdown above -->
+        <div class="h-64 md:h-72"></div>
+      </div>
+    </div>
+  </div>
+</section>

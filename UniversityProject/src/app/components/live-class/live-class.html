@@ -1,0 +1,101 @@
+<section class="py-24 relative bg-slate-900 text-white overflow-hidden">
+  <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
+
+  <div class="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-8">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Next-Generation <br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-mit-red to-orange-400">Live Virtual Classrooms</span>
+        </h2>
+        <p class="text-lg text-slate-300">
+          Integrated Zoom & Google Meet APIs combined with our proprietary AI Learning Assistant. Real-time smart attendance, automated transcriptions, and instant semantic search through recorded lectures.
+        </p>
+        
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-mit-red/20 flex items-center justify-center text-mit-red shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white mb-1">AI Assistant</h4>
+              <p class="text-sm text-slate-400">Real-time Q&A during class based on course material.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white mb-1">Smart Attendance</h4>
+              <p class="text-sm text-slate-400">Automated tracking via WebRTC engagement metrics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Class UI Mockup -->
+      <div class="relative">
+        <div class="rounded-2xl border border-slate-700 bg-slate-800 shadow-2xl overflow-hidden group">
+          <!-- Video Area -->
+          <div class="relative aspect-video bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop" alt="Virtual Classroom" class="w-full h-full object-cover opacity-80" />
+            
+            <div class="absolute bottom-4 right-4 flex gap-2">
+              <div class="w-24 h-16 rounded-lg overflow-hidden border border-slate-600 shadow-lg">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Student" class="w-full h-full object-cover" />
+              </div>
+              <div class="w-24 h-16 rounded-lg overflow-hidden border border-slate-600 shadow-lg">
+                <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=200&auto=format&fit=crop" alt="Student" class="w-full h-full object-cover" />
+              </div>
+            </div>
+
+            <div class="absolute top-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+              <div class="w-2 h-2 rounded-full bg-mit-red animate-pulse"></div>
+              <span class="text-xs font-bold text-white">REC</span>
+              <span class="text-xs text-slate-300 ml-2">45:12</span>
+            </div>
+          </div>
+          
+          <!-- Controls -->
+          <div class="p-4 bg-slate-800 border-t border-slate-700 flex justify-between items-center">
+            <div class="flex gap-3">
+              <button class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white hover:bg-slate-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+              </button>
+              <button class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white hover:bg-slate-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              </button>
+            </div>
+            
+            <button class="px-4 py-2 rounded-lg bg-mit-red text-white text-sm font-bold shadow-md hover:bg-red-600 transition-colors">
+              End Class
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating AI Widget -->
+        <div class="absolute -right-6 top-1/2 -translate-y-1/2 w-64 glass-card border border-slate-600/50 rounded-xl p-4 shadow-2xl animate-[float_4s_ease-in-out_infinite]">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-md bg-gradient-to-r from-mit-red to-orange-400 flex items-center justify-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/></svg>
+              </div>
+              <span class="text-sm font-bold text-white">AI Copilot</span>
+            </div>
+          </div>
+          <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+            <p class="text-xs text-slate-300">
+              <span class="text-mit-red font-bold">Concept alert:</span> The professor just mentioned "Neural Networks". Would you like me to save a study note?
+            </p>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button class="flex-1 bg-mit-red/20 text-mit-red text-xs font-bold py-1.5 rounded hover:bg-mit-red/30 transition-colors">Save Note</button>
+            <button class="flex-1 bg-slate-700 text-slate-300 text-xs font-bold py-1.5 rounded hover:bg-slate-600 transition-colors">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

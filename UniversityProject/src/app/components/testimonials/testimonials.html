@@ -1,0 +1,50 @@
+<section class="py-24 bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
+  <div class="container mx-auto px-4 md:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">Trusted by Top Institutions</h2>
+      <p class="text-lg text-slate-600 dark:text-slate-400">Join forward-thinking universities worldwide who have transformed their digital infrastructure.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <div *ngFor="let t of testimonials" class="glass-card rounded-2xl p-8 relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-slate-200 dark:text-slate-800 absolute top-6 right-8"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        
+        <p class="text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed relative z-10 mb-8">
+          "{{t.quote}}"
+        </p>
+        
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-mit-red to-primary-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+            {{t.name.charAt(4)}}
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white">{{t.name}}</h4>
+            <p class="text-sm text-slate-500">{{t.role}}, <span class="text-mit-red dark:text-primary-400 font-semibold">{{t.org}}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Metrics -->
+    <div class="mt-20 border-t border-slate-200 dark:border-slate-800 pt-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <h5 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">50+</h5>
+          <p class="text-slate-500 font-medium">Universities</p>
+        </div>
+        <div>
+          <h5 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">1.2M</h5>
+          <p class="text-slate-500 font-medium">Active Students</p>
+        </div>
+        <div>
+          <h5 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">99.9%</h5>
+          <p class="text-slate-500 font-medium">Uptime SLA</p>
+        </div>
+        <div>
+          <h5 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">24/7</h5>
+          <p class="text-slate-500 font-medium">Enterprise Support</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

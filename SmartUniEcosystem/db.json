@@ -1,0 +1,1010 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Super Admin",
+      "email": "super@smartuni.edu",
+      "password": "password",
+      "role": "Super Admin"
+    },
+    {
+      "id": "2",
+      "name": "University Admin",
+      "email": "admin@uni.com",
+      "password": "password",
+      "role": "University Admin"
+    },
+    {
+      "id": "3",
+      "name": "Emon Sarker",
+      "email": "emon@uni.com",
+      "password": "password",
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "name": "Emran Hossain",
+      "email": "eh@gmail.com",
+      "password": "password",
+      "role": "Faculty Member",
+      "universityId": "U1",
+      "id": "_bUfEoxkwxo"
+    },
+    {
+      "id": "dbZguN2EI5k",
+      "name": "Abul Hasan",
+      "email": "abulhasan@gmail.com",
+      "password": "password",
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "id": "6kPK6SQR8wI",
+      "name": "Tanvir",
+      "email": "tanvir@gmail.com",
+      "password": "password",
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "id": "sOqTyhZaJSE",
+      "name": "Emon",
+      "email": "emon@gmail.com",
+      "password": "password",
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "id": "EMP-9999",
+      "name": "Sarah Connor",
+      "email": "sarah@smartuni.edu",
+      "password": "password",
+      "role": "Staff",
+      "universityId": "U1"
+    }
+  ],
+  "staffProfiles": [
+    {
+      "id": "SP1",
+      "userId": "_bUfEoxkwxo",
+      "designation": "Senior Lecturer",
+      "department": "Computer Science",
+      "joiningDate": "2023-01-15",
+      "salary": 5000,
+      "phone": "+1-555-0101",
+      "address": "123 Academic Way, NY"
+    },
+    {
+      "id": "SP2",
+      "userId": "EMP-9999",
+      "designation": "Admin Coordinator",
+      "department": "Registrar Office",
+      "joiningDate": "2024-03-10",
+      "salary": 3500,
+      "phone": "+1-555-0202",
+      "address": "456 Office Plaza, NY"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "A1",
+      "userId": "_bUfEoxkwxo",
+      "date": "2026-05-15",
+      "status": "Present",
+      "checkIn": "08:55 AM",
+      "checkOut": "05:05 PM"
+    },
+    {
+      "id": "A2",
+      "userId": "EMP-9999",
+      "date": "2026-05-15",
+      "status": "Present",
+      "checkIn": "09:00 AM",
+      "checkOut": "06:00 PM"
+    }
+  ],
+  "leaveRequests": [
+    {
+      "id": "L1",
+      "userId": "_bUfEoxkwxo",
+      "type": "Sick Leave",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-02",
+      "reason": "Medical checkup",
+      "status": "Pending"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "assignedTo": "EMP-9999",
+      "title": "Process Fall Enrollments",
+      "description": "Review and approve pending student registrations for the new semester.",
+      "priority": "High",
+      "status": "In Progress",
+      "dueDate": "2026-05-20"
+    },
+    {
+      "id": "T2",
+      "assignedTo": "_bUfEoxkwxo",
+      "title": "Prepare CS101 Exam Paper",
+      "description": "Submit final draft of the midterm exam for review.",
+      "priority": "Medium",
+      "status": "Pending",
+      "dueDate": "2026-05-25"
+    }
+  ],
+  "universities": [
+    {
+      "id": "U1",
+      "name": "Dhaka University",
+      "location": "Dhaka, Bangladesh",
+      "status": "Active",
+      "totalStudents": 40000
+    }
+  ],
+  "faculties": [
+    {
+      "id": "F1",
+      "name": "Faculty of Humanities",
+      "bnName": "মানবিক বা কলা অনুষদ",
+      "universityId": "U1"
+    },
+    {
+      "id": "F2",
+      "name": "Faculty of Law",
+      "bnName": "আইন অনুষদ",
+      "universityId": "U1"
+    },
+    {
+      "id": "F3",
+      "name": "Faculty of Science",
+      "bnName": "বিজ্ঞান অনুষদ",
+      "universityId": "U1"
+    },
+    {
+      "id": "F4",
+      "name": "Faculty of Business Studies",
+      "bnName": "ব্যবসায় শিক্ষা অনুষদ",
+      "universityId": "U1"
+    },
+    {
+      "id": "F5",
+      "name": "Faculty of Engineering And Technology",
+      "bnName": "প্রকৌশল ও প্রযুক্তি অনুষদ",
+      "universityId": "U1"
+    }
+  ],
+  "departments": [
+    {
+      "id": "D1",
+      "facultyId": "F1",
+      "name": "Department of English",
+      "bnName": "ইংরেজি বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D2",
+      "facultyId": "F1",
+      "name": "Department of Bengali",
+      "bnName": "বাংলা বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D3",
+      "facultyId": "F1",
+      "name": "Department of History",
+      "bnName": "ইতিহাস বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D4",
+      "facultyId": "F2",
+      "name": "Department of Law",
+      "bnName": "আইন বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D5",
+      "facultyId": "F2",
+      "name": "Department of Jurisprudence",
+      "bnName": "আইনশাস্ত্র বা বিচারব্যবস্থা বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D6",
+      "facultyId": "F2",
+      "name": "Department of International Law",
+      "bnName": "আন্তর্জাতিক আইন বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D7",
+      "facultyId": "F2",
+      "name": "Department of Human Rights",
+      "bnName": "মানবাধিকার বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D8",
+      "facultyId": "F3",
+      "name": "Department of Physics",
+      "bnName": "পদার্থবিজ্ঞান বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D9",
+      "facultyId": "F3",
+      "name": "Department of Chemistry",
+      "bnName": "রসায়ন বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D10",
+      "facultyId": "F3",
+      "name": "Department of Mathematics",
+      "bnName": "গণিত বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D11",
+      "facultyId": "F3",
+      "name": "Department of Statistics",
+      "bnName": "পরিসংখ্যান বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D12",
+      "facultyId": "F3",
+      "name": "Department of Botany",
+      "bnName": "উদ্ভিদবিজ্ঞান বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D13",
+      "facultyId": "F4",
+      "name": "Department of Accounting",
+      "bnName": "হিসাববিজ্ঞান বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D14",
+      "facultyId": "F4",
+      "name": "Department of Management",
+      "bnName": "ব্যবস্থাপনা বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D15",
+      "facultyId": "F4",
+      "name": "Department of Finance and Banking",
+      "bnName": "অর্থায়ন ও ব্যাংকিং বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D16",
+      "facultyId": "F4",
+      "name": "Department of Marketing",
+      "bnName": "বিপণন বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D17",
+      "facultyId": "F5",
+      "name": "Department of Computer Science and Engineering (CSE)",
+      "bnName": "কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D18",
+      "facultyId": "F5",
+      "name": "Department of Electrical and Electronic Engineering (EEE)",
+      "bnName": "তড়িৎ ও ইলেক্ট্রনিক প্রকৌশল বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "D19",
+      "facultyId": "F5",
+      "name": "Department of Civil Engineering (CE)",
+      "bnName": "পুরকৌশল বা সিভিল ইঞ্জিনিয়ারিং বিভাগ",
+      "universityId": "U1"
+    },
+    {
+      "id": "9d_REqlluss",
+      "name": "fwas",
+      "bnName": "eqh",
+      "facultyId": "F2",
+      "universityId": "U1"
+    }
+  ],
+  "courses": [
+    {
+      "id": "C1",
+      "code": "CS101",
+      "title": "Introduction to Algorithms",
+      "credits": 3,
+      "department": "Department of Computer Science and Engineering (CSE)",
+      "status": "Active",
+      "enrolled": 120,
+      "capacity": 150,
+      "instructorId": "_bUfEoxkwxo"
+    },
+    {
+      "id": "C2",
+      "code": "CS205",
+      "title": "Data Structures",
+      "credits": 3,
+      "department": "Department of Computer Science and Engineering (CSE)",
+      "status": "Active",
+      "enrolled": 85,
+      "capacity": 85,
+      "instructorId": "_bUfEoxkwxo"
+    },
+    {
+      "code": "222",
+      "title": "Advanced Web Tech",
+      "credits": 4,
+      "department": "Department of Computer Science and Engineering (CSE)",
+      "status": "Active",
+      "enrolled": 45,
+      "capacity": 50,
+      "id": "DWh0zDi3DsI",
+      "instructorId": "_bUfEoxkwxo"
+    },
+    {
+      "code": "002",
+      "title": "Programming with Python",
+      "credits": 4,
+      "department": "Department of Computer Science and Engineering (CSE)",
+      "status": "Draft",
+      "enrolled": 0,
+      "capacity": 100,
+      "id": "bubXu5de3xk"
+    },
+    {
+      "code": "100",
+      "title": "Java Programming",
+      "credits": 4,
+      "department": "Department of Computer Science and Engineering (CSE)",
+      "status": "Draft",
+      "enrolled": 0,
+      "capacity": 100,
+      "id": "m7L5ORuIGGo"
+    },
+    {
+      "code": "77",
+      "title": "Discrete Math",
+      "credits": 4,
+      "department": "Mathematics",
+      "status": "Draft",
+      "enrolled": 0,
+      "capacity": 100,
+      "id": "ATEuVdb3EFE"
+    }
+  ],
+  "students": [
+    {
+      "id": "3",
+      "name": "Emon Sarker",
+      "email": "student@smartuni.edu",
+      "program": "Department of Computer Science and Engineering (CSE)",
+      "status": "Active",
+      "gpa": 3.8
+    },
+    {
+      "id": "dbZguN2EI5k",
+      "name": "Abul Hasan",
+      "email": "abulhasan@gmail.com",
+      "program": "Business Admin",
+      "status": "Active",
+      "gpa": 0
+    },
+    {
+      "id": "6kPK6SQR8wI",
+      "name": "Tanvir",
+      "email": "tanvir@gmail.com",
+      "program": "Data Science",
+      "status": "Active",
+      "gpa": 0
+    },
+    {
+      "id": "sOqTyhZaJSE",
+      "name": "Emon",
+      "email": "emon@gmail.com",
+      "program": "Data Science",
+      "status": "Active",
+      "gpa": 0
+    }
+  ],
+  "studentApplications": [
+    {
+      "id": "APP-9982",
+      "applicantName": "Emma Thompson",
+      "email": "emma@gmail.com",
+      "program": "Computer Science",
+      "priorGPA": 3.95,
+      "status": "Accepted",
+      "submissionDate": "2026-05-10"
+    },
+    {
+      "id": "APP-9983",
+      "applicantName": "James Wilson",
+      "email": "james@gmail.com",
+      "program": "Business Admin",
+      "priorGPA": 3.4,
+      "status": "Accepted",
+      "submissionDate": "2026-05-12"
+    },
+    {
+      "id": "APP-9984",
+      "applicantName": "Sophia Martinez",
+      "email": "sophia@gmail.com",
+      "program": "Data Science",
+      "priorGPA": 3.88,
+      "status": "Accepted",
+      "submissionDate": "2026-05-14"
+    }
+  ],
+  "pricingPlans": [
+    {
+      "id": "starter",
+      "name": "Starter Campus",
+      "description": "Perfect for small colleges and single-faculty institutions.",
+      "monthly": 599,
+      "annual": 499,
+      "features": [
+        "Up to 5,000 Students",
+        "Basic ERP & LMS",
+        "Standard Reporting"
+      ],
+      "buttonText": "Start Free Trial",
+      "popular": false
+    },
+    {
+      "id": "pro",
+      "name": "Professional University",
+      "description": "Complete ecosystem for mid-to-large universities.",
+      "monthly": 1799,
+      "annual": 1499,
+      "features": [
+        "Up to 25,000 Students",
+        "Advanced AI Analytics",
+        "Live Class Integrations",
+        "Financial Management Suite"
+      ],
+      "buttonText": "Get Started",
+      "popular": true
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise Multi-Campus",
+      "description": "Infinite scalability for massive university networks.",
+      "monthly": "Custom",
+      "annual": "Custom",
+      "features": [
+        "Unlimited Students",
+        "Multi-Campus Control",
+        "Dedicated Success Manager",
+        "Custom SLA & Deployment"
+      ],
+      "buttonText": "Contact Sales",
+      "popular": false
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "1",
+      "studentId": "3",
+      "courseId": "CS-101",
+      "semester": "Fall 2026",
+      "progress": 75,
+      "attendance": 96,
+      "completedAssignments": 4,
+      "totalAssignments": 5
+    },
+    {
+      "id": "2",
+      "studentId": "3",
+      "courseId": "MTH-201",
+      "semester": "Fall 2026",
+      "progress": 45,
+      "attendance": 88,
+      "completedAssignments": 2,
+      "totalAssignments": 5
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS101",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "UGjD2YOLbds"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS205",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "xfEW4aG2Rwg"
+    },
+    {
+      "studentId": "3",
+      "courseId": "222",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "6aXFcLZ-bRY"
+    },
+    {
+      "studentId": "3",
+      "courseId": "002",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "dM6YxNjjrN4"
+    },
+    {
+      "studentId": "3",
+      "courseId": "100",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "JbehpcekLV4"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS101",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "M-SMl-i2lKA"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS205",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "W83jxISKHM4"
+    },
+    {
+      "studentId": "3",
+      "courseId": "222",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "9YdelRChX_Y"
+    },
+    {
+      "studentId": "3",
+      "courseId": "002",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "yo2zKNUxO4A"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS101",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "NjruV0KYfpE"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS205",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "fcjra9hZpI8"
+    },
+    {
+      "studentId": "3",
+      "courseId": "222",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "o1eYMmwn8as"
+    },
+    {
+      "studentId": "3",
+      "courseId": "002",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "iW60Qv4ZO9A"
+    }
+  ],
+  "studentGrades": [
+    {
+      "id": "1",
+      "studentId": "3",
+      "courseId": "CS-099",
+      "grade": "A",
+      "gp": 4,
+      "credits": 3
+    },
+    {
+      "id": "2",
+      "studentId": "3",
+      "courseId": "MTH-101",
+      "grade": "B+",
+      "gp": 3.3,
+      "credits": 4
+    }
+  ],
+  "courseContent": [
+    {
+      "id": "MOD-01",
+      "courseId": "CS-101",
+      "title": "Module 1: Big O Notation",
+      "type": "Video",
+      "duration": "45m"
+    },
+    {
+      "id": "MOD-02",
+      "courseId": "CS-101",
+      "title": "Module 2: Sorting Algorithms",
+      "type": "Quiz",
+      "duration": "20m"
+    }
+  ],
+  "userProgress": [
+    {
+      "userId": "3",
+      "lastAccessedCourseId": "CS-101",
+      "lastAccessedModuleId": "MOD-02",
+      "totalHoursLearned": 42.5,
+      "certificatesEarned": 3,
+      "id": "vnl2dLrp3Pw"
+    }
+  ],
+  "programs": [
+    {
+      "id": "P-01",
+      "name": "B.Sc. in Computer Science",
+      "departmentId": "D17",
+      "credits": 140,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-02",
+      "name": "B.BA in Business Admin",
+      "departmentId": "D13",
+      "credits": 132,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-03",
+      "name": "B.A. in English Literature",
+      "departmentId": "D1",
+      "credits": 120,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-04",
+      "name": "LL.B. (Hons)",
+      "departmentId": "D4",
+      "credits": 144,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-05",
+      "name": "B.Sc. in Physics",
+      "departmentId": "D8",
+      "credits": 136,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-06",
+      "name": "B.Sc. in Electrical Engineering",
+      "departmentId": "D18",
+      "credits": 142,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-07",
+      "name": "MBA (Specialized)",
+      "departmentId": "D14",
+      "credits": 60,
+      "duration": "2 Years"
+    },
+    {
+      "id": "P-08",
+      "name": "B.A. in History",
+      "departmentId": "D3",
+      "credits": 120,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-09",
+      "name": "B.Sc. in Mathematics",
+      "departmentId": "D10",
+      "credits": 130,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-10",
+      "name": "M.Sc. in Data Science",
+      "departmentId": "D17",
+      "credits": 36,
+      "duration": "1.5 Years"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "A-01",
+      "courseId": "CS-101",
+      "title": "Big O Complexity Analysis",
+      "dueDate": "2026-06-20",
+      "totalPoints": 100
+    },
+    {
+      "id": "A-02",
+      "courseId": "MTH-201",
+      "title": "Matrix Inversion Project",
+      "dueDate": "2026-06-25",
+      "totalPoints": 100
+    }
+  ],
+  "submissions": [
+    {
+      "id": "S-01",
+      "assignmentId": "A-01",
+      "studentId": "3",
+      "studentName": "Emon Sarker",
+      "courseId": "C1",
+      "submissionDate": "2026-06-18",
+      "fileUrl": "big_o_report.pdf",
+      "grade": 95
+    },
+    {
+      "id": "S-02",
+      "assignmentId": "A-01",
+      "studentId": "dbZguN2EI5k",
+      "studentName": "Abul Hasan",
+      "courseId": "C1",
+      "submissionDate": "2026-06-19",
+      "fileUrl": "complexity.pdf",
+      "grade": null
+    },
+    {
+      "id": "S-03",
+      "assignmentId": "A-01",
+      "studentId": "6kPK6SQR8wI",
+      "studentName": "Tanvir",
+      "courseId": "C1",
+      "submissionDate": "2026-06-20",
+      "fileUrl": "analysis.pdf",
+      "grade": null
+    },
+    {
+      "id": "S-04",
+      "assignmentId": "A-03",
+      "studentId": "3",
+      "studentName": "Emon Sarker",
+      "courseId": "C2",
+      "submissionDate": "2026-06-15",
+      "fileUrl": "graph_traversal.zip",
+      "grade": null
+    }
+  ],
+  "discussions": [
+    {
+      "id": "D-01",
+      "courseId": "CS-101",
+      "userId": "3",
+      "title": "Best resources for QuickSort?",
+      "content": "Looking for some good visualizations for QuickSort algorithm.",
+      "date": "2026-05-15"
+    }
+  ],
+  "replies": [
+    {
+      "id": "R-01",
+      "discussionId": "D-01",
+      "userId": "_bUfEoxkwxo",
+      "content": "Check out Visualgo.net, it has great animations!",
+      "date": "2026-05-15"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "N1",
+      "userId": "3",
+      "message": "Your registration for Fall Semester is pending advisor approval.",
+      "read": false,
+      "timestamp": "2026-05-12T10:00:00Z"
+    }
+  ],
+  "systemStats": {
+    "totalUniversities": 42,
+    "totalStudents": 1250000,
+    "totalRevenue": 4500000,
+    "activeUsers": 89000
+  },
+  "invoices": [
+    {
+      "id": "INV-001",
+      "studentId": "3",
+      "studentName": "Emon Sarker",
+      "credits": 14,
+      "amount": 2100,
+      "status": "Paid",
+      "date": "2026-05-10"
+    },
+    {
+      "id": "INV-002",
+      "studentId": "dbZguN2EI5k",
+      "studentName": "Abul Hasan",
+      "credits": 18,
+      "amount": 2700,
+      "status": "Unpaid",
+      "date": "2026-05-12"
+    }
+  ],
+  "applicants": [
+    {
+      "id": "APP-001",
+      "name": "Sarah Ahmed",
+      "email": "sarah@example.com",
+      "phone": "+8801711223344",
+      "status": "Under Review",
+      "appliedDate": "2026-05-10"
+    }
+  ],
+  "applications": [
+    {
+      "id": "APL-001",
+      "applicantId": "APP-001",
+      "programId": "P-01",
+      "status": "Under Review",
+      "personalInfo": {
+        "fullName": "Sarah Ahmed",
+        "dob": "2004-12-05",
+        "gender": "Female"
+      },
+      "academicInfo": {
+        "sscGpa": 5,
+        "hscGpa": 5,
+        "previousInst": "Dhaka City College"
+      }
+    },
+    {
+      "fullName": "Mahbub",
+      "dob": "2026-05-17",
+      "gender": "Male",
+      "previousInst": "abc",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "programId": "P-08",
+      "id": "aLQUKE7S0zc",
+      "applicantId": "APP-328",
+      "status": "Pending",
+      "appliedDate": "2026-05-16T19:53:42.768Z"
+    },
+    {
+      "fullName": "emon",
+      "dob": "2016-10-22",
+      "gender": "Male",
+      "previousInst": "CVGC",
+      "sscGpa": 4.56,
+      "hscGpa": 4.42,
+      "programId": "P-02",
+      "id": "mRAhUFXQGdQ",
+      "applicantId": "APP-560",
+      "status": "Pending",
+      "appliedDate": "2026-05-16T20:12:20.991Z"
+    }
+  ],
+  "books": [
+    {
+      "id": "B-01",
+      "title": "Introduction to Algorithms",
+      "author": "CLRS",
+      "category": "Computer Science",
+      "stock": 5,
+      "available": 3
+    },
+    {
+      "id": "B-02",
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "category": "Software Engineering",
+      "stock": 10,
+      "available": 8
+    }
+  ],
+  "hostelRooms": [
+    {
+      "id": "H-101",
+      "block": "A",
+      "type": "Double",
+      "capacity": 2,
+      "occupied": 1,
+      "status": "Available"
+    },
+    {
+      "id": "H-201",
+      "block": "B",
+      "type": "Single",
+      "capacity": 1,
+      "occupied": 1,
+      "status": "Full"
+    }
+  ],
+  "buses": [
+    {
+      "id": "BUS-01",
+      "route": "Route A (Dhanmondi)",
+      "driver": "Rahim",
+      "capacity": 40,
+      "registered": 38
+    },
+    {
+      "id": "BUS-02",
+      "route": "Route B (Uttara)",
+      "driver": "Karim",
+      "capacity": 40,
+      "registered": 25
+    }
+  ],
+  "staff": [
+    {
+      "id": "S-01",
+      "name": "Admin User",
+      "email": "admin@smartuni.edu",
+      "role": "Super Admin"
+    },
+    {
+      "id": "S-02",
+      "name": "Admissions Head",
+      "email": "admission@smartuni.edu",
+      "role": "Admission Officer"
+    }
+  ],
+  "financialRates": {
+    "undergradRate": 150,
+    "gradRate": 250,
+    "facilityFee": 200
+  },
+  "examBatches": [
+    {
+      "id": "B-FALL-26",
+      "semester": "Fall 2026",
+      "department": "Computer Science",
+      "totalCourses": 12,
+      "gradedCourses": 8,
+      "status": "In Progress"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

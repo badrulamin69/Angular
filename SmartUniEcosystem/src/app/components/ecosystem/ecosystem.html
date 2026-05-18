@@ -1,0 +1,57 @@
+<section class="py-24 relative overflow-hidden bg-brand-light dark:bg-brand-dark">
+  <div class="container mx-auto px-4 md:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">Academic Ecosystem Architecture</h2>
+      <p class="text-lg text-slate-600 dark:text-slate-400">An MIT-inspired systems visualization of our perfectly mapped, infinitely scalable university data model.</p>
+    </div>
+
+    <!-- Hierarchy Visualization -->
+    <div class="relative max-w-5xl mx-auto p-8 rounded-3xl glass-card border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl">
+      <!-- Background Grid -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] rounded-3xl z-0"></div>
+      
+      <div class="relative z-10 flex flex-col items-center space-y-8">
+        
+        <!-- Level 1: University -->
+        <div class="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-200 text-white dark:text-slate-900 shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+          <div class="absolute inset-0 bg-mit-red/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+            <span class="text-xl font-bold tracking-wide">University Enterprise</span>
+          </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="h-8 w-px bg-gradient-to-b from-slate-400 to-transparent relative">
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-mit-red animate-ping"></div>
+        </div>
+
+        <!-- Level 2: Faculties -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+          <div *ngFor="let fac of faculties()" class="relative group">
+            <div class="px-6 py-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl text-center hover:border-mit-red/50 dark:hover:border-primary-500/50 transition-all duration-300 cursor-pointer group/card h-full flex flex-col justify-center">
+              <h3 class="font-black text-slate-900 dark:text-white group-hover/card:text-mit-red transition-colors mb-1">{{ fac.name }}</h3>
+              <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ fac.bnName }}</p>
+              
+              <!-- Hover departments peek -->
+              <div class="absolute top-full left-0 w-full pt-4 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                <div class="glass-panel p-4 shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                  <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">Departments</div>
+                  <div class="grid grid-cols-1 gap-2">
+                    <span *ngFor="let dept of getDepartmentsForFaculty(fac.id)" class="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-mit-red transition-colors flex items-center gap-2">
+                      <div class="w-1 h-1 rounded-full bg-mit-red"></div>
+                      {{ dept.name }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom Spacing -->
+        <div class="h-12"></div>
+      </div>
+    </div>
+  </div>
+</section>

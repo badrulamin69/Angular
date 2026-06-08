@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
       <div class="flex items-center h-12 container mx-auto px-4 overflow-hidden relative">
         <!-- Label -->
         <div class="absolute left-0 z-10 h-full flex items-center px-4 bg-mit-red text-white font-black text-xs uppercase tracking-widest shadow-[10px_0_20px_-5px_rgba(163,31,52,0.3)]">
-          Breaking News
+          Update Notice
         </div>
 
         <!-- Scrolling Content -->

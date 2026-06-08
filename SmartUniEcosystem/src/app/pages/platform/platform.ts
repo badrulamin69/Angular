@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { PdfService } from '../../core/services/pdf.service';
 
 @Component({
   selector: 'app-platform',
@@ -62,7 +64,10 @@ import { CommonModule } from '@angular/common';
             <div class="w-full md:w-1/2">
               <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Transparent Treasury</h3>
               <p class="text-slate-600 dark:text-slate-400 mb-6">Automated billing, dynamic scholarship allocation, and multi-currency support for international tuition fees.</p>
-              <button class="text-emerald-600 font-bold flex items-center gap-2 group">Explore Finance Module <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+              <div class="flex flex-wrap items-center gap-4">
+                <button type="button" class="text-emerald-600 font-bold flex items-center gap-2 group" (click)="navigateTo('/finance')">Explore Finance Module <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+                <button type="button" class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hover:bg-emerald-700 transition" (click)="downloadPlatformSummary()">Download Module PDF</button>
+              </div>
             </div>
             <div class="w-full md:w-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl">
               <div class="space-y-4">
@@ -77,4 +82,34 @@ import { CommonModule } from '@angular/common';
     </div>
   `
 })
-export class PlatformComponent {}
+export class PlatformComponent {
+  private router = inject(Router);
+  private pdfService = inject(PdfService);
+
+  navigateTo(path: string) {
+    this.router.navigateByUrl(path);
+  }
+
+  downloadPlatformSummary() {
+    const modules = [
+      {
+        title: 'Centralized ERP',
+        description: 'Manage departments, faculties, and human resources with enterprise-grade precision and unified administrative controls.'
+      },
+      {
+        title: 'Deep Analytics',
+        description: 'Predict student performance and institutional growth with real-time dashboards and AI-driven insights.'
+      },
+      {
+        title: 'Adaptive LMS',
+        description: 'A flexible learning environment with collaborative discussions, secure assignments, and live classroom experiences.'
+      },
+      {
+        title: 'Transparent Treasury',
+        description: 'Automated billing, scholarship management, and multi-currency tuition processing for seamless finance operations.'
+      }
+    ];
+
+    this.pdfService.generatePlatformModulesSummary(modules);
+  }
+

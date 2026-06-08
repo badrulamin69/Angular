@@ -2,13 +2,14 @@ import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
 
 interface Course { id?: string; code: string; title: string; credits: number; department: string; status: 'Active' | 'Draft' | 'Archived'; enrolled: number; capacity: number; }
 
 @Component({
   selector: 'app-courses',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, DynamicActionButtonComponent],
   template: `
     <div class="space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -45,12 +46,8 @@ interface Course { id?: string; code: string; title: string; credits: number; de
               }" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
                 {{ course.status }}
               </span>
-              <button (click)="openModal(course); $event.stopPropagation()" class="text-slate-400 hover:text-indigo-500 transition-colors p-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900/20" title="Edit Course">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-              </button>
-              <button (click)="deleteCourse(course.id!); $event.stopPropagation()" class="text-slate-400 hover:text-mit-red transition-colors p-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Course">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-              </button>
+              <app-dynamic-action-button [action]="getCourseAction(course, 'edit')" iconPosition="left" (clicked)="openModal(course); $event.stopPropagation()"></app-dynamic-action-button>
+              <app-dynamic-action-button [action]="getCourseAction(course, 'delete')" iconPosition="right" (clicked)="deleteCourse(course.id!); $event.stopPropagation()"></app-dynamic-action-button>
             </div>
           </div>
           
@@ -140,6 +137,27 @@ export class CoursesComponent implements OnInit {
   searchQuery = signal('');
   isModalOpen = signal(false);
   editingCourseId = signal<string | null>(null);
+
+  getCourseAction(course: Course, type: 'edit' | 'delete') {
+    if (type === 'edit') {
+      return {
+        label: 'Edit',
+        icon: 'edit',
+        type: 'outline',
+        size: 'sm',
+        tooltip: 'Edit course details',
+        ariaLabel: `Edit ${course.title}`
+      };
+    }
+    return {
+      label: 'Delete',
+      icon: 'arrow-right',
+      type: 'danger',
+      size: 'sm',
+      tooltip: 'Delete this course',
+      ariaLabel: `Delete ${course.title}`
+    };
+  }
 
   courseForm = this.fb.group({
     code: ['', Validators.required],

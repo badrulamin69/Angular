@@ -1,7 +1,9 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { PdfService } from '../../core/services/pdf.service';
 
 interface Student { id: string; name: string; email: string; program: string; status: 'Active' | 'Inactive' | 'Graduated'; gpa: number; }
@@ -71,6 +73,12 @@ interface Student { id: string; name: string; email: string; program: string; st
                 </td>
                 <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">{{ s.gpa | number:'1.2-2' }}</td>
                 <td class="px-6 py-4 text-right">
+                  <button (click)="viewMarksheet(s.id); $event.stopPropagation()" class="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/20 mr-2" title="View Marksheet">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button *ngIf="isAdmin()" (click)="openEdit(s); $event.stopPropagation()" class="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/20 mr-2" title="Edit Student">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4h6v6"/><path d="M21 3l-8 8"/><path d="M3 21v-4.2c0-.5.2-1 .6-1.4L17.4 2.6c.4-.4.9-.6 1.4-.6H21v4"/></svg>
+                  </button>
                   <button (click)="deleteStudent(s.id); $event.stopPropagation()" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Student">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
@@ -193,7 +201,7 @@ interface Student { id: string; name: string; email: string; program: string; st
       <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeModal()"></div>
       <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Enroll New Student</h3>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ editingId() ? 'Edit Student' : 'Enroll New Student' }}</h3>
           <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
           </button>
@@ -223,7 +231,7 @@ interface Student { id: string; name: string; email: string; program: string; st
           
           <div class="pt-4 flex gap-3 justify-end border-t border-slate-200 dark:border-slate-700 mt-6">
             <button type="button" (click)="closeModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cancel</button>
-            <button type="submit" [disabled]="studentForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">Enroll Student</button>
+            <button type="submit" [disabled]="studentForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">{{ editingId() ? 'Update Student' : 'Enroll Student' }}</button>
           </div>
         </form>
       </div>
@@ -234,6 +242,8 @@ export class StudentsComponent implements OnInit {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
   private pdfService = inject(PdfService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   students = signal<Student[]>([]);
   universities = signal<any[]>([]);
@@ -253,10 +263,18 @@ export class StudentsComponent implements OnInit {
     universityId: ['', Validators.required]
   });
 
+  // Whether current user is an admin (Super Admin / University Admin)
+  isAdmin = computed(() => {
+    const role = this.authService.currentUser()?.role || '';
+    return role.toLowerCase().includes('admin');
+  });
+
   filteredStudents = computed(() => {
     const q = this.searchQuery().toLowerCase();
     return this.students().filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q));
   });
+
+  editingId = signal<string | null>(null);
 
   ngOnInit() {
     this.loadData();
@@ -298,6 +316,19 @@ export class StudentsComponent implements OnInit {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
     const firstProg = this.programs().length > 0 ? this.programs()[0].name : '';
     this.studentForm.reset({ program: firstProg, universityId: firstUni });
+    this.editingId.set(null);
+    this.isModalOpen.set(true);
+  }
+
+  openEdit(student: Student) {
+    // Prefill form and open modal in edit mode
+    this.studentForm.reset({
+      name: student.name,
+      email: student.email,
+      program: student.program,
+      universityId: ''
+    });
+    this.editingId.set(student.id);
     this.isModalOpen.set(true);
   }
 
@@ -306,39 +337,74 @@ export class StudentsComponent implements OnInit {
   }
 
   saveStudent() {
-    if (this.studentForm.valid) {
-      const formValue = this.studentForm.value;
-      const studentId = 'STU-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-      
-      const newStudent: Student = {
-        id: studentId,
-        name: formValue.name!,
-        email: formValue.email!,
-        program: formValue.program!,
-        status: 'Active',
-        gpa: 0.0
-      };
+    if (!this.studentForm.valid) return;
 
-      const newUser = {
-        id: studentId,
+    const formValue = this.studentForm.value;
+    const editing = this.editingId();
+
+    if (editing) {
+      // Update existing student & user
+      const updatedStudent = {
         name: formValue.name,
         email: formValue.email,
-        password: 'password', // Default password
-        role: 'Student',
-        universityId: formValue.universityId
+        program: formValue.program
       };
 
-      // Atomic-like operation (Sequential for mock DB)
-      this.http.post<Student>('http://localhost:3000/students', newStudent).subscribe(res => {
-        this.http.post('http://localhost:3000/users', newUser).subscribe(() => {
-          this.students.update(s => [...s, res]);
+      this.http.patch<Student>(`http://localhost:3000/students/${editing}`, updatedStudent).subscribe(res => {
+        // Also patch user record if exists
+        const updatedUser = {
+          name: formValue.name,
+          email: formValue.email,
+          universityId: formValue.universityId
+        };
+        this.http.patch(`http://localhost:3000/users/${editing}`, updatedUser).subscribe(() => {
+          this.students.update(list => list.map(s => s.id === editing ? { ...s, ...res } : s));
+          this.editingId.set(null);
           this.closeModal();
+        }, err => {
+          console.error('Failed to update user record', err);
+          this.triggerLocalError('Failed to update user record');
         });
+      }, err => {
+        console.error('Failed to update student record', err);
+        this.triggerLocalError('Failed to update student record');
       });
+
+      return;
     }
+
+    // Create new student
+    const studentId = 'STU-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    
+    const newStudent: Student = {
+      id: studentId,
+      name: formValue.name!,
+      email: formValue.email!,
+      program: formValue.program!,
+      status: 'Active',
+      gpa: 0.0
+    };
+
+    const newUser = {
+      id: studentId,
+      name: formValue.name,
+      email: formValue.email,
+      password: 'password', // Default password
+      role: 'Student',
+      universityId: formValue.universityId
+    };
+
+    // Atomic-like operation (Sequential for mock DB)
+    this.http.post<Student>('http://localhost:3000/students', newStudent).subscribe(res => {
+      this.http.post('http://localhost:3000/users', newUser).subscribe(() => {
+        this.students.update(s => [...s, res]);
+        this.closeModal();
+      });
+    });
   }
 
   deleteStudent(id: string) {
+    if (!this.isAdmin()) return alert('Only admin users can delete students.');
     if (confirm('Are you sure you want to remove this student? This will also revoke their login access.')) {
       this.http.delete(`http://localhost:3000/students/${id}`).subscribe(() => {
         this.http.delete(`http://localhost:3000/users/${id}`).subscribe(() => {
@@ -371,5 +437,15 @@ export class StudentsComponent implements OnInit {
     if (s) {
       this.pdfService.generateOfficialTranscript(s, this.studentGrades(), this.courses());
     }
+  }
+
+  // Simple local error helper (replace with toast if available)
+  private triggerLocalError(msg: string) {
+    alert(msg);
+  }
+
+  viewMarksheet(id: string) {
+    if (!id) return;
+    this.router.navigate(['/admin/students', id, 'marksheet']);
   }
 }

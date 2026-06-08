@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
 
@@ -45,7 +46,7 @@ import html2canvas from 'html2canvas-pro';
             </div>
             <div class="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-between items-center">
               <span class="text-lg font-bold text-slate-900 dark:text-white">Total Amount</span>
-              <span class="text-3xl font-black text-mit-red">100.00 BDT</span>
+              <span class="text-3xl font-black text-mit-red">{{ amount | number:'1.2-2' }} BDT</span>
             </div>
           </div>
 
@@ -69,25 +70,43 @@ import html2canvas from 'html2canvas-pro';
       </div>
     </div>
   `,
-  styles: [`
-    :host { display: block; }
-    @media print {
-      .no-print { display: none !important; }
-    }
-  `]
+  styles: [
+    `:host { display: block; }`,
+    `@media print { .no-print { display: none !important; } }`
+  ]
 })
 export class PaymentSuccessComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
   
   tranId: string = 'REF-' + Math.random().toString(36).substring(7).toUpperCase();
   today = new Date();
+  amount: number = 100.00;
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['tran_id']) {
         this.tranId = params['tran_id'];
+        // Try to find the invoice and mark it paid
+        this.markInvoicePaid(this.tranId);
       }
     });
+  }
+
+  private markInvoicePaid(tranId: string) {
+    if (!tranId) return;
+    this.http.get<any[]>(`http://localhost:3000/invoices?tranId=${tranId}`).subscribe(invoices => {
+      if (invoices && invoices.length > 0) {
+        const inv = invoices[0];
+        this.amount = inv.amount || this.amount;
+        if (inv.status !== 'paid') {
+          this.http.patch(`http://localhost:3000/invoices/${inv.id}`, { status: 'paid' }).subscribe({
+            next: () => console.log('Invoice marked paid:', inv.id),
+            error: err => console.error('Failed to update invoice status', err)
+          });
+        }
+      }
+    }, err => console.error('Failed to fetch invoice', err));
   }
 
   async downloadReceipt() {

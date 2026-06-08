@@ -1,11 +1,12 @@
 import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
 
 @Component({
   selector: 'app-programs-listing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DynamicActionButtonComponent],
   template: `
     <div class="pt-32 pb-24 bg-brand-light dark:bg-brand-dark min-h-screen">
       <div class="container mx-auto px-4 md:px-6 lg:px-8">
@@ -60,10 +61,16 @@ import { HttpClient } from '@angular/common/http';
                   <div class="flex flex-col">
                     <span class="text-[10px] font-black text-mit-red uppercase tracking-widest mb-1">{{ getFacultyNameByDept(prog.departmentId) }}</span>
                     <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ getDeptName(prog.departmentId) }}</span>
+                    <span *ngIf="isProgramHighlighted(prog)" class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-[0.18em]">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      Selected
+                    </span>
                   </div>
-                  <button class="w-10 h-10 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                  </button>
+                  <app-dynamic-action-button *ngIf="getCardAction(prog)"
+                                            [action]="getCardAction(prog)"
+                                            iconPosition="right"></app-dynamic-action-button>
                 </div>
               </div>
             </div>
@@ -103,6 +110,18 @@ export class ProgramsListingComponent implements OnInit {
     this.http.get<any[]>('http://localhost:3000/faculties').subscribe(data => this.faculties.set(data));
   }
 
+  getCardAction(prog: any) {
+    return prog.action || {
+      label: 'View Details',
+      icon: 'arrow-right',
+      type: this.isProgramHighlighted(prog) ? 'success' : 'secondary',
+      size: 'sm',
+      route: `/apply?program=${encodeURIComponent(prog.name)}`,
+      tooltip: 'Apply or learn more about this program',
+      ariaLabel: 'View program details'
+    };
+  }
+
   filterFaculty(id: string) {
     this.selectedFaculty.set(id);
   }
@@ -115,5 +134,11 @@ export class ProgramsListingComponent implements OnInit {
     const dept = this.departments().find(d => d.id === deptId);
     if (!dept) return 'Academic Faculty';
     return this.faculties().find(f => f.id === dept.facultyId)?.name || 'Academic Faculty';
+  }
+
+  isProgramHighlighted(prog: any) {
+    if (!this.selectedFaculty()) return false;
+    const dept = this.departments().find(d => d.id === prog.departmentId);
+    return dept?.facultyId === this.selectedFaculty();
   }
 }

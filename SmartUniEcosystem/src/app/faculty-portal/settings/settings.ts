@@ -159,7 +159,7 @@ import { ThemeService } from '../../core/services/theme.service';
                 <button type="button" (click)="resetProfileForm()" class="px-5 py-2 text-sm font-bold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-850 rounded-xl transition-all">
                   Discard Changes
                 </button>
-                <button type="submit" [disabled]="profileForm.invalid || savingProfileState()" class="px-5 py-2 bg-indigo-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-indigo-700 disabled:opacity-50 transition-all flex items-center gap-2">
+                <button type="submit" [disabled]="!canSave() || savingProfileState()" class="px-5 py-2 bg-indigo-600 text-white font-bold rounded-xl text-sm shadow-md hover:bg-indigo-700 disabled:opacity-50 transition-all flex items-center gap-2">
                   <svg *ngIf="savingProfileState()" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                   Save Profile
                 </button>
@@ -549,6 +549,18 @@ export class FacultySettingsComponent implements OnInit {
     return val && val.length >= 8;
   });
 
+  // Whether Save Profile should be enabled
+  canSave = computed(() => {
+    try {
+      const formValid = !!this.profileForm && this.profileForm.valid;
+      const profileChanged = this.originalProfileValue ? JSON.stringify(this.profileForm.value) !== JSON.stringify(this.originalProfileValue) : true;
+      const avatarChanged = this.avatarSrc !== (this.user()?.profilePhoto || null);
+      return (formValid && profileChanged) || avatarChanged;
+    } catch (e) {
+      return false;
+    }
+  });
+
   otherSessions = computed(() => {
     return this.sessions().filter(s => !s.current);
   });
@@ -713,7 +725,7 @@ export class FacultySettingsComponent implements OnInit {
         // Update user state inside service
         const mergedUser = { ...currentUser, ...updatedUser };
         this.authService.currentUser.set(mergedUser);
-        localStorage.setItem('smartuni_user', JSON.stringify(mergedUser));
+        localStorage.setItem('academy_user', JSON.stringify(mergedUser));
 
         // Reset baseline state
         this.originalProfileValue = this.profileForm.value;
@@ -766,7 +778,7 @@ export class FacultySettingsComponent implements OnInit {
         // Sync memory pass
         (currentUser as any).password = newPassword;
         this.authService.currentUser.set({ ...currentUser });
-        localStorage.setItem('smartuni_user', JSON.stringify(currentUser));
+        localStorage.setItem('academy_user', JSON.stringify(currentUser));
 
         this.passwordForm.reset();
         this.passwordForm.markAsPristine();

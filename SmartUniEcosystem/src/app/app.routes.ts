@@ -23,6 +23,10 @@ export const routes: Routes = [
         path: 'admissions', 
         loadComponent: () => import('./pages/admission-home/admission-home').then(m => m.AdmissionHome) 
       },
+      {
+        path: 'alumni',
+        loadComponent: () => import('./pages/alumni/alumni').then(m => m.AlumniPageComponent)
+      },
       { 
         path: 'apply', 
         loadComponent: () => import('./pages/apply/apply').then(m => m.ApplyComponent) 
@@ -43,6 +47,7 @@ export const routes: Routes = [
       { path: 'faculties', loadComponent: () => import('./academic/faculties/faculties').then(m => m.FacultiesComponent) },
       { path: 'courses', loadComponent: () => import('./academic/courses/courses').then(m => m.CoursesComponent) },
       { path: 'programs', loadComponent: () => import('./academic/programs/programs').then(m => m.ProgramsComponent) },
+      { path: 'students/:id/marksheet', loadComponent: () => import('./shared/marksheet/marksheet').then(m => m.MarksheetComponent) },
       { path: 'students', loadComponent: () => import('./student/students/students').then(m => m.StudentsComponent) },
       { path: 'teachers', loadComponent: () => import('./faculty/teachers/teachers').then(m => m.TeachersComponent) },
       { path: 'finance', loadComponent: () => import('./finance/finance-dashboard/finance-dashboard').then(m => m.FinanceDashboardComponent) },
@@ -131,6 +136,7 @@ export const routes: Routes = [
       { path: 'exams', loadComponent: () => import('./student-portal/exams/exams').then(m => m.StudentExamsComponent) },
       { path: 'finance', loadComponent: () => import('./student-portal/finance/finance').then(m => m.StudentFinanceComponent) },
       { path: 'transcript', loadComponent: () => import('./student-portal/transcript/transcript').then(m => m.StudentTranscriptComponent) },
+      { path: 'marksheet/:id', loadComponent: () => import('./shared/marksheet/marksheet').then(m => m.MarksheetComponent) },
       { path: 'payment', loadComponent: () => import('./pages/payment-demo/payment-demo').then(m => m.PaymentDemo) },
       { path: 'payment-success', loadComponent: () => import('./pages/payment-success/payment-success').then(m => m.PaymentSuccessComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }

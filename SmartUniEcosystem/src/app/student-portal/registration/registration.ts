@@ -2,6 +2,7 @@ import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
+import { forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-student-registration',
@@ -150,13 +151,48 @@ export class StudentRegistrationComponent implements OnInit {
       completedAssignments: 0,
       totalAssignments: 0
     }));
+    // Post all enrollments, then create an invoice and redirect to payment
+    const requests = registrations.map(r => this.http.post('http://localhost:3000/enrollments', r));
 
-    // In a real app, we'd use forkJoin for multiple posts, but for demo we'll just post them
-    registrations.forEach(reg => {
-      this.http.post('http://localhost:3000/enrollments', reg).subscribe();
+    forkJoin(requests.length ? requests : [of(null)]).subscribe({
+      next: () => {
+        // Create invoice in mock DB
+        const amount = this.totalCredits() * 150;
+        const tranId = 'REF' + Date.now();
+        const user = this.authService.currentUser() || { name: 'Student', email: '' };
+
+        const invoice = {
+          studentId: studentId,
+          studentName: user.name,
+          studentEmail: user.email,
+          courses: this.selectedCourses().map(c => c.code),
+          credits: this.totalCredits(),
+          amount: amount,
+          status: 'pending',
+          tranId: tranId,
+          createdAt: new Date().toISOString()
+        };
+
+        this.http.post('http://localhost:3000/invoices', invoice).subscribe(() => {
+          // Redirect to payment server with dynamic amount and student info
+          const params = new URLSearchParams({
+            amount: String(amount),
+            tran_id: tranId,
+            studentId: studentId,
+            name: user.name || '',
+            email: user.email || ''
+          });
+          // Include the app's origin so the payment demo can return to the correct dev port
+          params.set('return_url', window.location.origin + `/student/payment-success?tran_id=${tranId}`);
+          window.location.href = `http://localhost:3030/init?${params.toString()}`;
+        }, () => {
+          alert('Registration saved but failed to create invoice. Please try payment from Payments page.');
+          this.selectedCourses.set([]);
+        });
+      },
+      error: () => {
+        alert('Failed to submit registration. Please try again.');
+      }
     });
-
-    alert('Registration submitted successfully!');
-    this.selectedCourses.set([]);
   }
 }

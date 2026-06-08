@@ -272,7 +272,7 @@ export class StaffAdmissionsComponent implements OnInit {
     const newStudent = {
       id: studentId,
       name: app.fullName,
-      email: app.applicantId + '@student.smartuni.edu',
+      email: app.applicantId + '@student.academy.edu',
       program: app.programId,
       status: 'Active',
       gpa: 0.0

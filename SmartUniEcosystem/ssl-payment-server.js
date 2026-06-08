@@ -18,20 +18,29 @@ const is_live = false; // true for live, false for sandbox
 
 // Payment Initialization
 app.get('/init', (req, res) => {
+    // Allow passing amount and customer info via query params for demo
+    const amount = req.query.amount ? Number(req.query.amount) : 100;
+    const tran = req.query.tran_id || ('REF' + Date.now());
+    const cus_name = req.query.name || 'Test Student';
+    const cus_email = req.query.email || 'student@example.com';
+
+    // Allow client to supply where to return after payment (useful for different dev ports)
+    const returnUrl = req.query.return_url;
+
     const data = {
-        total_amount: 100,
+        total_amount: amount,
         currency: 'BDT',
-        tran_id: 'REF' + Date.now(), // Generate a unique transaction ID
-        success_url: `http://localhost:4200/student/payment-success`,
-        fail_url: `http://localhost:4200/student/payment`,
-        cancel_url: `http://localhost:4200/student/payment`,
+        tran_id: tran,
+        success_url: returnUrl || `http://localhost:4200/student/payment-success?tran_id=${tran}`,
+        fail_url: returnUrl ? `${returnUrl}&status=fail` : `http://localhost:4200/student/payment?tran_id=${tran}&status=fail`,
+        cancel_url: returnUrl ? `${returnUrl}&status=cancel` : `http://localhost:4200/student/payment?tran_id=${tran}&status=cancel`,
         ipn_url: `http://localhost:${port}/ipn`,
         shipping_method: 'Courier',
         product_name: 'Smart University Course Fee',
         product_category: 'Education',
         product_profile: 'general',
-        cus_name: 'Test Student',
-        cus_email: 'student@example.com',
+        cus_name: cus_name,
+        cus_email: cus_email,
         cus_add1: 'Dhaka',
         cus_add2: 'Dhaka',
         cus_city: 'Dhaka',

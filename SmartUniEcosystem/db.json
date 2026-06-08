@@ -5,7 +5,8 @@
       "name": "Super Admin",
       "email": "super@smartuni.edu",
       "password": "password",
-      "role": "Super Admin"
+      "role": "Super Admin",
+      "bio": ""
     },
     {
       "id": "2",
@@ -33,15 +34,8 @@
       "phone": "+1-555-0101",
       "designation": "Associate Professor",
       "employeeId": "EMP-1024",
-      "profilePhoto": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-    },
-    {
-      "id": "dbZguN2EI5k",
-      "name": "Abul Hasan",
-      "email": "abulhasan@gmail.com",
-      "password": "password",
-      "role": "Student",
-      "universityId": "U1"
+      "profilePhoto": null,
+      "bio": ""
     },
     {
       "id": "6kPK6SQR8wI",
@@ -73,11 +67,31 @@
       "email": "kamal@gmail.com",
       "password": "password",
       "role": "Student",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Computer%20Science%20%26%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Computer Science & Engineering"}
+      "universityId": "U1"
+    },
+    {
+      "id": "uRte-W8JNDc",
+      "name": "Mortuza",
+      "email": "mortuza@gmail.com",
+      "password": "password",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Electrical%20%26%20Electronic%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Electrical & Electronic Engineering"}
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "id": "Y-rHwzeM9h4",
+      "name": "PK",
+      "email": "pk@gmail.com",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Civil%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Civil Engineering"}
+      "password": "password",
+      "role": "Staff",
       "universityId": "U1"
     }
   ],
   "staffProfiles": [
     {
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Mechanical%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Mechanical Engineering"}
       "id": "SP1",
       "userId": "_bUfEoxkwxo",
       "designation": "Senior Lecturer",
@@ -85,6 +99,7 @@
       "joiningDate": "2023-01-15",
       "salary": 5000,
       "phone": "+1-555-0101",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Architecture","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Architecture"}
       "address": "123 Academic Way, NY"
     },
     {
@@ -92,6 +107,7 @@
       "userId": "EMP-9999",
       "designation": "Admin Coordinator",
       "department": "Registrar Office",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=BS%20in%20Software%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to BS in Software Engineering"}
       "joiningDate": "2024-03-10",
       "salary": 3500,
       "phone": "+1-555-0202",
@@ -99,6 +115,7 @@
     }
   ],
   "attendance": [
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=BBA%20in%20Business%20Administration","tooltip": "Start your application for this program","ariaLabel": "Apply to BBA in Business Administration"}
     {
       "id": "A1",
       "userId": "_bUfEoxkwxo",
@@ -106,6 +123,7 @@
       "status": "Present",
       "checkIn": "08:55 AM",
       "checkOut": "05:05 PM"
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=BBA%20in%20Human%20Resource%20Management","tooltip": "Start your application for this program","ariaLabel": "Apply to BBA in Human Resource Management"}
     },
     {
       "id": "A2",
@@ -113,6 +131,7 @@
       "date": "2026-05-15",
       "status": "Present",
       "checkIn": "09:00 AM",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Com%20in%20Accounting","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Com in Accounting"}
       "checkOut": "06:00 PM"
     }
   ],
@@ -120,6 +139,7 @@
     {
       "id": "L1",
       "userId": "_bUfEoxkwxo",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Com%20in%20Finance","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Com in Finance"}
       "type": "Sick Leave",
       "startDate": "2026-06-01",
       "endDate": "2026-06-02",
@@ -127,6 +147,7 @@
       "status": "Pending"
     }
   ],
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Biotechnology","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Biotechnology"}
   "tasks": [
     {
       "id": "T1",
@@ -134,6 +155,7 @@
       "title": "Process Fall Enrollments",
       "description": "Review and approve pending student registrations for the new semester.",
       "priority": "High",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=BBA%20in%20Supply%20Chain%20Management","tooltip": "Start your application for this program","ariaLabel": "Apply to BBA in Supply Chain Management"}
       "status": "In Progress",
       "dueDate": "2026-05-20"
     },
@@ -141,6 +163,7 @@
       "id": "T2",
       "assignedTo": "_bUfEoxkwxo",
       "title": "Prepare CS101 Exam Paper",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Pharmacy","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Pharmacy"}
       "description": "Submit final draft of the midterm exam for review.",
       "priority": "Medium",
       "status": "Pending",
@@ -148,6 +171,7 @@
     }
   ],
   "universities": [
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=BBA%20in%20Entrepreneurship","tooltip": "Start your application for this program","ariaLabel": "Apply to BBA in Entrepreneurship"}
     {
       "id": "U1",
       "name": "University of Chittagong",
@@ -155,6 +179,7 @@
       "status": "Active",
       "totalStudents": 40000
     }
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Environmental%20Science","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Environmental Science"}
   ],
   "faculties": [
     {
@@ -162,6 +187,7 @@
       "name": "Faculty of Humanities",
       "bnName": "মানবিক বা কলা অনুষদ",
       "universityId": "U1"
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Marine%20Science","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Marine Science"}
     },
     {
       "id": "F2",
@@ -169,6 +195,7 @@
       "bnName": "আইন অনুষদ",
       "universityId": "U1"
     },
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Hospitality%20Management","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Hospitality Management"}
     {
       "id": "F3",
       "name": "Faculty of Science",
@@ -176,6 +203,7 @@
       "universityId": "U1"
     },
     {
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.BA%20in%20Finance%20%26%20Banking","tooltip": "Start your application for this program","ariaLabel": "Apply to B.BA in Finance & Banking"}
       "id": "F4",
       "name": "Faculty of Business Studies",
       "bnName": "ব্যবসায় শিক্ষা অনুষদ",
@@ -183,6 +211,7 @@
     },
     {
       "id": "F5",
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.BA%20in%20Marketing","tooltip": "Start your application for this program","ariaLabel": "Apply to B.BA in Marketing"}
       "name": "Faculty of Engineering And Technology",
       "bnName": "প্রকৌশল ও প্রযুক্তি অনুষদ",
       "universityId": "U1"
@@ -190,6 +219,7 @@
   ],
   "departments": [
     {
+      ,"action": {"label": "Apply Now","icon": "arrow-right","type": "primary","size": "sm","route": "/apply?program=B.Sc.%20in%20Civil%20Engineering","tooltip": "Start your application for this program","ariaLabel": "Apply to B.Sc. in Civil Engineering"}
       "id": "D1",
       "facultyId": "F1",
       "name": "Department of English",
@@ -408,18 +438,10 @@
       "gpa": 3.8
     },
     {
-      "id": "dbZguN2EI5k",
-      "name": "Abul Hasan",
-      "email": "abulhasan@gmail.com",
-      "program": "Business Admin",
-      "status": "Active",
-      "gpa": 0
-    },
-    {
       "id": "6kPK6SQR8wI",
       "name": "Tanvir",
       "email": "tanvir@gmail.com",
-      "program": "Data Science",
+      "program": "M.A. in Human Rights",
       "status": "Active",
       "gpa": 0
     },
@@ -436,6 +458,14 @@
       "name": "Kamal Ahmed",
       "email": "kamal@gmail.com",
       "program": "Computer Science",
+      "status": "Active",
+      "gpa": 0
+    },
+    {
+      "id": "a-iPV69wP_M",
+      "name": "Mortuza",
+      "email": "mortuza@gmail.com",
+      "program": "B.A. in Bengali",
       "status": "Active",
       "gpa": 0
     }
@@ -715,6 +745,26 @@
       "credits": 4
     }
   ],
+  "invoices": [
+    {
+      "id": "INV-001",
+      "studentId": "3",
+      "studentName": "Emon Sarker",
+      "credits": 14,
+      "amount": 2100,
+      "status": "Paid",
+      "date": "2026-05-10"
+    },
+    {
+      "id": "INV-002",
+      "studentId": null,
+      "studentName": "Abul Hasan",
+      "credits": 18,
+      "amount": 2700,
+      "status": "Unpaid",
+      "date": "2026-05-12"
+    }
+  ],
   "courseContent": [
     {
       "id": "MOD-01",
@@ -747,140 +797,320 @@
       "name": "B.Sc. in Computer Science",
       "departmentId": "D17",
       "credits": 140,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Computer%20Science",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Computer Science"
+      }
     },
     {
       "id": "P-02",
       "name": "B.BA in Business Admin",
       "departmentId": "D13",
       "credits": 132,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.BA%20in%20Business%20Admin",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.BA in Business Admin"
+      }
     },
     {
       "id": "P-03",
       "name": "B.A. in English Literature",
       "departmentId": "D1",
       "credits": 120,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.A.%20in%20English%20Literature",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.A. in English Literature"
+      }
     },
     {
       "id": "P-04",
       "name": "LL.B. (Hons)",
       "departmentId": "D4",
       "credits": 144,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=LL.B.%20(Hons)",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to LL.B. (Hons)"
+      }
     },
     {
       "id": "P-05",
       "name": "B.Sc. in Physics",
       "departmentId": "D8",
       "credits": 136,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Physics",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Physics"
+      }
     },
     {
       "id": "P-06",
       "name": "B.Sc. in Electrical Engineering",
       "departmentId": "D18",
       "credits": 142,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Electrical%20Engineering",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Electrical Engineering"
+      }
     },
     {
       "id": "P-07",
       "name": "MBA (Specialized)",
       "departmentId": "D14",
       "credits": 60,
-      "duration": "2 Years"
+      "duration": "2 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=MBA%20(Specialized)",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to MBA (Specialized)"
+      }
     },
     {
       "id": "P-08",
       "name": "B.A. in History",
       "departmentId": "D3",
       "credits": 120,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.A.%20in%20History",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.A. in History"
+      }
     },
     {
       "id": "P-09",
       "name": "B.Sc. in Mathematics",
       "departmentId": "D10",
       "credits": 130,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Mathematics",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Mathematics"
+      }
     },
     {
       "id": "P-10",
       "name": "M.Sc. in Data Science",
       "departmentId": "D17",
       "credits": 36,
-      "duration": "1.5 Years"
+      "duration": "1.5 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=M.Sc.%20in%20Data%20Science",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to M.Sc. in Data Science"
+      }
     },
     {
       "id": "P-11",
       "name": "B.A. in Bengali",
       "departmentId": "D2",
       "credits": 120,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.A.%20in%20Bengali",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.A. in Bengali"
+      }
     },
     {
       "id": "P-12",
       "name": "Master of Laws (LL.M.)",
       "departmentId": "D5",
       "credits": 36,
-      "duration": "1 Year"
+      "duration": "1 Year",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=Master%20of%20Laws%20(LL.M.)",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to Master of Laws (LL.M.)"
+      }
     },
     {
       "id": "P-13",
       "name": "M.A. in International Law",
       "departmentId": "D6",
       "credits": 36,
-      "duration": "1 Year"
+      "duration": "1 Year",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=M.A.%20in%20International%20Law",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to M.A. in International Law"
+      }
     },
     {
       "id": "P-14",
       "name": "M.A. in Human Rights",
       "departmentId": "D7",
       "credits": 36,
-      "duration": "1 Year"
+      "duration": "1 Year",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=M.A.%20in%20Human%20Rights",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to M.A. in Human Rights"
+      }
     },
     {
       "id": "P-15",
       "name": "B.Sc. in Chemistry",
       "departmentId": "D9",
       "credits": 136,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Chemistry",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Chemistry"
+      }
     },
     {
       "id": "P-16",
       "name": "B.Sc. in Statistics",
       "departmentId": "D11",
       "credits": 132,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Statistics",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Statistics"
+      }
     },
     {
       "id": "P-17",
       "name": "B.Sc. in Botany",
       "departmentId": "D12",
       "credits": 128,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Botany",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Botany"
+      }
     },
     {
       "id": "P-18",
       "name": "B.BA in Finance & Banking",
       "departmentId": "D15",
       "credits": 132,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.BA%20in%20Finance%20%26%20Banking",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.BA in Finance & Banking"
+      }
     },
     {
       "id": "P-19",
       "name": "B.BA in Marketing",
       "departmentId": "D16",
       "credits": 132,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.BA%20in%20Marketing",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.BA in Marketing"
+      }
     },
     {
       "id": "P-20",
       "name": "B.Sc. in Civil Engineering",
       "departmentId": "D19",
       "credits": 144,
-      "duration": "4 Years"
+      "duration": "4 Years",
+      "action": {
+        "label": "Apply Now",
+        "icon": "arrow-right",
+        "type": "primary",
+        "size": "sm",
+        "route": "/apply?program=B.Sc.%20in%20Civil%20Engineering",
+        "tooltip": "Start your application for this program",
+        "ariaLabel": "Apply to B.Sc. in Civil Engineering"
+      }
     }
   ],
   "assignments": [
@@ -913,7 +1143,7 @@
     {
       "id": "S-02",
       "assignmentId": "A-01",
-      "studentId": "dbZguN2EI5k",
+      "studentId": null,
       "studentName": "Abul Hasan",
       "courseId": "C1",
       "submissionDate": "2026-06-19",
@@ -975,26 +1205,6 @@
     "totalRevenue": 4500000,
     "activeUsers": 89000
   },
-  "invoices": [
-    {
-      "id": "INV-001",
-      "studentId": "3",
-      "studentName": "Emon Sarker",
-      "credits": 14,
-      "amount": 2100,
-      "status": "Paid",
-      "date": "2026-05-10"
-    },
-    {
-      "id": "INV-002",
-      "studentId": "dbZguN2EI5k",
-      "studentName": "Abul Hasan",
-      "credits": 18,
-      "amount": 2700,
-      "status": "Unpaid",
-      "date": "2026-05-12"
-    }
-  ],
   "applicants": [
     {
       "id": "APP-001",
@@ -1189,6 +1399,21 @@
       "applicantId": "APP-236",
       "status": "Pending",
       "appliedDate": "2026-06-08T07:02:53.280Z"
+    },
+    {
+      "fullName": "Hasan",
+      "dob": "2026-06-17",
+      "gender": "Male",
+      "previousInst": "Hasan",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F1",
+      "departmentId": "D1",
+      "programId": "P-03",
+      "id": "xOYqihPsauw",
+      "applicantId": "APP-706",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T08:53:25.069Z"
     }
   ],
   "books": [
@@ -1341,15 +1566,6 @@
       "location": "Chittagong, Bangladesh",
       "lastActive": "Active Now",
       "current": true
-    },
-    {
-      "id": "sess-3",
-      "userId": "_bUfEoxkwxo",
-      "device": "Firefox on MacOS",
-      "ipAddress": "180.234.120.55",
-      "location": "Sylhet, Bangladesh",
-      "lastActive": "3 days ago",
-      "current": false
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

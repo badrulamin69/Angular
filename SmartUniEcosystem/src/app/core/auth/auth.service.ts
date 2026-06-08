@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   private loadUserFromStorage() {
-    const storedUser = localStorage.getItem('smartuni_user');
+    const storedUser = localStorage.getItem('academy_user');
     if (storedUser) {
       this.currentUser.set(JSON.parse(storedUser));
     }
@@ -50,7 +50,7 @@ export class AuthService {
           // Generate fake JWT token
           user.token = btoa(JSON.stringify({ id: user.id, role: user.role, timestamp: Date.now() }));
           this.currentUser.set(user);
-          localStorage.setItem('smartuni_user', JSON.stringify(user));
+          localStorage.setItem('academy_user', JSON.stringify(user));
         } else {
           throw new Error('Invalid credentials');
         }
@@ -60,7 +60,7 @@ export class AuthService {
 
   logout() {
     this.currentUser.set(null);
-    localStorage.removeItem('smartuni_user');
+    localStorage.removeItem('academy_user');
     this.router.navigate(['/login']);
   }
   

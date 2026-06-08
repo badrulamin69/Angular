@@ -105,7 +105,7 @@ import { HttpClient } from '@angular/common/http';
               </div>
               <div class="md:col-span-2 border-t border-slate-200 dark:border-slate-800 pt-3 mt-1">
                 <p class="text-[10px] text-slate-400 uppercase font-black">Contact Address</p>
-                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.address || 'SmartUni Campus Main Road' }} &bull; {{ teacherProfile()?.phone || '+880-CU-ADMIN' }}</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.address || 'Academy Campus Main Road' }} &bull; {{ teacherProfile()?.phone || '+880-CU-ADMIN' }}</p>
               </div>
             </div>
           </div>
@@ -171,6 +171,16 @@ import { HttpClient } from '@angular/common/http';
             <input type="email" formControlName="email" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
           </div>
           <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Designation</label>
+            <input type="text" formControlName="designation" placeholder="e.g. Senior Lecturer" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Department</label>
+            <select formControlName="departmentId" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+              <option *ngFor="let dept of departments()" [value]="dept.id">{{ dept.name }}</option>
+            </select>
+          </div>
+          <div>
             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Role</label>
             <select formControlName="role" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
               <option value="Faculty Member">Faculty Member</option>
@@ -199,6 +209,7 @@ export class TeachersComponent implements OnInit {
 
   teachers = signal<any[]>([]);
   universities = signal<any[]>([]);
+  departments = signal<any[]>([]);
   isModalOpen = signal(false);
 
   selectedTeacher = signal<any | null>(null);
@@ -208,6 +219,8 @@ export class TeachersComponent implements OnInit {
   teacherForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    designation: ['', Validators.required],
+    departmentId: ['', Validators.required],
     role: ['Faculty Member', Validators.required],
     universityId: ['', Validators.required]
   });
@@ -225,11 +238,20 @@ export class TeachersComponent implements OnInit {
     this.http.get<any[]>('http://localhost:3000/universities').subscribe(data => {
       this.universities.set(data);
     });
+    this.http.get<any[]>('http://localhost:3000/departments').subscribe(data => {
+      this.departments.set(data);
+    });
   }
 
   openModal() {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
-    this.teacherForm.reset({ role: 'Faculty Member', universityId: firstUni });
+    const firstDept = this.departments().length > 0 ? this.departments()[0].id : '';
+    this.teacherForm.reset({
+      role: 'Faculty Member',
+      universityId: firstUni,
+      designation: '',
+      departmentId: firstDept
+    });
     this.isModalOpen.set(true);
   }
 
@@ -250,8 +272,25 @@ export class TeachersComponent implements OnInit {
       };
 
       this.http.post<any>('http://localhost:3000/users', newTeacher).subscribe(res => {
-        this.teachers.update(t => [...t, res]);
-        this.closeModal();
+        const department = this.departments().find(d => d.id === formValue.departmentId)?.name || '';
+        const staffProfile = {
+          id: 'SP-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0'),
+          userId: res.id,
+          designation: formValue.designation,
+          department: department,
+          joiningDate: new Date().toISOString().split('T')[0],
+          salary: 0,
+          phone: '',
+          address: ''
+        };
+
+        this.http.post<any>('http://localhost:3000/staffProfiles', staffProfile).subscribe(() => {
+          this.teachers.update(t => [...t, res]);
+          this.closeModal();
+        }, err => {
+          console.error('Failed to create staff profile', err);
+          this.closeModal();
+        });
       });
     }
   }

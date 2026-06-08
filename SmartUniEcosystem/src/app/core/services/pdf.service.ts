@@ -34,7 +34,7 @@ export class PdfService {
     pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('SmartUni Ecosystem', 32, 24);
+    pdf.text('Academy Management Ecosystem', 32, 24);
     
     pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
     pdf.setFontSize(7);
@@ -302,7 +302,7 @@ export class PdfService {
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
     pdf.text('Digital Signature ID: CIO-SP26-88', 15, y + 9);
-    pdf.text('Verified via SmartUni Ledger', 130, y + 9);
+    pdf.text('Verified via Academy Management Ledger', 130, y + 9);
 
     this.drawPremiumFooter(pdf, 1);
     pdf.save('Executive_Analytics_Summary.pdf');
@@ -551,7 +551,7 @@ export class PdfService {
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7.5);
     pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('This is an official document bearing the digital seal of SmartUni Digital Registrar. The integrity of details listed', 20, y + 13);
+    pdf.text('This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed', 20, y + 13);
     pdf.text('herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.', 20, y + 18);
 
     // Decorative Seal badge representation
@@ -705,7 +705,7 @@ export class PdfService {
 
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('SmartUni Financial Systems Hub', 15, y + 9);
+    pdf.text('Academy Management Financial Systems Hub', 15, y + 9);
     pdf.text('Authorized & Signed digitally', 130, y + 9);
 
     this.drawPremiumFooter(pdf, 1);
@@ -809,5 +809,57 @@ export class PdfService {
 
     this.drawPremiumFooter(pdf, 1);
     pdf.save('Faculties_Departments_Structure.pdf');
+  }
+
+  /**
+   * 7. PLATFORM MODULES OVERVIEW PDF
+   */
+  generatePlatformModulesSummary(modules: { title: string; description: string; }[]) {
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    this.drawPremiumHeader(pdf, 'Platform Module Overview', 'Summary of core modules and capabilities available in the ecosystem.', 'Platform Summary');
+
+    let y = 62;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(11);
+    pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.text('Available Modules', 15, y);
+
+    y += 10;
+    modules.forEach((module, idx) => {
+      if (idx > 0) {
+        y += 14;
+      }
+      if (y > 250) {
+        this.drawPremiumFooter(pdf, Math.ceil((y - 60) / 250));
+        pdf.addPage();
+        this.drawPremiumHeader(pdf, 'Platform Module Overview', 'Summary of core modules and capabilities available in the ecosystem.', 'Platform Summary');
+        y = 62;
+      }
+
+      pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
+      pdf.rect(15, y - 6, 180, 14, 'F');
+      pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
+      pdf.rect(15, y - 6, 180, 14, 'S');
+
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(this.colors.mitRed[0], this.colors.mitRed[1], this.colors.mitRed[2]);
+      pdf.text(module.title, 20, y + 3);
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8.5);
+      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      const description = module.description.length > 120 ? module.description.substring(0, 117) + '...' : module.description;
+      pdf.text(description, 20, y + 9);
+    });
+
+    y += 25;
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(8);
+    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.text('This PDF contains a curated overview of the platform modules available to your institution. Use it for planning training and rollout documentation.', 15, y);
+
+    this.drawPremiumFooter(pdf, 1);
+    pdf.save('Platform_Module_Overview.pdf');
   }
 }

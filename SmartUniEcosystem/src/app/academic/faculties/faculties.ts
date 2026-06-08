@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
+import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
 
 interface Faculty {
   id: string;
@@ -30,7 +31,7 @@ interface Department {
 @Component({
   selector: 'app-faculties',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DynamicActionButtonComponent],
   templateUrl: './faculties.html'
 })
 export class FacultiesComponent implements OnInit {
@@ -158,6 +159,21 @@ export class FacultiesComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  getAction(type: 'exportCsv' | 'exportPdf' | 'openModal' | 'delete', item?: Department) {
+    switch (type) {
+      case 'exportCsv':
+        return { label: 'Export CSV', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export all departments to CSV', ariaLabel: 'Export departments as CSV' };
+      case 'exportPdf':
+        return { label: 'Export PDF', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export faculty structure to PDF', ariaLabel: 'Export departments as PDF' };
+      case 'openModal':
+        return { label: 'Add Department', icon: 'arrow-right', type: 'primary', size: 'sm', tooltip: 'Create new department', ariaLabel: 'Add a new department' };
+      case 'delete':
+        return { label: 'Delete', icon: 'arrow-right', type: 'danger', size: 'sm', tooltip: `Delete department ${item?.name || ''}`, ariaLabel: `Delete ${item?.name || 'department'}` };
+      default:
+        return undefined;
+    }
   }
 
   exportPDF() {

@@ -1,15 +1,16 @@
-import { Component, signal, inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, signal, inject, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 
 @Component({
   selector: 'app-student-registration',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-950 px-4">
+    <div class="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-955 px-4">
       <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
         
         <!-- Form Section -->
@@ -46,10 +47,7 @@ import html2canvas from 'html2canvas';
                   <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Academic Department</label>
                   <select formControlName="department" class="w-full px-5 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium transition-all shadow-sm">
                     <option value="">Select Dept</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Electrical Engineering">Electrical Engineering</option>
-                    <option value="Business Admin">Business Admin</option>
-                    <option value="Law & Justice">Law & Justice</option>
+                    <option *ngFor="let dept of departments()" [value]="dept.name">{{ dept.name }}</option>
                   </select>
                 </div>
               </div>
@@ -87,7 +85,7 @@ import html2canvas from 'html2canvas';
               
               <!-- Profile Photo Placeholder -->
               <div class="absolute top-24 left-1/2 -translate-x-1/2 w-36 h-36 rounded-[2rem] bg-slate-50 dark:bg-slate-800 border-4 border-white dark:border-slate-900 overflow-hidden flex items-center justify-center shadow-xl z-20">
-                <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg xmlns="http://www.w3.org/205" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
 
               <!-- Details -->
@@ -232,8 +230,9 @@ import html2canvas from 'html2canvas';
     :host { display: block; }
   `]
 })
-export class StudentRegistrationComponent {
+export class StudentRegistrationComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
   
   @ViewChild('idCard') idCardElement!: ElementRef;
   @ViewChild('printReceipt') receiptElement!: ElementRef;
@@ -241,6 +240,8 @@ export class StudentRegistrationComponent {
   isGenerating = signal(false);
   receiptNo = signal(Math.floor(100000 + Math.random() * 900000));
   today = signal(new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }));
+  
+  departments = signal<any[]>([]);
 
   regForm = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -249,6 +250,25 @@ export class StudentRegistrationComponent {
     dob: ['', [Validators.required]],
     department: ['', [Validators.required]]
   });
+
+  ngOnInit() {
+    this.http.get<any[]>('http://localhost:3000/departments').subscribe({
+      next: (data) => {
+        this.departments.set(data);
+      },
+      error: (err) => {
+        console.error('Failed to load departments from API:', err);
+        // Fallback options in case json-server goes down
+        this.departments.set([
+          { name: 'Department of Computer Science and Engineering (CSE)' },
+          { name: 'Department of Electrical and Electronic Engineering (EEE)' },
+          { name: 'Department of Mathematics' },
+          { name: 'Department of History' },
+          { name: 'Department of Law' }
+        ]);
+      }
+    });
+  }
 
   async onFormSubmit() {
     if (this.regForm.invalid) return;
@@ -284,7 +304,7 @@ export class StudentRegistrationComponent {
       pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
       
       // 4. Download
-      const fileName = `Registration_Receipt_${this.regForm.value.fullName?.replace(/\\s/g, '_')}.pdf`;
+      const fileName = `Registration_Receipt_${this.regForm.value.fullName?.replace(/\s/g, '_')}.pdf`;
       pdf.save(fileName);
 
       // 5. Success Notification

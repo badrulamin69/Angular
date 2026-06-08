@@ -1,7 +1,8 @@
-import { Component, signal, HostListener, computed, inject } from '@angular/core';
+import { Component, signal, HostListener, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { FacultySettingsService } from '../../core/services/faculty-settings.service';
 
 @Component({
   selector: 'app-faculty-layout',
@@ -122,7 +123,7 @@ import { AuthService } from '../../core/auth/auth.service';
                   <p class="text-xs text-slate-500 mt-1 font-medium">{{ user()?.role || 'Professor' }}</p>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-indigo-500 overflow-hidden hover:ring-2 hover:ring-indigo-500/30 transition-all">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Faculty Avatar" class="w-full h-full object-cover" />
+                  <img [src]="user()?.profilePhoto || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user()?.name || 'Sarah')" alt="Faculty Avatar" class="w-full h-full object-cover" />
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 ml-1 hidden md:block transition-transform duration-300" [class.rotate-180]="isDropdownOpen()"><path d="m6 9 6 6 6-6"/></svg>
               </div>
@@ -134,9 +135,19 @@ import { AuthService } from '../../core/auth/auth.service';
                   <p class="text-xs text-slate-500 truncate mt-0.5">{{ user()?.email || 'faculty@smartuni.edu' }}</p>
                 </div>
                 
-                <a routerLink="/faculty/profile" class="flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <a routerLink="/faculty/profile" (click)="closeDropdown()" class="flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 opacity-70"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                   My Profile
+                </a>
+
+                <a routerLink="/faculty/settings" (click)="closeDropdown()" class="flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 opacity-70"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  Settings
+                </a>
+
+                <a routerLink="/faculty/help" (click)="closeDropdown()" class="flex items-center px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 opacity-70"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+                  Help & Support
                 </a>
                 
                 <div class="h-px bg-slate-100 dark:bg-slate-800 my-1.5"></div>
@@ -161,8 +172,9 @@ import { AuthService } from '../../core/auth/auth.service';
     </div>
   `
 })
-export class FacultyLayoutComponent {
+export class FacultyLayoutComponent implements OnInit {
   authService = inject(AuthService);
+  settingsService = inject(FacultySettingsService);
   user = computed(() => this.authService.currentUser());
 
   isSidebarOpen = signal(true);
@@ -171,6 +183,17 @@ export class FacultyLayoutComponent {
   windowWidth = signal(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   isMobile = computed(() => this.windowWidth() < 768);
+
+  ngOnInit() {
+    const userId = this.user()?.id;
+    if (userId) {
+      this.settingsService.getSettings(userId).subscribe(settings => {
+        if (settings) {
+          this.isSidebarOpen.set(!settings.sidebarCollapsed);
+        }
+      });
+    }
+  }
 
   @HostListener('window:resize')
   onResize() {

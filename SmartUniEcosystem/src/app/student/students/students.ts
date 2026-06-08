@@ -2,6 +2,7 @@ import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { PdfService } from '../../core/services/pdf.service';
 
 interface Student { id: string; name: string; email: string; program: string; status: 'Active' | 'Inactive' | 'Graduated'; gpa: number; }
 
@@ -17,9 +18,9 @@ interface Student { id: string; name: string; email: string; program: string; st
           <p class="text-slate-500 mt-1">Manage enrollments, academic profiles, and statuses.</p>
         </div>
         <div class="flex gap-3">
-          <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 font-semibold flex items-center gap-2 group transition-colors">
+          <button (click)="exportCSV()" class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 font-semibold flex items-center gap-2 group transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 group-hover:text-slate-600"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            Export
+            Export CSV
           </button>
           <button (click)="openModal()" class="px-4 py-2 bg-gradient-to-r from-mit-red to-primary-600 text-white rounded-xl shadow-lg shadow-mit-red/30 hover:shadow-mit-red/50 hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
@@ -48,7 +49,7 @@ interface Student { id: string; name: string; email: string; program: string; st
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-700/50">
-              <tr *ngFor="let s of filteredStudents()" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
+              <tr *ngFor="let s of filteredStudents()" (click)="openDossier(s)" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
                 <td class="px-6 py-4 flex items-center gap-3">
                   <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm">
                     {{ s.name.charAt(0) }}
@@ -70,13 +71,119 @@ interface Student { id: string; name: string; email: string; program: string; st
                 </td>
                 <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">{{ s.gpa | number:'1.2-2' }}</td>
                 <td class="px-6 py-4 text-right">
-                  <button (click)="deleteStudent(s.id)" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Student">
+                  <button (click)="deleteStudent(s.id); $event.stopPropagation()" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Student">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Dossier Modal -->
+    <div *ngIf="selectedStudent()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeDossier()"></div>
+      <div class="glass-panel w-full max-w-2xl p-6 relative z-10 animate-fade-in-up flex flex-col max-h-[85vh] overflow-y-auto">
+        <div class="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-mit-red text-white flex items-center justify-center font-bold text-lg">
+              {{ selectedStudent()?.name?.charAt(0) }}
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ selectedStudent()?.name }}</h3>
+              <p class="text-xs text-slate-400 font-semibold">{{ selectedStudent()?.id }} &bull; {{ selectedStudent()?.email }}</p>
+            </div>
+          </div>
+          <button (click)="downloadTranscript()" class="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold rounded-lg flex items-center gap-2 hover:bg-slate-800 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Print Transcript
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="grid grid-cols-3 gap-4 text-center">
+            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
+              <p class="text-[10px] text-slate-400 uppercase font-black">Program</p>
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1 truncate">{{ selectedStudent()?.program }}</p>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
+              <p class="text-[10px] text-slate-400 uppercase font-black">GPA Standing</p>
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1">{{ selectedStudent()?.gpa | number:'1.2-2' }}</p>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl">
+              <p class="text-[10px] text-slate-400 uppercase font-black">Enrollment Status</p>
+              <span class="text-xs font-black text-green-600 dark:text-green-400 mt-1 block">{{ selectedStudent()?.status }}</span>
+            </div>
+          </div>
+
+          <!-- Enrollments -->
+          <div>
+            <h4 class="text-sm font-black text-slate-900 dark:text-white mb-2 uppercase tracking-wide">Registered Courses</h4>
+            <div class="overflow-x-auto bg-slate-50/50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+                    <th class="px-4 py-2 font-bold text-slate-500">Course Code</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">Semester</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">Progress</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">Attendance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let e of studentEnrollments()" class="border-b border-slate-100 dark:border-slate-800/50">
+                    <td class="px-4 py-2 font-bold text-slate-850 dark:text-slate-300">{{ e.courseId }}</td>
+                    <td class="px-4 py-2 font-semibold text-slate-500">{{ e.semester }}</td>
+                    <td class="px-4 py-2">
+                      <div class="flex items-center gap-2">
+                        <div class="w-20 bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                          <div class="bg-emerald-500 h-2" [style.width.%]="e.progress"></div>
+                        </div>
+                        <span class="font-bold">{{ e.progress }}%</span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-2 font-bold" [class.text-red-500]="e.attendance < 75">{{ e.attendance }}%</td>
+                  </tr>
+                  <tr *ngIf="studentEnrollments().length === 0">
+                    <td colspan="4" class="px-4 py-4 text-center text-slate-400">No active course enrollments found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Academic Grades -->
+          <div>
+            <h4 class="text-sm font-black text-slate-900 dark:text-white mb-2 uppercase tracking-wide">Grade History</h4>
+            <div class="overflow-x-auto bg-slate-50/50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+                    <th class="px-4 py-2 font-bold text-slate-500">Course</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">Credits</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">GP</th>
+                    <th class="px-4 py-2 font-bold text-slate-500">Grade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let g of studentGrades()" class="border-b border-slate-100 dark:border-slate-800/50">
+                    <td class="px-4 py-2 font-bold text-slate-850 dark:text-slate-300">{{ g.courseId }}</td>
+                    <td class="px-4 py-2 font-semibold text-slate-500">{{ g.credits }}</td>
+                    <td class="px-4 py-2 font-bold">{{ g.gp | number:'1.1-1' }}</td>
+                    <td class="px-4 py-2 font-black text-mit-red">{{ g.grade }}</td>
+                  </tr>
+                  <tr *ngIf="studentGrades().length === 0">
+                    <td colspan="4" class="px-4 py-4 text-center text-slate-400">No official grades recorded yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 mt-6 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+          <button (click)="closeDossier()" class="px-5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-350 font-bold rounded-lg text-sm transition-colors">Close Dossier</button>
         </div>
       </div>
     </div>
@@ -104,9 +211,7 @@ interface Student { id: string; name: string; email: string; program: string; st
           <div>
             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Program</label>
             <select formControlName="program" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
-              <option value="Computer Science">Computer Science</option>
-              <option value="Business Admin">Business Admin</option>
-              <option value="Data Science">Data Science</option>
+              <option *ngFor="let p of programs()" [value]="p.name">{{ p.name }}</option>
             </select>
           </div>
           <div>
@@ -128,16 +233,23 @@ interface Student { id: string; name: string; email: string; program: string; st
 export class StudentsComponent implements OnInit {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
+  private pdfService = inject(PdfService);
 
   students = signal<Student[]>([]);
   universities = signal<any[]>([]);
+  programs = signal<any[]>([]);
+  courses = signal<any[]>([]);
   searchQuery = signal('');
   isModalOpen = signal(false);
+
+  selectedStudent = signal<Student | null>(null);
+  studentEnrollments = signal<any[]>([]);
+  studentGrades = signal<any[]>([]);
 
   studentForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    program: ['Computer Science', Validators.required],
+    program: ['', Validators.required],
     universityId: ['', Validators.required]
   });
 
@@ -157,11 +269,35 @@ export class StudentsComponent implements OnInit {
     this.http.get<any[]>('http://localhost:3000/universities').subscribe(data => {
       this.universities.set(data);
     });
+    this.http.get<any[]>('http://localhost:3000/programs').subscribe(data => {
+      this.programs.set(data);
+      if (data.length > 0 && !this.studentForm.get('program')?.value) {
+        this.studentForm.get('program')?.setValue(data[0].name);
+      }
+    });
+    this.http.get<any[]>('http://localhost:3000/courses').subscribe(data => {
+      this.courses.set(data);
+    });
+  }
+
+  exportCSV() {
+    let csv = 'Student ID,Name,Email,Program,Status,GPA\n';
+    this.filteredStudents().forEach(s => {
+      csv += `"${s.id}","${s.name}","${s.email}","${s.program}","${s.status}","${s.gpa.toFixed(2)}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'student_directory.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   openModal() {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
-    this.studentForm.reset({ program: 'Computer Science', universityId: firstUni });
+    const firstProg = this.programs().length > 0 ? this.programs()[0].name : '';
+    this.studentForm.reset({ program: firstProg, universityId: firstUni });
     this.isModalOpen.set(true);
   }
 
@@ -209,6 +345,31 @@ export class StudentsComponent implements OnInit {
           this.students.update(s => s.filter(student => student.id !== id));
         });
       });
+    }
+  }
+
+  openDossier(student: Student) {
+    this.selectedStudent.set(student);
+    this.studentEnrollments.set([]);
+    this.studentGrades.set([]);
+
+    this.http.get<any[]>(`http://localhost:3000/enrollments?studentId=${student.id}`).subscribe(data => {
+      this.studentEnrollments.set(data);
+    });
+
+    this.http.get<any[]>(`http://localhost:3000/studentGrades?studentId=${student.id}`).subscribe(data => {
+      this.studentGrades.set(data);
+    });
+  }
+
+  closeDossier() {
+    this.selectedStudent.set(null);
+  }
+
+  downloadTranscript() {
+    const s = this.selectedStudent();
+    if (s) {
+      this.pdfService.generateOfficialTranscript(s, this.studentGrades(), this.courses());
     }
   }
 }

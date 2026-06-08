@@ -102,6 +102,10 @@ export class FacultiesComponent implements OnInit {
     return this.faculties().find(f => f.id === id)?.name || id;
   }
 
+  getUniversityName(id: string) {
+    return this.universities().find(u => u.id === id)?.name || 'Unknown University';
+  }
+
   openModal() {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
     const firstFac = this.faculties().length > 0 ? this.faculties()[0].id : '';

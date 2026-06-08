@@ -12,7 +12,8 @@
       "name": "University Admin",
       "email": "admin@uni.com",
       "password": "password",
-      "role": "University Admin"
+      "role": "University Admin",
+      "bio": "Administrator"
     },
     {
       "id": "3",
@@ -28,7 +29,11 @@
       "password": "password",
       "role": "Faculty Member",
       "universityId": "U1",
-      "id": "_bUfEoxkwxo"
+      "id": "_bUfEoxkwxo",
+      "phone": "+1-555-0101",
+      "designation": "Associate Professor",
+      "employeeId": "EMP-1024",
+      "profilePhoto": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
     },
     {
       "id": "dbZguN2EI5k",
@@ -60,6 +65,14 @@
       "email": "sarah@smartuni.edu",
       "password": "password",
       "role": "Staff",
+      "universityId": "U1"
+    },
+    {
+      "id": "sK14Ckb2oMc",
+      "name": "Kamal Ahmed",
+      "email": "kamal@gmail.com",
+      "password": "password",
+      "role": "Student",
       "universityId": "U1"
     }
   ],
@@ -137,8 +150,8 @@
   "universities": [
     {
       "id": "U1",
-      "name": "Dhaka University",
-      "location": "Dhaka, Bangladesh",
+      "name": "University of Chittagong",
+      "location": "Chittagong, Bangladesh",
       "status": "Active",
       "totalStudents": 40000
     }
@@ -308,13 +321,6 @@
       "name": "Department of Civil Engineering (CE)",
       "bnName": "পুরকৌশল বা সিভিল ইঞ্জিনিয়ারিং বিভাগ",
       "universityId": "U1"
-    },
-    {
-      "id": "9d_REqlluss",
-      "name": "fwas",
-      "bnName": "eqh",
-      "facultyId": "F2",
-      "universityId": "U1"
     }
   ],
   "courses": [
@@ -380,6 +386,16 @@
       "enrolled": 0,
       "capacity": 100,
       "id": "ATEuVdb3EFE"
+    },
+    {
+      "code": "010",
+      "title": "Basic Computer",
+      "credits": 4,
+      "department": "fwas",
+      "capacity": 50,
+      "status": "Active",
+      "enrolled": 0,
+      "id": "ZnzcVf1OECA"
     }
   ],
   "students": [
@@ -412,6 +428,14 @@
       "name": "Emon",
       "email": "emon@gmail.com",
       "program": "Data Science",
+      "status": "Active",
+      "gpa": 0
+    },
+    {
+      "id": "jGC2h-JnzVs",
+      "name": "Kamal Ahmed",
+      "email": "kamal@gmail.com",
+      "program": "Computer Science",
       "status": "Active",
       "gpa": 0
     }
@@ -641,6 +665,36 @@
       "completedAssignments": 0,
       "totalAssignments": 0,
       "id": "iW60Qv4ZO9A"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS101",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "evpNGkBeEHQ"
+    },
+    {
+      "studentId": "3",
+      "courseId": "CS205",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "dss7obASlKE"
+    },
+    {
+      "studentId": "3",
+      "courseId": "222",
+      "semester": "Fall 2026",
+      "progress": 0,
+      "attendance": 0,
+      "completedAssignments": 0,
+      "totalAssignments": 0,
+      "id": "_icWeY3aSy0"
     }
   ],
   "studentGrades": [
@@ -757,6 +811,76 @@
       "departmentId": "D17",
       "credits": 36,
       "duration": "1.5 Years"
+    },
+    {
+      "id": "P-11",
+      "name": "B.A. in Bengali",
+      "departmentId": "D2",
+      "credits": 120,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-12",
+      "name": "Master of Laws (LL.M.)",
+      "departmentId": "D5",
+      "credits": 36,
+      "duration": "1 Year"
+    },
+    {
+      "id": "P-13",
+      "name": "M.A. in International Law",
+      "departmentId": "D6",
+      "credits": 36,
+      "duration": "1 Year"
+    },
+    {
+      "id": "P-14",
+      "name": "M.A. in Human Rights",
+      "departmentId": "D7",
+      "credits": 36,
+      "duration": "1 Year"
+    },
+    {
+      "id": "P-15",
+      "name": "B.Sc. in Chemistry",
+      "departmentId": "D9",
+      "credits": 136,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-16",
+      "name": "B.Sc. in Statistics",
+      "departmentId": "D11",
+      "credits": 132,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-17",
+      "name": "B.Sc. in Botany",
+      "departmentId": "D12",
+      "credits": 128,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-18",
+      "name": "B.BA in Finance & Banking",
+      "departmentId": "D15",
+      "credits": 132,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-19",
+      "name": "B.BA in Marketing",
+      "departmentId": "D16",
+      "credits": 132,
+      "duration": "4 Years"
+    },
+    {
+      "id": "P-20",
+      "name": "B.Sc. in Civil Engineering",
+      "departmentId": "D19",
+      "credits": 144,
+      "duration": "4 Years"
     }
   ],
   "assignments": [
@@ -936,6 +1060,135 @@
       "applicantId": "APP-55",
       "status": "Pending",
       "appliedDate": "2026-05-24T09:33:27.447Z"
+    },
+    {
+      "fullName": "Test Applicant",
+      "dob": "2004-12-05",
+      "gender": "Male",
+      "previousInst": "Dhaka City College",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "programId": "P-01",
+      "id": "yCZo0_ALt0o",
+      "applicantId": "APP-715",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T04:20:37.637Z"
+    },
+    {
+      "fullName": "Md. Tanvir ",
+      "dob": "2000-01-01",
+      "gender": "Male",
+      "previousInst": "Pabna",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "programId": "P-02",
+      "id": "AqzvUqkaRv0",
+      "applicantId": "APP-732",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T04:26:43.664Z"
+    },
+    {
+      "fullName": "Mahbub",
+      "dob": "2026-06-23",
+      "gender": "Male",
+      "previousInst": "Mahbub",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "programId": "P-05",
+      "id": "ZBaJH1MgS_I",
+      "applicantId": "APP-29",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T05:22:14.038Z"
+    },
+    {
+      "fullName": "Emon ",
+      "dob": "2020-01-01",
+      "gender": "Male",
+      "previousInst": "abc",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F5",
+      "departmentId": "D17",
+      "programId": "P-01",
+      "id": "SJE3zly_jlU",
+      "applicantId": "APP-979",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T06:20:43.164Z"
+    },
+    {
+      "fullName": "Emon Sarker",
+      "dob": "2026-07-09",
+      "gender": "Male",
+      "previousInst": "44",
+      "sscGpa": 4,
+      "hscGpa": 4,
+      "facultyId": "F1",
+      "departmentId": "D1",
+      "programId": "P-03",
+      "id": "idcbmc5U-Jw",
+      "applicantId": "APP-54",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T06:26:43.772Z"
+    },
+    {
+      "fullName": "Emran Hossain",
+      "dob": "1999-09-09",
+      "gender": "Female",
+      "previousInst": "MIT",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F3",
+      "departmentId": "D10",
+      "programId": "P-09",
+      "id": "h1KEzg7bLd4",
+      "applicantId": "APP-22",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T06:34:43.291Z"
+    },
+    {
+      "fullName": "Emran Hossain",
+      "dob": "1998-04-12",
+      "gender": "Male",
+      "previousInst": "Chittagong College",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F3",
+      "departmentId": "D8",
+      "programId": "P-05",
+      "id": "yYpsC0VocS0",
+      "applicantId": "APP-728",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T06:42:14.740Z"
+    },
+    {
+      "fullName": "Emran Hossain",
+      "dob": "2000-01-01",
+      "gender": "Male",
+      "previousInst": "Dhaka College",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F5",
+      "departmentId": "D17",
+      "programId": "P-01",
+      "id": "gnJYE0XuSFU",
+      "applicantId": "APP-380",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T06:49:12.001Z"
+    },
+    {
+      "fullName": "Sarker",
+      "dob": "2026-07-01",
+      "gender": "Female",
+      "previousInst": "5",
+      "sscGpa": 5,
+      "hscGpa": 5,
+      "facultyId": "F2",
+      "departmentId": "D4",
+      "programId": "P-04",
+      "id": "5r7pmgYmU2c",
+      "applicantId": "APP-236",
+      "status": "Pending",
+      "appliedDate": "2026-06-08T07:02:53.280Z"
     }
   ],
   "books": [
@@ -1017,6 +1270,86 @@
       "totalCourses": 12,
       "gradedCourses": 8,
       "status": "In Progress"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "1",
+      "title": "New university boarded: Stanford",
+      "time": "2 minutes ago",
+      "timestamp": "2026-06-07T16:51:22Z",
+      "type": "info"
+    },
+    {
+      "id": "2",
+      "title": "Database backup completed",
+      "time": "1 hour ago",
+      "timestamp": "2026-06-07T15:53:22Z",
+      "type": "success"
+    },
+    {
+      "id": "3",
+      "title": "High traffic warning: AWS Node 3",
+      "time": "3 hours ago",
+      "timestamp": "2026-06-07T13:53:22Z",
+      "type": "warning"
+    },
+    {
+      "id": "4",
+      "title": "Payment gateway error",
+      "time": "5 hours ago",
+      "timestamp": "2026-06-07T11:53:22Z",
+      "type": "error"
+    }
+  ],
+  "facultySettings": [
+    {
+      "id": "1",
+      "userId": "_bUfEoxkwxo",
+      "theme": "dark",
+      "sidebarCollapsed": false,
+      "emailNotifications": true,
+      "assignmentNotifications": true,
+      "examNotifications": true,
+      "messageNotifications": true,
+      "profileVisibility": true,
+      "phoneVisibility": false,
+      "lastUpdated": "2026-06-08T03:41:48.328Z"
+    }
+  ],
+  "faculty-settings": [
+    {
+      "id": "1",
+      "userId": "_bUfEoxkwxo",
+      "theme": "dark",
+      "sidebarCollapsed": false,
+      "emailNotifications": true,
+      "assignmentNotifications": true,
+      "examNotifications": true,
+      "messageNotifications": true,
+      "profileVisibility": true,
+      "phoneVisibility": false,
+      "lastUpdated": "2026-06-08T03:41:48.328Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess-1",
+      "userId": "_bUfEoxkwxo",
+      "device": "Chrome on Windows 11 (Current)",
+      "ipAddress": "192.168.1.102",
+      "location": "Chittagong, Bangladesh",
+      "lastActive": "Active Now",
+      "current": true
+    },
+    {
+      "id": "sess-3",
+      "userId": "_bUfEoxkwxo",
+      "device": "Firefox on MacOS",
+      "ipAddress": "180.234.120.55",
+      "location": "Sylhet, Bangladesh",
+      "lastActive": "3 days ago",
+      "current": false
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

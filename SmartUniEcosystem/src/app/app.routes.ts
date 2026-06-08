@@ -3,6 +3,7 @@ import { Home } from './pages/home/home';
 import { About } from './pages/about/about';
 import { Contact } from './pages/contact/contact';
 import { authGuard, roleGuard } from './core/auth/auth.guard';
+import { pendingChangesGuard } from './core/guards/pending-changes.guard';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,8 @@ export const routes: Routes = [
       { path: 'students', loadComponent: () => import('./student/students/students').then(m => m.StudentsComponent) },
       { path: 'teachers', loadComponent: () => import('./faculty/teachers/teachers').then(m => m.TeachersComponent) },
       { path: 'finance', loadComponent: () => import('./finance/finance-dashboard/finance-dashboard').then(m => m.FinanceDashboardComponent) },
+      { path: 'profile', loadComponent: () => import('./shared-portal/settings/settings').then(m => m.SharedSettingsComponent) },
+      { path: 'settings', loadComponent: () => import('./shared-portal/settings/settings').then(m => m.SharedSettingsComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -59,6 +62,7 @@ export const routes: Routes = [
       { path: 'attendance', loadComponent: () => import('./faculty-portal/attendance/attendance').then(m => m.FacultyAttendanceComponent) },
       { path: 'grading', loadComponent: () => import('./faculty-portal/grading/grading').then(m => m.FacultyGradingComponent) },
       { path: 'advising', loadComponent: () => import('./faculty-portal/advising/advising').then(m => m.FacultyAdvisingComponent) },
+      { path: 'settings', loadComponent: () => import('./faculty-portal/settings/settings').then(m => m.FacultySettingsComponent), canDeactivate: [pendingChangesGuard] },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

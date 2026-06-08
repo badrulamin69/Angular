@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 
 @Component({
   selector: 'app-payment-success',
@@ -113,7 +113,7 @@ export class PaymentSuccessComponent implements OnInit {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`DU-Receipt-${this.tranId}.pdf`);
+      pdf.save(`CU-Receipt-${this.tranId}.pdf`);
     } catch (err) {
       console.error('Receipt generation failed:', err);
     } finally {

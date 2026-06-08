@@ -1,5 +1,7 @@
 import { Component, signal, inject, OnInit, computed, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { FacultyService } from '../../core/services/faculty.service';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -20,7 +22,7 @@ export class FilterByTypePipe implements PipeTransform {
 @Component({
   selector: 'app-faculty-courses',
   standalone: true,
-  imports: [CommonModule, FilterByTypePipe],
+  imports: [CommonModule, FilterByTypePipe, FormsModule],
   template: `
     <div class="space-y-6 animate-fade-in-up">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -28,10 +30,13 @@ export class FilterByTypePipe implements PipeTransform {
           <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Course Management</h1>
           <p class="text-slate-500 mt-1">Manage your active courses, upload materials, and view recorded lectures.</p>
         </div>
-        <button class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-          Upload Material
-        </button>
+        <div class="flex gap-2">
+          <input #materialInput type="file" multiple accept=".pdf,.pptx,.docx,.zip" class="hidden" (change)="onMaterialUpload($event)">
+          <button (click)="materialInput.click()" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            Upload Material
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -79,12 +84,28 @@ export class FilterByTypePipe implements PipeTransform {
                 <div *ngIf="courseContent().length === 0" class="md:col-span-2 text-center py-12 text-slate-500">No materials uploaded yet.</div>
               </div>
               
-              <div class="mt-6 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer">
+              <div class="mt-6 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-10 flex flex-col items-center justify-center text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer" (click)="materialInput.click()" (dragover)="$event.preventDefault()" (drop)="onMaterialDrop($event)">
+                <input #materialInput type="file" multiple accept=".pdf,.pptx,.docx,.zip" class="hidden" (change)="onMaterialUpload($event)">
                 <div class="w-16 h-16 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-500 mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
                 </div>
                 <h3 class="font-bold text-slate-900 dark:text-white text-lg">Drag & Drop Files Here</h3>
                 <p class="text-slate-500 text-sm mt-1">PDF, PPTX, DOCX, or ZIP up to 50MB</p>
+              </div>
+              <!-- Uploaded files list -->
+              <div *ngIf="pendingUploads().length > 0" class="mt-4 space-y-2">
+                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending Uploads</h5>
+                <div *ngFor="let f of pendingUploads(); let i = index" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-lg flex items-center justify-center text-xs font-black">{{ f.name.split('.').pop()?.toUpperCase() }}</div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{{ f.name }}</p>
+                    <p class="text-xs text-slate-400">{{ (f.size / 1024).toFixed(1) }} KB</p>
+                  </div>
+                  <button (click)="removePendingUpload(i)" class="text-slate-400 hover:text-rose-500 transition-colors p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+                  </button>
+                </div>
+                <button (click)="submitUploads()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-colors">Submit {{ pendingUploads().length }} File(s)</button>
               </div>
             </div>
 
@@ -113,18 +134,19 @@ export class FilterByTypePipe implements PipeTransform {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Course Name</label>
-                  <input type="text" [value]="selectedCourse()?.title" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                  <input type="text" [(ngModel)]="editCourseTitle" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
                 </div>
                 <div>
                   <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Enrollment Status</label>
-                  <select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold">
-                    <option [selected]="selectedCourse()?.status === 'Active'">Active</option>
-                    <option [selected]="selectedCourse()?.status === 'Draft'">Draft</option>
-                    <option [selected]="selectedCourse()?.status === 'Archived'">Archived</option>
+                  <select [(ngModel)]="editCourseStatus" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    <option value="Active">Active</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Archived">Archived</option>
                   </select>
                 </div>
               </div>
-              <button class="mt-6 px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">Save Changes</button>
+              <div *ngIf="saveCourseFeedback()" class="mt-4 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 text-emerald-700 dark:text-emerald-400 rounded-xl text-sm font-semibold">{{ saveCourseFeedback() }}</div>
+              <button (click)="saveSettings()" class="mt-6 px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors">Save Changes</button>
             </div>
           </div>
 
@@ -158,6 +180,11 @@ export class FacultyCoursesComponent implements OnInit {
   courseContent = signal<any[]>([]);
   activeTab = signal<'materials' | 'lectures' | 'details'>('materials');
 
+  pendingUploads = signal<any[]>([]);
+  editCourseTitle = signal<string>('');
+  editCourseStatus = signal<string>('Active');
+  saveCourseFeedback = signal<string>('');
+
   ngOnInit() {
     const faculty = this.user();
     if (!faculty) return;
@@ -173,8 +200,79 @@ export class FacultyCoursesComponent implements OnInit {
   selectCourse(course: any) {
     this.selectedCourseId.set(course.id);
     this.selectedCourse.set(course);
+    this.editCourseTitle.set(course.title);
+    this.editCourseStatus.set(course.status);
+    this.saveCourseFeedback.set('');
     this.facultyService.getCourseContent(course.id).subscribe(content => {
       this.courseContent.set(content);
+    });
+  }
+
+  onMaterialUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const filesArray = Array.from(input.files);
+      this.pendingUploads.update(current => [...current, ...filesArray]);
+    }
+  }
+
+  onMaterialDrop(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const filesArray = Array.from(event.dataTransfer.files);
+      this.pendingUploads.update(current => [...current, ...filesArray]);
+    }
+  }
+
+  removePendingUpload(index: number) {
+    this.pendingUploads.update(current => current.filter((_, i) => i !== index));
+  }
+
+  submitUploads() {
+    const courseId = this.selectedCourseId();
+    if (!courseId) return;
+
+    const uploads = this.pendingUploads().map(file => {
+      const payload = {
+        courseId: courseId,
+        title: file.name,
+        type: 'File',
+        duration: `${(file.size / 1024).toFixed(1)} KB`
+      };
+      return this.facultyService.uploadCourseContent(payload);
+    });
+
+    if (uploads.length === 0) return;
+
+    forkJoin(uploads).subscribe(() => {
+      this.pendingUploads.set([]);
+      this.facultyService.getCourseContent(courseId).subscribe(content => {
+        this.courseContent.set(content);
+      });
+    });
+  }
+
+  saveSettings() {
+    const courseId = this.selectedCourseId();
+    if (!courseId) return;
+
+    const data = {
+      title: this.editCourseTitle(),
+      status: this.editCourseStatus()
+    };
+
+    this.facultyService.updateCourse(courseId, data).subscribe({
+      next: (updatedCourse) => {
+        this.saveCourseFeedback.set('Course settings updated successfully!');
+        this.selectedCourse.update(c => ({ ...c, ...data }));
+        this.courses.update(list => list.map(c => c.id === courseId ? { ...c, ...data } : c));
+        setTimeout(() => {
+          this.saveCourseFeedback.set('');
+        }, 3000);
+      },
+      error: () => {
+        this.saveCourseFeedback.set('Failed to update course settings.');
+      }
     });
   }
 }

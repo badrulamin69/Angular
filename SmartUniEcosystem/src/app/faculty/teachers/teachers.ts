@@ -31,7 +31,7 @@ import { HttpClient } from '@angular/common/http';
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-700/50">
-              <tr *ngFor="let t of teachers()" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
+              <tr *ngFor="let t of teachers()" (click)="openTeacherDossier(t)" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer">
                 <td class="px-6 py-4 flex items-center gap-3">
                   <div [ngClass]="{
                     'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400': t.role === 'Faculty Member',
@@ -46,7 +46,7 @@ import { HttpClient } from '@angular/common/http';
                 </td>
                 <td class="px-6 py-4 text-slate-600 dark:text-slate-400 font-medium">{{ t.email }}</td>
                 <td class="px-6 py-4 text-right">
-                  <button (click)="deleteTeacher(t.id)" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Faculty">
+                  <button (click)="deleteTeacher(t.id); $event.stopPropagation()" class="text-slate-400 hover:text-mit-red transition-colors p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Faculty">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
                 </td>
@@ -56,6 +56,96 @@ import { HttpClient } from '@angular/common/http';
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher Dossier Modal -->
+    <div *ngIf="selectedTeacher()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeTeacherDossier()"></div>
+      <div class="glass-panel w-full max-w-2xl p-6 relative z-10 animate-fade-in-up flex flex-col max-h-[85vh] overflow-y-auto">
+        <div class="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div [ngClass]="{
+              'bg-indigo-600 text-white': selectedTeacher()?.role === 'Faculty Member',
+              'bg-emerald-600 text-white': selectedTeacher()?.role === 'Staff'
+            }" class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg">
+              {{ selectedTeacher()?.name?.charAt(0) }}
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ selectedTeacher()?.name }}</h3>
+              <p class="text-xs text-slate-400 font-semibold">{{ selectedTeacher()?.role }} &bull; {{ selectedTeacher()?.email }}</p>
+            </div>
+          </div>
+          <span class="text-xs font-black uppercase tracking-wider px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-650 dark:text-slate-350">
+            ID: {{ selectedTeacher()?.id }}
+          </span>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Staff Profile Details -->
+          <div>
+            <h4 class="text-sm font-black text-slate-900 dark:text-white mb-2 uppercase tracking-wide">Employment Profile</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+              <div>
+                <p class="text-[10px] text-slate-400 uppercase font-black">Designation</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.designation || 'Lecturer / Coordinator' }}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-slate-400 uppercase font-black">Department</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.department || 'Instructional Department' }}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-slate-400 uppercase font-black">Salary (Monthly)</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ (teacherProfile()?.salary || 3500) | currency:'USD' }}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-slate-400 uppercase font-black">Joining Date</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.joiningDate || '2024-01-01' | date:'mediumDate' }}</p>
+              </div>
+              <div class="md:col-span-2 border-t border-slate-200 dark:border-slate-800 pt-3 mt-1">
+                <p class="text-[10px] text-slate-400 uppercase font-black">Contact Address</p>
+                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ teacherProfile()?.address || 'SmartUni Campus Main Road' }} &bull; {{ teacherProfile()?.phone || '+880-CU-ADMIN' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tasks list -->
+          <div>
+            <h4 class="text-sm font-black text-slate-900 dark:text-white mb-2 uppercase tracking-wide">Assigned Duties & Tasks</h4>
+            <div class="space-y-3">
+              <div *ngFor="let task of teacherTasks()" class="p-3 bg-slate-50/50 dark:bg-slate-900/30 rounded-xl border border-slate-100 dark:border-slate-800/80 flex items-start justify-between">
+                <div>
+                  <h5 class="font-bold text-sm text-slate-800 dark:text-slate-200">{{ task.title }}</h5>
+                  <p class="text-xs text-slate-500 mt-0.5">{{ task.description }}</p>
+                  <p class="text-[10px] text-slate-450 mt-1.5 font-semibold">Due Date: {{ task.dueDate | date:'mediumDate' }}</p>
+                </div>
+                <div class="text-right">
+                  <span [ngClass]="{
+                    'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400': task.priority === 'High',
+                    'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400': task.priority === 'Medium',
+                    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400': task.priority === 'Low'
+                  }" class="text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider block mb-1">
+                    {{ task.priority }} Priority
+                  </span>
+                  <span [ngClass]="{
+                    'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50': task.status === 'Completed',
+                    'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400 border-blue-200 dark:border-blue-900/50': task.status === 'In Progress',
+                    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400': task.status === 'Pending'
+                  }" class="text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-wider inline-block">
+                    {{ task.status }}
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="teacherTasks().length === 0" class="text-center text-xs text-slate-400 py-6 bg-slate-50/50 dark:bg-slate-900/30 rounded-xl">
+                No administrative tasks currently delegated.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 mt-6 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+          <button (click)="closeTeacherDossier()" class="px-5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-350 font-bold rounded-lg text-sm transition-colors">Close Dossier</button>
         </div>
       </div>
     </div>
@@ -110,6 +200,10 @@ export class TeachersComponent implements OnInit {
   teachers = signal<any[]>([]);
   universities = signal<any[]>([]);
   isModalOpen = signal(false);
+
+  selectedTeacher = signal<any | null>(null);
+  teacherProfile = signal<any | null>(null);
+  teacherTasks = signal<any[]>([]);
 
   teacherForm = this.fb.group({
     name: ['', Validators.required],
@@ -168,5 +262,25 @@ export class TeachersComponent implements OnInit {
         this.teachers.update(t => t.filter(teacher => teacher.id !== id));
       });
     }
+  }
+
+  openTeacherDossier(teacher: any) {
+    this.selectedTeacher.set(teacher);
+    this.teacherProfile.set(null);
+    this.teacherTasks.set([]);
+
+    this.http.get<any[]>(`http://localhost:3000/staffProfiles?userId=${teacher.id}`).subscribe(data => {
+      if (data && data.length > 0) {
+        this.teacherProfile.set(data[0]);
+      }
+    });
+
+    this.http.get<any[]>(`http://localhost:3000/tasks?assignedTo=${teacher.id}`).subscribe(data => {
+      this.teacherTasks.set(data);
+    });
+  }
+
+  closeTeacherDossier() {
+    this.selectedTeacher.set(null);
   }
 }

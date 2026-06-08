@@ -38,7 +38,7 @@ import { HttpClient } from '@angular/common/http';
           <div class="flex justify-between items-start mb-4">
             <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black uppercase tracking-widest rounded">{{ prog.id }}</span>
             <div class="flex gap-1">
-              <button class="p-1.5 text-slate-400 hover:text-indigo-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>
+              <button (click)="openModal(prog); $event.stopPropagation()" class="p-1.5 text-slate-400 hover:text-indigo-500 transition-colors" title="Edit Program"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>
               <button (click)="deleteProgram(prog.id)" class="p-1.5 text-slate-400 hover:text-rose-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
             </div>
           </div>
@@ -62,7 +62,7 @@ import { HttpClient } from '@angular/common/http';
     <!-- Modal -->
     <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
       <div class="glass-panel max-w-lg w-full p-6 shadow-2xl">
-        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Add New Program</h2>
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">{{ editingProgramId() ? 'Edit Academic Program' : 'Add New Program' }}</h2>
         <form [formGroup]="progForm" (ngSubmit)="saveProgram()" class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Program Name</label>
@@ -86,7 +86,9 @@ import { HttpClient } from '@angular/common/http';
           </div>
           <div class="flex gap-3 mt-6">
             <button type="button" (click)="isModalOpen = false" class="flex-1 py-2 text-slate-500 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">Cancel</button>
-            <button type="submit" [disabled]="progForm.invalid" class="flex-1 py-2 bg-indigo-600 text-white font-bold rounded-xl shadow-lg">Save Program</button>
+            <button type="submit" [disabled]="progForm.invalid" class="flex-1 py-2 bg-indigo-600 text-white font-bold rounded-xl shadow-lg">
+              {{ editingProgramId() ? 'Save Changes' : 'Save Program' }}
+            </button>
           </div>
         </form>
       </div>
@@ -104,6 +106,7 @@ export class ProgramsComponent implements OnInit {
   searchQuery = '';
   selectedDept = '';
   isModalOpen = false;
+  editingProgramId = signal<string | null>(null);
 
   progForm = this.fb.group({
     name: ['', Validators.required],
@@ -149,22 +152,46 @@ export class ProgramsComponent implements OnInit {
     this.filteredPrograms.set(filtered);
   }
 
-  openModal() {
-    this.progForm.reset({ credits: 140 });
+  openModal(prog?: any) {
+    if (prog) {
+      this.editingProgramId.set(prog.id);
+      this.progForm.reset({
+        name: prog.name,
+        departmentId: prog.departmentId,
+        duration: prog.duration,
+        credits: prog.credits
+      });
+    } else {
+      this.editingProgramId.set(null);
+      this.progForm.reset({ credits: 140 });
+    }
     this.isModalOpen = true;
   }
 
   saveProgram() {
     if (this.progForm.valid) {
-      const newProg = {
-        ...this.progForm.value,
-        id: 'P-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
-      };
-      this.http.post<any>('http://localhost:3000/programs', newProg).subscribe(res => {
-        this.programs.update(p => [...p, res]);
-        this.applyFilters();
-        this.isModalOpen = false;
-      });
+      const formVal = this.progForm.value;
+      const editId = this.editingProgramId();
+
+      if (editId) {
+        // PATCH existing
+        this.http.patch<any>(`http://localhost:3000/programs/${editId}`, formVal).subscribe(res => {
+          this.programs.update(list => list.map(p => p.id === editId ? { ...p, ...res } : p));
+          this.applyFilters();
+          this.isModalOpen = false;
+        });
+      } else {
+        // POST new
+        const newProg = {
+          ...formVal,
+          id: 'P-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
+        };
+        this.http.post<any>('http://localhost:3000/programs', newProg).subscribe(res => {
+          this.programs.update(p => [...p, res]);
+          this.applyFilters();
+          this.isModalOpen = false;
+        });
+      }
     }
   }
 

@@ -63,4 +63,12 @@ export class FacultyService {
       })
     );
   }
+
+  uploadCourseContent(content: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/courseContent`, content);
+  }
+
+  updateCourse(courseId: string, data: Partial<any>): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/courses/${courseId}`, data);
+  }
 }

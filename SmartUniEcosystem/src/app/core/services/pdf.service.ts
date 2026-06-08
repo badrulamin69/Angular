@@ -739,7 +739,7 @@ export class PdfService {
     pdf.setFontSize(11);
     pdf.text(String(faculties.length), 20, y + 14);
     pdf.text(String(departments.length), 85, y + 14);
-    pdf.text('Dhaka University (DU)', 140, y + 14);
+    pdf.text('University of Chittagong (CU)', 140, y + 14);
 
     y += 30;
     pdf.setFont('helvetica', 'bold');

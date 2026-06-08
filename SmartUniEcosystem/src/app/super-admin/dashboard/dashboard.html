@@ -10,7 +10,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
         Export Report
       </button>
-      <button (click)="onboardUniversity()" class="px-4 py-2 bg-mit-red text-white rounded-lg shadow-lg shadow-mit-red/30 hover:bg-primary-600 transition-colors font-bold flex items-center gap-2">
+      <button (click)="openOnboardModal()" class="px-4 py-2 bg-mit-red text-white rounded-lg shadow-lg shadow-mit-red/30 hover:bg-primary-600 transition-colors font-bold flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         Onboard University
       </button>
@@ -29,7 +29,7 @@
         <h3 class="text-4xl font-black text-slate-900 dark:text-white">{{ stats()?.totalUniversities || 0 }}</h3>
         <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          +12%
+          +{{ universityGrowthPct() }}%
         </span>
       </div>
     </div>
@@ -44,7 +44,7 @@
         <h3 class="text-4xl font-black text-slate-900 dark:text-white">{{ (stats()?.totalStudents || 0) | number:'1.0-0' }}</h3>
         <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          +5.4%
+          +{{ studentGrowthPct() }}%
         </span>
       </div>
     </div>
@@ -59,7 +59,7 @@
         <h3 class="text-4xl font-black text-slate-900 dark:text-white">${{ ((stats()?.totalRevenue || 0) / 1000000) | number:'1.1-2' }}M</h3>
         <span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          +18%
+          +{{ revenueGrowthPct() }}%
         </span>
       </div>
     </div>
@@ -85,52 +85,157 @@
     <div class="lg:col-span-2 glass-panel p-6 animate-fade-in delay-200">
       <div class="flex items-center justify-between mb-6">
         <h3 class="font-bold text-lg text-slate-900 dark:text-white">Platform Growth</h3>
-        <select class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm font-medium px-3 py-1.5 focus:ring-2 focus:ring-mit-red">
-          <option>Last 12 Months</option>
-          <option>Last 30 Days</option>
-          <option>This Year</option>
+        <select [ngModel]="chartPeriod()" (ngModelChange)="chartPeriod.set($event)" class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm font-medium px-3 py-1.5 focus:ring-2 focus:ring-mit-red">
+          <option value="12m">Last 12 Months</option>
+          <option value="30d">Last 30 Days</option>
+          <option value="year">This Year</option>
         </select>
       </div>
-      <!-- Placeholder for Chart.js -->
-      <div class="h-72 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-        <span class="text-slate-400">Growth Chart Simulation (Chart.js)</span>
+      <!-- Live Responsive Custom SVG Line Chart -->
+      <div class="h-72 w-full bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden">
+        <svg class="w-full h-full p-4" viewBox="0 0 480 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#A31D1D" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#A31D1D" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid Lines -->
+          <line x1="40" y1="30" x2="440" y2="30" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="4" class="dark:stroke-slate-800"/>
+          <line x1="40" y1="70" x2="440" y2="70" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="4" class="dark:stroke-slate-800"/>
+          <line x1="40" y1="110" x2="440" y2="110" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="4" class="dark:stroke-slate-800"/>
+          <line x1="40" y1="150" x2="440" y2="150" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="4" class="dark:stroke-slate-800"/>
+          
+          <!-- Area under Path -->
+          <path [attr.d]="chartAreaPath()" fill="url(#chartGrad)"/>
+          
+          <!-- Line Path -->
+          <path [attr.d]="chartPath()" fill="none" stroke="#A31D1D" stroke-width="3" stroke-linecap="round"/>
+          
+          <!-- Points -->
+          <circle *ngFor="let p of chartDots()" [attr.cx]="p.x" [attr.cy]="p.y" r="5" fill="#A31D1D" class="cursor-pointer hover:r-7 transition-all">
+            <title>{{ p.label }}: {{ p.value }} Students</title>
+          </circle>
+
+          <!-- Labels — dynamic based on selected period -->
+          <text *ngFor="let p of chartDots()" [attr.x]="p.x" y="170" fill="#94A3B8" font-size="9" text-anchor="middle" font-weight="bold">{{ p.label }}</text>
+        </svg>
       </div>
     </div>
 
     <div class="glass-panel p-6 animate-fade-in delay-300">
       <div class="flex items-center justify-between mb-6">
         <h3 class="font-bold text-lg text-slate-900 dark:text-white">System Logs</h3>
-        <button class="text-sm font-bold text-mit-red hover:text-primary-600 transition-colors">View All</button>
+        <button (click)="openLogsModal()" class="text-sm font-bold text-mit-red hover:text-primary-600 transition-colors">View All</button>
       </div>
       <div class="space-y-4">
-        <div class="flex items-start gap-3">
-          <div class="w-2 h-2 mt-1.5 rounded-full bg-emerald-500 flex-shrink-0"></div>
+        <div *ngFor="let log of latestLogs()" class="flex items-start gap-3">
+          <div [ngClass]="{
+            'bg-emerald-500': log.type === 'success',
+            'bg-blue-500': log.type === 'info',
+            'bg-amber-500': log.type === 'warning',
+            'bg-red-500': log.type === 'error'
+          }" class="w-2 h-2 mt-1.5 rounded-full flex-shrink-0"></div>
           <div>
-            <p class="text-sm font-medium text-slate-900 dark:text-white">New university boarded: Stanford</p>
-            <p class="text-xs text-slate-500">2 minutes ago</p>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">{{ log.title }}</p>
+            <p class="text-xs text-slate-500">{{ log.timestamp | date:'shortTime' }} &bull; {{ log.time }}</p>
           </div>
         </div>
-        <div class="flex items-start gap-3">
-          <div class="w-2 h-2 mt-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-          <div>
-            <p class="text-sm font-medium text-slate-900 dark:text-white">Database backup completed</p>
-            <p class="text-xs text-slate-500">1 hour ago</p>
-          </div>
+        <div *ngIf="latestLogs().length === 0" class="text-center text-sm text-slate-500 py-6">
+          No system events logged.
         </div>
-        <div class="flex items-start gap-3">
-          <div class="w-2 h-2 mt-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
-          <div>
-            <p class="text-sm font-medium text-slate-900 dark:text-white">High traffic warning: AWS Node 3</p>
-            <p class="text-xs text-slate-500">3 hours ago</p>
-          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Onboard University Modal -->
+<div *ngIf="isOnboardModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeOnboardModal()"></div>
+  <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold text-slate-900 dark:text-white">Onboard University</h3>
+      <button (click)="closeOnboardModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+      </button>
+    </div>
+    
+    <form [formGroup]="onboardForm" (ngSubmit)="saveOnboardUniversity()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">University Name</label>
+        <input type="text" formControlName="name" placeholder="e.g. Stanford University" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium">
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Location</label>
+        <input type="text" formControlName="location" placeholder="e.g. Stanford, CA" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+          <select formControlName="status" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-bold">
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Suspended">Suspended</option>
+          </select>
         </div>
-        <div class="flex items-start gap-3">
-          <div class="w-2 h-2 mt-1.5 rounded-full bg-mit-red flex-shrink-0"></div>
-          <div>
-            <p class="text-sm font-medium text-slate-900 dark:text-white">Payment gateway error</p>
-            <p class="text-xs text-slate-500">5 hours ago</p>
-          </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Students Count</label>
+          <input type="number" formControlName="students" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium">
         </div>
+      </div>
+      
+      <div class="pt-4 flex gap-3 justify-end border-t border-slate-200 dark:border-slate-700 mt-6">
+        <button type="button" (click)="closeOnboardModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+        <button type="submit" [disabled]="onboardForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">Onboard</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- View All Logs Modal -->
+<div *ngIf="isLogsModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeLogsModal()"></div>
+  <div class="glass-panel w-full max-w-2xl p-6 relative z-10 animate-fade-in-up flex flex-col max-h-[80vh]">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">System Events Explorer</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Real-time system events logging and audit trail.</p>
+      </div>
+      <button (click)="closeLogsModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex gap-4 mb-4 items-center">
+      <input type="text" [ngModel]="logSearchQuery()" (ngModelChange)="logSearchQuery.set($event)" placeholder="Search logs..." class="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none">
+      <select [ngModel]="logTypeFilter()" (ngModelChange)="logTypeFilter.set($event)" class="px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none font-semibold">
+        <option value="all">All Events</option>
+        <option value="info">Info Only</option>
+        <option value="success">Success Only</option>
+        <option value="warning">Warnings</option>
+        <option value="error">Errors</option>
+      </select>
+    </div>
+
+    <!-- Logs List Scroll Container -->
+    <div class="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
+      <div *ngFor="let log of filteredLogs()" class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+        <span [ngClass]="{
+          'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400': log.type === 'success',
+          'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400': log.type === 'info',
+          'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400': log.type === 'warning',
+          'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400': log.type === 'error'
+        }" class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
+          {{ log.type }}
+        </span>
+        <div class="flex-1">
+          <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ log.title }}</p>
+          <p class="text-xs text-slate-400 mt-0.5">{{ log.timestamp | date:'medium' }}</p>
+        </div>
+      </div>
+      <div *ngIf="filteredLogs().length === 0" class="text-center text-slate-400 py-10">
+        No matching system logs found.
       </div>
     </div>
   </div>

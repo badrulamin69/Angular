@@ -45,6 +45,9 @@ interface Course { id?: string; code: string; title: string; credits: number; de
               }" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
                 {{ course.status }}
               </span>
+              <button (click)="openModal(course); $event.stopPropagation()" class="text-slate-400 hover:text-indigo-500 transition-colors p-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900/20" title="Edit Course">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+              </button>
               <button (click)="deleteCourse(course.id!); $event.stopPropagation()" class="text-slate-400 hover:text-mit-red transition-colors p-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete Course">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
@@ -75,7 +78,7 @@ interface Course { id?: string; code: string; title: string; credits: number; de
       <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeModal()"></div>
       <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Create New Course</h3>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ editingCourseId() ? 'Edit Course' : 'Create New Course' }}</h3>
           <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
           </button>
@@ -102,14 +105,26 @@ interface Course { id?: string; code: string; title: string; credits: number; de
               <option *ngFor="let dept of departments()" [value]="dept.name">{{ dept.name }}</option>
             </select>
           </div>
-          <div>
-            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Capacity</label>
-            <input type="number" formControlName="capacity" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Capacity</label>
+              <input type="number" formControlName="capacity" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+              <select formControlName="status" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-bold">
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+                <option value="Archived">Archived</option>
+              </select>
+            </div>
           </div>
           
           <div class="pt-4 flex gap-3 justify-end border-t border-slate-200 dark:border-slate-700 mt-6">
             <button type="button" (click)="closeModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cancel</button>
-            <button type="submit" [disabled]="courseForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">Create Course</button>
+            <button type="submit" [disabled]="courseForm.invalid" class="px-5 py-2.5 bg-mit-red text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all disabled:opacity-50">
+              {{ editingCourseId() ? 'Save Changes' : 'Create Course' }}
+            </button>
           </div>
         </form>
       </div>
@@ -124,13 +139,15 @@ export class CoursesComponent implements OnInit {
   departments = signal<any[]>([]);
   searchQuery = signal('');
   isModalOpen = signal(false);
+  editingCourseId = signal<string | null>(null);
 
   courseForm = this.fb.group({
     code: ['', Validators.required],
     title: ['', Validators.required],
     credits: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     department: ['', Validators.required],
-    capacity: [50, [Validators.required, Validators.min(1)]]
+    capacity: [50, [Validators.required, Validators.min(1)]],
+    status: ['Draft', Validators.required]
   });
 
   filteredCourses = computed(() => {
@@ -151,9 +168,22 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  openModal() {
-    const firstDept = this.departments().length > 0 ? this.departments()[0].name : '';
-    this.courseForm.reset({ credits: 3, capacity: 50, department: firstDept });
+  openModal(course?: Course) {
+    if (course) {
+      this.editingCourseId.set(course.id || null);
+      this.courseForm.reset({
+        code: course.code,
+        title: course.title,
+        credits: course.credits,
+        department: course.department,
+        capacity: course.capacity,
+        status: course.status
+      });
+    } else {
+      this.editingCourseId.set(null);
+      const firstDept = this.departments().length > 0 ? this.departments()[0].name : '';
+      this.courseForm.reset({ credits: 3, capacity: 50, department: firstDept, status: 'Draft' });
+    }
     this.isModalOpen.set(true);
   }
 
@@ -164,20 +194,30 @@ export class CoursesComponent implements OnInit {
   saveCourse() {
     if (this.courseForm.valid) {
       const formValue = this.courseForm.value;
-      const newCourse: any = {
+      const courseData: any = {
         code: formValue.code?.toUpperCase(),
         title: formValue.title,
         credits: formValue.credits,
         department: formValue.department,
-        status: 'Draft',
-        enrolled: 0,
-        capacity: formValue.capacity
+        capacity: formValue.capacity,
+        status: formValue.status
       };
 
-      this.http.post<Course>('http://localhost:3000/courses', newCourse).subscribe(res => {
-        this.courses.update(c => [...c, res]);
-        this.closeModal();
-      });
+      const editId = this.editingCourseId();
+      if (editId) {
+        // PATCH existing
+        this.http.patch<Course>(`http://localhost:3000/courses/${editId}`, courseData).subscribe(res => {
+          this.courses.update(list => list.map(c => c.id === editId ? { ...c, ...res } : c));
+          this.closeModal();
+        });
+      } else {
+        // POST new
+        courseData.enrolled = 0;
+        this.http.post<Course>('http://localhost:3000/courses', courseData).subscribe(res => {
+          this.courses.update(c => [...c, res]);
+          this.closeModal();
+        });
+      }
     }
   }
 

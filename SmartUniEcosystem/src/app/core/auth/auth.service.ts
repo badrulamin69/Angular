@@ -11,6 +11,11 @@ export interface User {
   role: string;
   universityId?: string;
   token?: string;
+  profilePhoto?: string;
+  phone?: string;
+  designation?: string;
+  employeeId?: string;
+  password?: string;
 }
 
 @Injectable({

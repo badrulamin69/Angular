@@ -110,6 +110,6 @@ export class PlatformComponent {
       }
     ];
 
-    this.pdfService.generatePlatformModulesSummary(modules);
+    this.pdfService.generateExecutiveAnalyticsSummary();
   }
-
+}

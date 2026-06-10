@@ -69,7 +69,7 @@ import { DynamicAction, IconResolverService } from '../../../core/services/icon-
   ]
 })
 export class DynamicActionButtonComponent {
-  @Input() action?: DynamicAction;
+  @Input() action?: DynamicAction | any;
   @Input() iconPosition: 'left' | 'right' = 'left';
   @Output() clicked = new EventEmitter<Event>();
 

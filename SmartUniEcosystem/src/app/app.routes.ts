@@ -136,6 +136,7 @@ export const routes: Routes = [
       { path: 'exams', loadComponent: () => import('./student-portal/exams/exams').then(m => m.StudentExamsComponent) },
       { path: 'finance', loadComponent: () => import('./student-portal/finance/finance').then(m => m.StudentFinanceComponent) },
       { path: 'transcript', loadComponent: () => import('./student-portal/transcript/transcript').then(m => m.StudentTranscriptComponent) },
+      { path: 'results', loadComponent: () => import('./student-portal/results/results').then(m => m.StudentResultsComponent) },
       { path: 'marksheet/:id', loadComponent: () => import('./shared/marksheet/marksheet').then(m => m.MarksheetComponent) },
       { path: 'payment', loadComponent: () => import('./pages/payment-demo/payment-demo').then(m => m.PaymentDemo) },
       { path: 'payment-success', loadComponent: () => import('./pages/payment-success/payment-success').then(m => m.PaymentSuccessComponent) },

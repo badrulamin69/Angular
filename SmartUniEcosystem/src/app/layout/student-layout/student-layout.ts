@@ -64,6 +64,12 @@ import { AuthService } from '../../core/auth/auth.service';
                   </a>
                 </li>
                 <li>
+                  <a routerLink="/student/results" routerLinkActive="bg-red-50 text-mit-red dark:bg-red-500/10 dark:text-red-400 font-bold" class="flex items-center px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white transition-all group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 group-hover:scale-110 transition-transform"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17h6"/><path d="M9 13h6"/><path d="M9 9h1"/></svg>
+                    <span *ngIf="isSidebarOpen()" class="ml-3">Semester Results</span>
+                  </a>
+                </li>
+                <li>
                   <a routerLink="/student/transcript" routerLinkActive="bg-red-50 text-mit-red dark:bg-red-500/10 dark:text-red-400 font-bold" class="flex items-center px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white transition-all group">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 group-hover:scale-110 transition-transform"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     <span *ngIf="isSidebarOpen()" class="ml-3">Results & CGPA</span>

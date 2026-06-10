@@ -42,7 +42,7 @@ import html2canvas from 'html2canvas-pro';
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-slate-500">Method</span>
-              <span class="font-bold text-slate-900 dark:text-white">SSLCommerz Gateway</span>
+              <span class="font-bold text-slate-900 dark:text-white">{{ paymentMethod }}</span>
             </div>
             <div class="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-between items-center">
               <span class="text-lg font-bold text-slate-900 dark:text-white">Total Amount</span>
@@ -82,13 +82,27 @@ export class PaymentSuccessComponent implements OnInit {
   tranId: string = 'REF-' + Math.random().toString(36).substring(7).toUpperCase();
   today = new Date();
   amount: number = 100.00;
+  paymentMethod: string = 'Online Payment';
+
+  private methodLabels: Record<string, string> = {
+    'card': 'Credit / Debit Card',
+    'bkash': 'bKash Mobile Banking',
+    'nagad': 'Nagad Mobile Banking',
+    'rocket': 'Rocket (DBBL) Banking',
+    'sslcommerz': 'SSLCommerz Gateway'
+  };
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['tran_id']) {
         this.tranId = params['tran_id'];
-        // Try to find the invoice and mark it paid
         this.markInvoicePaid(this.tranId);
+      }
+      if (params['method']) {
+        this.paymentMethod = this.methodLabels[params['method'].toLowerCase()] || params['method'];
+      }
+      if (params['amount']) {
+        this.amount = parseFloat(params['amount']) || this.amount;
       }
     });
   }

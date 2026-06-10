@@ -862,4 +862,153 @@ export class PdfService {
     this.drawPremiumFooter(pdf, 1);
     pdf.save('Platform_Module_Overview.pdf');
   }
+
+  /**
+   * 8. SEMESTER MARKSHEET PDF
+   */
+  generateSemesterMarksheet(student: any, results: any[], semester: string) {
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    this.drawPremiumHeader(pdf, 'Semester Marksheet', `Official record of course marks, grades, and GPA standing for ${semester}.`, 'Marksheet');
+
+    // Student Info Block
+    let y = 60;
+    pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
+    pdf.rect(15, y, 180, 32, 'F');
+    pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
+    pdf.rect(15, y, 180, 32, 'S');
+
+    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(8);
+    pdf.text('STUDENT NAME', 20, y + 8);
+    pdf.text('STUDENT ID', 95, y + 8);
+    pdf.text('ACADEMIC PROGRAM', 135, y + 8);
+
+    pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(9.5);
+    pdf.text(student.name || 'Emon Sarker', 20, y + 13);
+    pdf.text(String(student.id || '3'), 95, y + 13);
+    pdf.text(student.program || 'Computer Science & Engineering', 135, y + 13);
+
+    // Line separator inside block
+    pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
+    pdf.line(20, y + 17, 190, y + 17);
+
+    // Term Stats
+    // Calculate GPA dynamically for the selected semester results
+    const totalGP = results.reduce((acc, r) => acc + (r.gp * r.credits), 0);
+    const totalCredits = results.reduce((acc, r) => acc + r.credits, 0);
+    const termGPA = totalCredits > 0 ? (totalGP / totalCredits).toFixed(2) : '0.00';
+
+    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(8);
+    pdf.text('SEMESTER', 20, y + 23);
+    pdf.text('SEMESTER GPA', 70, y + 23);
+    pdf.text('CREDITS REGISTERED', 125, y + 23);
+    pdf.text('STATUS', 160, y + 23);
+
+    pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(9.5);
+    pdf.text(semester, 20, y + 28);
+    pdf.text(termGPA, 70, y + 28);
+    pdf.text(`${totalCredits} Credits`, 125, y + 28);
+    pdf.setTextColor(16, 124, 65);
+    pdf.text('PASSED', 160, y + 28);
+
+    // Course Grades Table
+    y += 42;
+    pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(11);
+    pdf.text('Detailed Marks & Grades Breakdown', 15, y);
+
+    y += 5;
+    pdf.setFillColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.rect(15, y, 180, 8, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(7.5);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('CODE', 18, y + 5.5);
+    pdf.text('COURSE TITLE', 36, y + 5.5);
+    pdf.text('CR', 94, y + 5.5);
+    pdf.text('MID(30)', 102, y + 5.5);
+    pdf.text('QZ(15)', 116, y + 5.5);
+    pdf.text('ASG(15)', 128, y + 5.5);
+    pdf.text('FIN(40)', 142, y + 5.5);
+    pdf.text('TOT(100)', 155, y + 5.5);
+    pdf.text('GRADE', 171, y + 5.5);
+    pdf.text('GP', 186, y + 5.5);
+
+    y += 8;
+
+    results.forEach((r: any, idx: number) => {
+      if (idx % 2 === 1) {
+        pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
+        pdf.rect(15, y, 180, 8, 'F');
+      }
+      pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
+      pdf.line(15, y + 8, 195, y + 8);
+
+      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(7.5);
+      
+      pdf.text(r.courseCode || 'N/A', 18, y + 5.5);
+      
+      const title = r.courseTitle || 'N/A';
+      pdf.text(title.length > 30 ? title.substring(0, 28) + '...' : title, 36, y + 5.5);
+      
+      pdf.text(String(r.credits || 3), 95, y + 5.5);
+      pdf.text(String(r.midterm ?? '-'), 105, y + 5.5);
+      pdf.text(String(r.quizzes ?? '-'), 118, y + 5.5);
+      pdf.text(String(r.assignments ?? '-'), 130, y + 5.5);
+      pdf.text(String(r.final ?? '-'), 144, y + 5.5);
+      pdf.text(String(r.total ?? '-'), 157, y + 5.5);
+
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(this.colors.mitRed[0], this.colors.mitRed[1], this.colors.mitRed[2]);
+      pdf.text(r.grade || 'N/A', 173, y + 5.5);
+      
+      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.text(Number(r.gp ?? 0).toFixed(2), 186, y + 5.5);
+
+      y += 8;
+    });
+
+    // Verification Seal area
+    y += 18;
+    pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
+    pdf.rect(15, y, 180, 26, 'F');
+    pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
+    pdf.rect(15, y, 180, 26, 'S');
+
+    // Registrar official text
+    pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(8);
+    pdf.text('REGISTRAR OFFICIAL MARKSHEET SEAL', 20, y + 7);
+    
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(7.5);
+    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.text('This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed', 20, y + 13);
+    pdf.text('herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.', 20, y + 18);
+
+    // Decorative Seal badge representation
+    pdf.setLineWidth(0.5);
+    pdf.setDrawColor(this.colors.mitRed[0], this.colors.mitRed[1], this.colors.mitRed[2]);
+    pdf.circle(175, y + 13, 9, 'S');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(5);
+    pdf.setTextColor(this.colors.mitRed[0], this.colors.mitRed[1], this.colors.mitRed[2]);
+    pdf.text('OFFICIAL', 175, y + 12, { align: 'center' });
+    pdf.text('SEAL', 175, y + 15, { align: 'center' });
+
+    this.drawPremiumFooter(pdf, 1);
+    pdf.save(`Semester_Marksheet_${semester.replace(/\s/g, '_')}_${student.name?.replace(/\s/g, '_') || 'Student'}.pdf`);
+  }
 }

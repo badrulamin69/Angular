@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angu
 import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
 import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
+import { DynamicAction } from '../../core/services/icon-resolver.service';
 
 interface Faculty {
   id: string;
@@ -161,16 +162,16 @@ export class FacultiesComponent implements OnInit {
     document.body.removeChild(link);
   }
 
-  getAction(type: 'exportCsv' | 'exportPdf' | 'openModal' | 'delete', item?: Department) {
+  getAction(type: 'exportCsv' | 'exportPdf' | 'openModal' | 'delete', item?: Department): DynamicAction | undefined {
     switch (type) {
       case 'exportCsv':
-        return { label: 'Export CSV', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export all departments to CSV', ariaLabel: 'Export departments as CSV' };
+        return { label: 'Export CSV', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export all departments to CSV', ariaLabel: 'Export departments as CSV' } as DynamicAction;
       case 'exportPdf':
-        return { label: 'Export PDF', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export faculty structure to PDF', ariaLabel: 'Export departments as PDF' };
+        return { label: 'Export PDF', icon: 'download', type: 'secondary', size: 'sm', tooltip: 'Export faculty structure to PDF', ariaLabel: 'Export departments as PDF' } as DynamicAction;
       case 'openModal':
-        return { label: 'Add Department', icon: 'arrow-right', type: 'primary', size: 'sm', tooltip: 'Create new department', ariaLabel: 'Add a new department' };
+        return { label: 'Add Department', icon: 'arrow-right', type: 'primary', size: 'sm', tooltip: 'Create new department', ariaLabel: 'Add a new department' } as DynamicAction;
       case 'delete':
-        return { label: 'Delete', icon: 'arrow-right', type: 'danger', size: 'sm', tooltip: `Delete department ${item?.name || ''}`, ariaLabel: `Delete ${item?.name || 'department'}` };
+        return { label: 'Delete', icon: 'arrow-right', type: 'danger', size: 'sm', tooltip: `Delete department ${item?.name || ''}`, ariaLabel: `Delete ${item?.name || 'department'}` } as DynamicAction;
       default:
         return undefined;
     }

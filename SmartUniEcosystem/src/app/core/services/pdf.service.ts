@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PdfService {
-  
   private colors = {
     mitRed: [163, 29, 29], // #A31D1D
     slateDark: [30, 41, 59], // #1E293B
     slateLight: [100, 116, 139], // #64748B
     slateBg: [248, 250, 252], // #F8FAFC
-    border: [226, 232, 240] // #E2E8F0
+    border: [226, 232, 240], // #E2E8F0
   };
 
   /**
@@ -35,8 +34,12 @@ export class PdfService {
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Academy Management Ecosystem', 32, 24);
-    
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFontSize(7);
     pdf.setFont('helvetica', 'normal');
     pdf.text('MIT-INSPIRED UNIVERSITY MANAGEMENT SUITE', 32, 28);
@@ -58,7 +61,11 @@ export class PdfService {
     pdf.text(title, 15, 42);
 
     // Report Subtitle
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(9);
     pdf.text(subtitle, 15, 47);
@@ -73,10 +80,14 @@ export class PdfService {
    * Universal Footer Helper
    */
   private drawPremiumFooter(pdf: jsPDF, pageNum: number = 1) {
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7);
-    
+
     const today = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     pdf.text(`Generated: ${today} • Campus OS v4.2.0`, 15, 287);
     pdf.text(`Page ${pageNum}`, 195, 287, { align: 'right' });
@@ -87,8 +98,13 @@ export class PdfService {
    */
   generateGlobalSystemReport(stats: any) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    
-    this.drawPremiumHeader(pdf, 'Global System Audit & Status Report', 'Full ecosystem monitoring and university onboarding analytics.', 'System Report');
+
+    this.drawPremiumHeader(
+      pdf,
+      'Global System Audit & Status Report',
+      'Full ecosystem monitoring and university onboarding analytics.',
+      'System Report',
+    );
 
     // Stats Grid
     let y = 62;
@@ -98,7 +114,11 @@ export class PdfService {
     pdf.rect(15, y, 180, 45, 'S');
 
     // Columns within Grid
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('TOTAL UNIVERSITIES', 25, y + 12);
@@ -117,7 +137,11 @@ export class PdfService {
     // Legend
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7.5);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.text('Platform capacity is stable. Server load is within margins (23% load).', 25, y + 36);
 
     // Server Cluster Status Table
@@ -140,10 +164,34 @@ export class PdfService {
     pdf.text('STATUS', 170, y + 5);
 
     const nodes = [
-      { id: 'AWS-AP-SOUTH1A', loc: 'Mumbai (Primary Hub)', cpu: '18.4%', mem: '4.2 GB / 16 GB', status: 'Healthy' },
-      { id: 'AWS-US-EAST1B', loc: 'N. Virginia (Failover Hub)', cpu: '8.2%', mem: '2.1 GB / 16 GB', status: 'Healthy' },
-      { id: 'AWS-EU-WEST1C', loc: 'Ireland (LMS Analytics)', cpu: '34.9%', mem: '9.8 GB / 32 GB', status: 'Optimal' },
-      { id: 'DB-REPL-NODE1', loc: 'Oregon (Database Replica)', cpu: '4.5%', mem: '1.2 GB / 8 GB', status: 'Syncing' }
+      {
+        id: 'AWS-AP-SOUTH1A',
+        loc: 'Mumbai (Primary Hub)',
+        cpu: '18.4%',
+        mem: '4.2 GB / 16 GB',
+        status: 'Healthy',
+      },
+      {
+        id: 'AWS-US-EAST1B',
+        loc: 'N. Virginia (Failover Hub)',
+        cpu: '8.2%',
+        mem: '2.1 GB / 16 GB',
+        status: 'Healthy',
+      },
+      {
+        id: 'AWS-EU-WEST1C',
+        loc: 'Ireland (LMS Analytics)',
+        cpu: '34.9%',
+        mem: '9.8 GB / 32 GB',
+        status: 'Optimal',
+      },
+      {
+        id: 'DB-REPL-NODE1',
+        loc: 'Oregon (Database Replica)',
+        cpu: '4.5%',
+        mem: '1.2 GB / 8 GB',
+        status: 'Syncing',
+      },
     ];
 
     y += 7;
@@ -155,7 +203,11 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
       pdf.text(node.id, 20, y + 5.5);
@@ -181,8 +233,16 @@ export class PdfService {
 
     pdf.setFont('helvetica', 'italic');
     pdf.setFontSize(8.5);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('This executive dashboard audit report is automatically generated and secured by cryptography.', 20, y + 10);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
+    pdf.text(
+      'This executive dashboard audit report is automatically generated and secured by cryptography.',
+      20,
+      y + 10,
+    );
     pdf.text('Authorization Signature: Super Administrative Control Key Verified.', 20, y + 16);
 
     this.drawPremiumFooter(pdf, 1);
@@ -194,7 +254,12 @@ export class PdfService {
    */
   generateExecutiveAnalyticsSummary() {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Executive Platform Analytics & Growth', 'Detailed metric summary and engagement trends for Spring 2026.', 'Analytics');
+    this.drawPremiumHeader(
+      pdf,
+      'Executive Platform Analytics & Growth',
+      'Detailed metric summary and engagement trends for Spring 2026.',
+      'Analytics',
+    );
 
     // Strategic Overview Section
     let y = 60;
@@ -206,14 +271,18 @@ export class PdfService {
     y += 6;
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(9);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     const highlights = [
       '• Enrollment rates grew by 14.8% semester-over-semester in standard science majors.',
       '• Average engagement time per user inside the LMS platform increased to 48.2 minutes daily.',
       '• High availability rate of 99.98% maintained over active midterm exam cycles.',
-      '• Total transaction success rate via credit and mobile payment networks is currently at 98.6%.'
+      '• Total transaction success rate via credit and mobile payment networks is currently at 98.6%.',
     ];
-    highlights.forEach(h => {
+    highlights.forEach((h) => {
       pdf.text(h, 17, y);
       y += 5.5;
     });
@@ -238,9 +307,27 @@ export class PdfService {
     pdf.text('GROWTH RATING', 165, y + 5);
 
     const cohorts = [
-      { term: 'Spring 2025 (Baseline)', majors: '18 active', users: '7,400 enrolled', lms: '32m / day', rating: 'Stable' },
-      { term: 'Fall 2025', majors: '22 active', users: '9,820 enrolled', lms: '39m / day', rating: 'Moderate' },
-      { term: 'Spring 2026 (Current)', majors: '29 active', users: '12,450 enrolled', lms: '48m / day', rating: 'Outstanding' }
+      {
+        term: 'Spring 2025 (Baseline)',
+        majors: '18 active',
+        users: '7,400 enrolled',
+        lms: '32m / day',
+        rating: 'Stable',
+      },
+      {
+        term: 'Fall 2025',
+        majors: '22 active',
+        users: '9,820 enrolled',
+        lms: '39m / day',
+        rating: 'Moderate',
+      },
+      {
+        term: 'Spring 2026 (Current)',
+        majors: '29 active',
+        users: '12,450 enrolled',
+        lms: '48m / day',
+        rating: 'Outstanding',
+      },
     ];
 
     y += 7.5;
@@ -252,7 +339,11 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
       pdf.text(c.term, 20, y + 5.5);
@@ -283,9 +374,21 @@ export class PdfService {
     pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(8);
-    pdf.text('Predictive performance graphs show a 20% spike in concurrent platform users over the final exams period.', 20, y + 14);
-    pdf.text('Autoscaling algorithms have been preset to scale servers up to 6 core node elements automatically.', 20, y + 19);
-    pdf.text('Data synchronization from regional sites will remain continuous throughout the weekend periods.', 20, y + 24);
+    pdf.text(
+      'Predictive performance graphs show a 20% spike in concurrent platform users over the final exams period.',
+      20,
+      y + 14,
+    );
+    pdf.text(
+      'Autoscaling algorithms have been preset to scale servers up to 6 core node elements automatically.',
+      20,
+      y + 19,
+    );
+    pdf.text(
+      'Data synchronization from regional sites will remain continuous throughout the weekend periods.',
+      20,
+      y + 24,
+    );
 
     // Signatures
     y += 50;
@@ -300,7 +403,11 @@ export class PdfService {
     pdf.text('SYSTEMS ARCHITECT & ANALYST', 130, y + 5);
 
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.text('Digital Signature ID: CIO-SP26-88', 15, y + 9);
     pdf.text('Verified via Academy Management Ledger', 130, y + 9);
 
@@ -313,7 +420,12 @@ export class PdfService {
    */
   generateStaffInstitutionalReport(stats: any, recentApps: any[], logs: any[]) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Institutional Command Center Performance', 'Q2 Academic Year 2026-2027 performance and registration metrics.', 'Staff Report');
+    this.drawPremiumHeader(
+      pdf,
+      'Institutional Command Center Performance',
+      'Q2 Academic Year 2026-2027 performance and registration metrics.',
+      'Staff Report',
+    );
 
     // Performance Stats Section
     let y = 60;
@@ -322,7 +434,11 @@ export class PdfService {
     pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
     pdf.rect(15, y, 180, 24, 'S');
 
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('TOTAL ENROLLED STUDENTS', 20, y + 8);
@@ -357,11 +473,29 @@ export class PdfService {
     pdf.text('STATUS', 170, y + 5);
 
     y += 7;
-    const appsToUse = recentApps && recentApps.length > 0 ? recentApps.slice(0, 5) : [
-      { fullName: 'Emma Thompson', programId: 'Computer Science', hscGpa: '3.95', status: 'Accepted' },
-      { fullName: 'James Wilson', programId: 'Business Admin', hscGpa: '3.40', status: 'Accepted' },
-      { fullName: 'Sophia Martinez', programId: 'Data Science', hscGpa: '3.88', status: 'Accepted' }
-    ];
+    const appsToUse =
+      recentApps && recentApps.length > 0
+        ? recentApps.slice(0, 5)
+        : [
+            {
+              fullName: 'Emma Thompson',
+              programId: 'Computer Science',
+              hscGpa: '3.95',
+              status: 'Accepted',
+            },
+            {
+              fullName: 'James Wilson',
+              programId: 'Business Admin',
+              hscGpa: '3.40',
+              status: 'Accepted',
+            },
+            {
+              fullName: 'Sophia Martinez',
+              programId: 'Data Science',
+              hscGpa: '3.88',
+              status: 'Accepted',
+            },
+          ];
 
     appsToUse.forEach((app, idx) => {
       if (idx % 2 === 1) {
@@ -371,7 +505,11 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
       pdf.text(app.fullName || app.applicantName || 'N/A', 20, y + 5.5);
@@ -401,12 +539,15 @@ export class PdfService {
     pdf.text('TIME ELAPSED', 160, y + 5);
 
     y += 7;
-    const logsToUse = logs && logs.length > 0 ? logs : [
-      { title: 'New admission approved by Registrar', time: '2 mins ago' },
-      { title: 'Semester fee invoice generated for 400 students', time: '1 hour ago' },
-      { title: 'Library inventory updated: 12 new titles', time: '3 hours ago' },
-      { title: 'Bus Route B schedule changed for exams', time: '5 hours ago' }
-    ];
+    const logsToUse =
+      logs && logs.length > 0
+        ? logs
+        : [
+            { title: 'New admission approved by Registrar', time: '2 mins ago' },
+            { title: 'Semester fee invoice generated for 400 students', time: '1 hour ago' },
+            { title: 'Library inventory updated: 12 new titles', time: '3 hours ago' },
+            { title: 'Bus Route B schedule changed for exams', time: '5 hours ago' },
+          ];
 
     logsToUse.forEach((l, idx) => {
       if (idx % 2 === 1) {
@@ -416,7 +557,11 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
       pdf.text(l.title, 20, y + 5.5);
@@ -433,7 +578,12 @@ export class PdfService {
    */
   generateOfficialTranscript(student: any, grades: any[], courses: any[]) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Official Academic Transcript', 'Official record of academic history, credits, and GPA standing.', 'Transcript');
+    this.drawPremiumHeader(
+      pdf,
+      'Official Academic Transcript',
+      'Official record of academic history, credits, and GPA standing.',
+      'Transcript',
+    );
 
     // Student Info Block
     let y = 60;
@@ -442,7 +592,11 @@ export class PdfService {
     pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
     pdf.rect(15, y, 180, 28, 'S');
 
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('STUDENT NAME', 20, y + 8);
@@ -461,7 +615,11 @@ export class PdfService {
     pdf.line(20, y + 17, 190, y + 17);
 
     // Term Stats
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('CUMULATIVE GPA', 20, y + 23);
@@ -498,18 +656,35 @@ export class PdfService {
     pdf.text('LETTER GRADE', 172, y + 5);
 
     y += 7.5;
-    
+
     // Fallback list of courses if empty
-    const gradesList = grades && grades.length > 0 ? grades : [
-      { courseId: 'CS-201', grade: 'A', gp: 4.0, credits: 4, title: 'Object Oriented Programming' },
-      { courseId: 'MTH-102', grade: 'A-', gp: 3.7, credits: 4, title: 'Calculus II' },
-      { courseId: 'PHY-101', grade: 'A', gp: 4.0, credits: 3, title: 'Physics for Engineers' },
-      { courseId: 'ENG-101', grade: 'A-', gp: 3.7, credits: 3, title: 'English Composition' }
-    ];
+    const gradesList =
+      grades && grades.length > 0
+        ? grades
+        : [
+            {
+              courseId: 'CS-201',
+              grade: 'A',
+              gp: 4.0,
+              credits: 4,
+              title: 'Object Oriented Programming',
+            },
+            { courseId: 'MTH-102', grade: 'A-', gp: 3.7, credits: 4, title: 'Calculus II' },
+            {
+              courseId: 'PHY-101',
+              grade: 'A',
+              gp: 4.0,
+              credits: 3,
+              title: 'Physics for Engineers',
+            },
+            { courseId: 'ENG-101', grade: 'A-', gp: 3.7, credits: 3, title: 'English Composition' },
+          ];
 
     gradesList.forEach((gradeItem: any, idx: number) => {
       // Find course details
-      const cDetails = courses?.find(c => c.code === gradeItem.courseId || c.id === gradeItem.courseId);
+      const cDetails = courses?.find(
+        (c) => c.code === gradeItem.courseId || c.id === gradeItem.courseId,
+      );
       const title = gradeItem.title || cDetails?.title || 'Advanced Subject Study';
       const code = gradeItem.courseId || cDetails?.code || 'CS-GEN';
 
@@ -520,7 +695,11 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
       pdf.text(code, 20, y + 5.5);
@@ -547,12 +726,24 @@ export class PdfService {
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('REGISTRAR OFFICIAL CERTIFICATION SEAL', 20, y + 7);
-    
+
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7.5);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed', 20, y + 13);
-    pdf.text('herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.', 20, y + 18);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
+    pdf.text(
+      'This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed',
+      20,
+      y + 13,
+    );
+    pdf.text(
+      'herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.',
+      20,
+      y + 18,
+    );
 
     // Decorative Seal badge representation
     pdf.setLineWidth(0.5);
@@ -573,7 +764,12 @@ export class PdfService {
    */
   generateInvoicePDF(invoice: any) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Official Tuition Fee Invoice', 'Detailed billing statement for tuition, credits, and waivers.', 'Invoice');
+    this.drawPremiumHeader(
+      pdf,
+      'Official Tuition Fee Invoice',
+      'Detailed billing statement for tuition, credits, and waivers.',
+      'Invoice',
+    );
 
     let y = 60;
     // Split Invoice Details Block
@@ -583,7 +779,11 @@ export class PdfService {
     pdf.rect(15, y, 180, 30, 'S');
 
     // Left info
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('BILL TO (STUDENT)', 20, y + 8);
@@ -596,7 +796,11 @@ export class PdfService {
     pdf.text(String(invoice.studentId || '3'), 20, y + 25);
 
     // Right info
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('INVOICE NUMBER', 110, y + 8);
@@ -635,7 +839,7 @@ export class PdfService {
     pdf.text('TOTAL AMOUNT', 165, y + 5);
 
     y += 7.5;
-    
+
     // Row 1: Course tuition
     pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
     pdf.setFont('helvetica', 'normal');
@@ -643,14 +847,14 @@ export class PdfService {
     pdf.text('Semester Tuition Fees (Undergrad Program)', 20, y + 5.5);
     pdf.text(String(invoice.credits || 14), 100, y + 5.5);
     pdf.text('$150.00', 135, y + 5.5);
-    
+
     const initialTuition = (invoice.credits || 14) * 150;
     pdf.setFont('helvetica', 'bold');
     pdf.text(`$${initialTuition.toFixed(2)}`, 165, y + 5.5);
-    
+
     pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
     pdf.line(15, y + 8, 195, y + 8);
-    
+
     // Row 2: Scholarship Waiver if applicable
     y += 8;
     pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
@@ -661,7 +865,7 @@ export class PdfService {
     pdf.setFont('helvetica', 'bold');
     const waiver = initialTuition * 0.25;
     pdf.text(`-$${waiver.toFixed(2)}`, 165, y + 5.5);
-    
+
     pdf.line(15, y + 8, 195, y + 8);
 
     // Row 3: Total due
@@ -685,12 +889,20 @@ export class PdfService {
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8.5);
     pdf.text('OFFICIAL PAYMENT ADVISORY', 20, y + 6);
-    
+
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7.5);
     pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
-    pdf.text('Payments are accepted securely via credit cards (SSLCommerz) and Mobile Banking (bKash) portals.', 20, y + 11);
-    pdf.text('Ensure that your registration transaction token ID is clearly written down in case of offline bank drafts.', 20, y + 16);
+    pdf.text(
+      'Payments are accepted securely via credit cards (SSLCommerz) and Mobile Banking (bKash) portals.',
+      20,
+      y + 11,
+    );
+    pdf.text(
+      'Ensure that your registration transaction token ID is clearly written down in case of offline bank drafts.',
+      20,
+      y + 16,
+    );
 
     // Signature Area
     y += 45;
@@ -704,7 +916,11 @@ export class PdfService {
     pdf.text('CHIEF ADMINISTRATIVE REGISTRAR', 130, y + 5);
 
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.text('Academy Management Financial Systems Hub', 15, y + 9);
     pdf.text('Authorized & Signed digitally', 130, y + 9);
 
@@ -717,17 +933,26 @@ export class PdfService {
    */
   generateFacultiesPDF(faculties: any[], departments: any[]) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Institutional Academic Structure', 'Full listing of faculties, departments, and language translation structures.', 'Structure');
+    this.drawPremiumHeader(
+      pdf,
+      'Institutional Academic Structure',
+      'Full listing of faculties, departments, and language translation structures.',
+      'Structure',
+    );
 
     let y = 60;
-    
+
     // Structural Stats box
     pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
     pdf.rect(15, y, 180, 20, 'F');
     pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
     pdf.rect(15, y, 180, 20, 'S');
 
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8.5);
     pdf.text('TOTAL ACTIVE FACULTIES', 20, y + 8);
@@ -758,12 +983,16 @@ export class PdfService {
     pdf.text('FACULTY PARENT', 160, y + 5);
 
     y += 7.5;
-    
+
     // Group & list departments
     departments.forEach((dept, idx) => {
       // Find faculty
-      const faculty = faculties.find(f => f.id === dept.facultyId);
-      const facName = faculty ? (faculty.name.length > 20 ? faculty.name.substring(0, 18) + '..' : faculty.name) : dept.facultyId;
+      const faculty = faculties.find((f) => f.id === dept.facultyId);
+      const facName = faculty
+        ? faculty.name.length > 20
+          ? faculty.name.substring(0, 18) + '..'
+          : faculty.name
+        : dept.facultyId;
 
       if (idx % 2 === 1) {
         pdf.setFillColor(this.colors.slateBg[0], this.colors.slateBg[1], this.colors.slateBg[2]);
@@ -772,17 +1001,21 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(7.5);
       pdf.text(dept.id, 20, y + 5.5);
       pdf.text(dept.name.length > 45 ? dept.name.substring(0, 42) + '...' : dept.name, 38, y + 5.5);
-      
+
       // Since default fonts do not support Bengali script easily and might output gibberish/boxes,
       // we can output a beautiful placeholder or fallback to transliterated text, or write the bnName if supported.
       // To prevent boxes/question marks in the generated PDF, let's output a clean romanized representation or a clean status flag!
       pdf.text('Supported (Unicode)', 105, y + 5.5);
-      
+
       pdf.setFont('helvetica', 'bold');
       pdf.text(facName, 160, y + 5.5);
 
@@ -792,9 +1025,18 @@ export class PdfService {
       if (y > 270) {
         this.drawPremiumFooter(pdf, 1);
         pdf.addPage();
-        this.drawPremiumHeader(pdf, 'Institutional Academic Structure', 'Full listing of faculties, departments, and language translation structures.', 'Structure');
+        this.drawPremiumHeader(
+          pdf,
+          'Institutional Academic Structure',
+          'Full listing of faculties, departments, and language translation structures.',
+          'Structure',
+        );
         y = 60;
-        pdf.setFillColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+        pdf.setFillColor(
+          this.colors.slateDark[0],
+          this.colors.slateDark[1],
+          this.colors.slateDark[2],
+        );
         pdf.rect(15, y, 180, 7.5, 'F');
 
         pdf.setTextColor(255, 255, 255);
@@ -814,9 +1056,14 @@ export class PdfService {
   /**
    * 7. PLATFORM MODULES OVERVIEW PDF
    */
-  generatePlatformModulesSummary(modules: { title: string; description: string; }[]) {
+  generatePlatformModulesSummary(modules: { title: string; description: string }[]) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Platform Module Overview', 'Summary of core modules and capabilities available in the ecosystem.', 'Platform Summary');
+    this.drawPremiumHeader(
+      pdf,
+      'Platform Module Overview',
+      'Summary of core modules and capabilities available in the ecosystem.',
+      'Platform Summary',
+    );
 
     let y = 62;
     pdf.setFont('helvetica', 'bold');
@@ -832,7 +1079,12 @@ export class PdfService {
       if (y > 250) {
         this.drawPremiumFooter(pdf, Math.ceil((y - 60) / 250));
         pdf.addPage();
-        this.drawPremiumHeader(pdf, 'Platform Module Overview', 'Summary of core modules and capabilities available in the ecosystem.', 'Platform Summary');
+        this.drawPremiumHeader(
+          pdf,
+          'Platform Module Overview',
+          'Summary of core modules and capabilities available in the ecosystem.',
+          'Platform Summary',
+        );
         y = 62;
       }
 
@@ -848,16 +1100,31 @@ export class PdfService {
 
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8.5);
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
-      const description = module.description.length > 120 ? module.description.substring(0, 117) + '...' : module.description;
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
+      const description =
+        module.description.length > 120
+          ? module.description.substring(0, 117) + '...'
+          : module.description;
       pdf.text(description, 20, y + 9);
     });
 
     y += 25;
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(8);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('This PDF contains a curated overview of the platform modules available to your institution. Use it for planning training and rollout documentation.', 15, y);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
+    pdf.text(
+      'This PDF contains a curated overview of the platform modules available to your institution. Use it for planning training and rollout documentation.',
+      15,
+      y,
+    );
 
     this.drawPremiumFooter(pdf, 1);
     pdf.save('Platform_Module_Overview.pdf');
@@ -868,7 +1135,12 @@ export class PdfService {
    */
   generateSemesterMarksheet(student: any, results: any[], semester: string) {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    this.drawPremiumHeader(pdf, 'Semester Marksheet', `Official record of course marks, grades, and GPA standing for ${semester}.`, 'Marksheet');
+    this.drawPremiumHeader(
+      pdf,
+      'Semester Marksheet',
+      `Official record of course marks, grades, and GPA standing for ${semester}.`,
+      'Marksheet',
+    );
 
     // Student Info Block
     let y = 60;
@@ -877,7 +1149,11 @@ export class PdfService {
     pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
     pdf.rect(15, y, 180, 32, 'S');
 
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('STUDENT NAME', 20, y + 8);
@@ -897,11 +1173,15 @@ export class PdfService {
 
     // Term Stats
     // Calculate GPA dynamically for the selected semester results
-    const totalGP = results.reduce((acc, r) => acc + (r.gp * r.credits), 0);
+    const totalGP = results.reduce((acc, r) => acc + r.gp * r.credits, 0);
     const totalCredits = results.reduce((acc, r) => acc + r.credits, 0);
     const termGPA = totalCredits > 0 ? (totalGP / totalCredits).toFixed(2) : '0.00';
 
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('SEMESTER', 20, y + 23);
@@ -953,15 +1233,19 @@ export class PdfService {
       pdf.setDrawColor(this.colors.border[0], this.colors.border[1], this.colors.border[2]);
       pdf.line(15, y + 8, 195, y + 8);
 
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(7.5);
-      
+
       pdf.text(r.courseCode || 'N/A', 18, y + 5.5);
-      
+
       const title = r.courseTitle || 'N/A';
       pdf.text(title.length > 30 ? title.substring(0, 28) + '...' : title, 36, y + 5.5);
-      
+
       pdf.text(String(r.credits || 3), 95, y + 5.5);
       pdf.text(String(r.midterm ?? '-'), 105, y + 5.5);
       pdf.text(String(r.quizzes ?? '-'), 118, y + 5.5);
@@ -972,8 +1256,12 @@ export class PdfService {
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(this.colors.mitRed[0], this.colors.mitRed[1], this.colors.mitRed[2]);
       pdf.text(r.grade || 'N/A', 173, y + 5.5);
-      
-      pdf.setTextColor(this.colors.slateDark[0], this.colors.slateDark[1], this.colors.slateDark[2]);
+
+      pdf.setTextColor(
+        this.colors.slateDark[0],
+        this.colors.slateDark[1],
+        this.colors.slateDark[2],
+      );
       pdf.text(Number(r.gp ?? 0).toFixed(2), 186, y + 5.5);
 
       y += 8;
@@ -991,12 +1279,24 @@ export class PdfService {
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(8);
     pdf.text('REGISTRAR OFFICIAL MARKSHEET SEAL', 20, y + 7);
-    
+
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(7.5);
-    pdf.setTextColor(this.colors.slateLight[0], this.colors.slateLight[1], this.colors.slateLight[2]);
-    pdf.text('This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed', 20, y + 13);
-    pdf.text('herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.', 20, y + 18);
+    pdf.setTextColor(
+      this.colors.slateLight[0],
+      this.colors.slateLight[1],
+      this.colors.slateLight[2],
+    );
+    pdf.text(
+      'This is an official document bearing the digital seal of Academy Management Digital Registrar. The integrity of details listed',
+      20,
+      y + 13,
+    );
+    pdf.text(
+      'herein is verified through blockchain cryptography. For any verifications, scan official barcode or contact Registrar Office.',
+      20,
+      y + 18,
+    );
 
     // Decorative Seal badge representation
     pdf.setLineWidth(0.5);
@@ -1009,6 +1309,8 @@ export class PdfService {
     pdf.text('SEAL', 175, y + 15, { align: 'center' });
 
     this.drawPremiumFooter(pdf, 1);
-    pdf.save(`Semester_Marksheet_${semester.replace(/\s/g, '_')}_${student.name?.replace(/\s/g, '_') || 'Student'}.pdf`);
+    pdf.save(
+      `Semester_Marksheet_${semester.replace(/\s/g, '_')}_${student.name?.replace(/\s/g, '_') || 'Student'}.pdf`,
+    );
   }
 }

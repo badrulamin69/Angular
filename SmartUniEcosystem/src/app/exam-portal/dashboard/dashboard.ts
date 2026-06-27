@@ -9,8 +9,12 @@ import { CommonModule } from '@angular/common';
     <div class="space-y-6 animate-fade-in-up">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Controller Dashboard</h1>
-          <p class="text-slate-500 mt-1">University-wide examination analytics and system health.</p>
+          <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Controller Dashboard
+          </h1>
+          <p class="text-slate-500 mt-1">
+            University-wide examination analytics and system health.
+          </p>
         </div>
       </div>
 
@@ -22,17 +26,23 @@ import { CommonModule } from '@angular/common';
           <p class="text-xs font-bold text-cyan-600 mt-2">Across 8 Departments</p>
         </div>
         <div class="glass-card p-6 border-b-4 border-b-indigo-500">
-          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Pending Results</p>
+          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+            Pending Results
+          </p>
           <h3 class="text-4xl font-black text-slate-900 dark:text-white">452</h3>
           <p class="text-xs font-bold text-slate-400 mt-2">Awaiting processing</p>
         </div>
         <div class="glass-card p-6 border-b-4 border-b-emerald-500">
-          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Avg. University CGPA</p>
+          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+            Avg. University CGPA
+          </p>
           <h3 class="text-4xl font-black text-slate-900 dark:text-white">3.12</h3>
           <p class="text-xs font-bold text-emerald-600 mt-2">+0.04 from last semester</p>
         </div>
         <div class="glass-card p-6 border-b-4 border-b-amber-500">
-          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Appeals / Retakes</p>
+          <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+            Appeals / Retakes
+          </p>
           <h3 class="text-4xl font-black text-slate-900 dark:text-white">28</h3>
           <p class="text-xs font-bold text-amber-600 mt-2">Requires manual review</p>
         </div>
@@ -41,25 +51,48 @@ import { CommonModule } from '@angular/common';
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Live Exam Monitor -->
         <div class="lg:col-span-2 space-y-4">
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Live Exam Monitor (Online)</h3>
-          
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+            Live Exam Monitor (Online)
+          </h3>
+
           <div class="glass-panel overflow-hidden">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Exam Code</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Active Participants</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">System Flags</th>
+                <tr
+                  class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700"
+                >
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Exam Code
+                  </th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Type
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center"
+                  >
+                    Active Participants
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center"
+                  >
+                    System Flags
+                  </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                   <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">CS-101 Midterm</td>
-                  <td class="px-6 py-4 text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded inline-flex mt-3 ml-6">MCQ Auto-Graded</td>
+                  <td
+                    class="px-6 py-4 text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded inline-flex mt-3 ml-6"
+                  >
+                    MCQ Auto-Graded
+                  </td>
                   <td class="px-6 py-4 text-center">
-                    <span class="inline-flex items-center gap-1.5 font-mono text-slate-700 dark:text-slate-300 font-bold">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 145 / 150
+                    <span
+                      class="inline-flex items-center gap-1.5 font-mono text-slate-700 dark:text-slate-300 font-bold"
+                    >
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 145 /
+                      150
                     </span>
                   </td>
                   <td class="px-6 py-4 text-center">
@@ -68,14 +101,24 @@ import { CommonModule } from '@angular/common';
                 </tr>
                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                   <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">ENG-201 Final</td>
-                  <td class="px-6 py-4 text-xs font-bold text-fuchsia-600 bg-fuchsia-50 dark:bg-fuchsia-900/30 px-2 py-1 rounded inline-flex mt-3 ml-6">CQ Written</td>
+                  <td
+                    class="px-6 py-4 text-xs font-bold text-fuchsia-600 bg-fuchsia-50 dark:bg-fuchsia-900/30 px-2 py-1 rounded inline-flex mt-3 ml-6"
+                  >
+                    CQ Written
+                  </td>
                   <td class="px-6 py-4 text-center">
-                    <span class="inline-flex items-center gap-1.5 font-mono text-slate-700 dark:text-slate-300 font-bold">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 89 / 90
+                    <span
+                      class="inline-flex items-center gap-1.5 font-mono text-slate-700 dark:text-slate-300 font-bold"
+                    >
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 89 /
+                      90
                     </span>
                   </td>
                   <td class="px-6 py-4 text-center">
-                    <span class="text-xs font-bold px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded">2 Browser Flags</span>
+                    <span
+                      class="text-xs font-bold px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded"
+                      >2 Browser Flags</span
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -85,7 +128,9 @@ import { CommonModule } from '@angular/common';
 
         <!-- Grade Distribution Analytics -->
         <div class="space-y-4">
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white">University Grade Distribution</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+            University Grade Distribution
+          </h3>
           <div class="glass-panel p-6 bg-slate-900 text-white border border-slate-800">
             <div class="space-y-4">
               <!-- Bar -->
@@ -139,14 +184,18 @@ import { CommonModule } from '@angular/common';
                 </div>
               </div>
             </div>
-            
+
             <div class="mt-6 pt-4 border-t border-slate-800 flex justify-center">
-              <button class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider">Generate Full Report</button>
+              <button
+                class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider"
+              >
+                Generate Full Report
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  `
+  `,
 })
 export class ExamDashboardComponent {}

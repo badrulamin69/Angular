@@ -16,16 +16,27 @@ import { PdfService } from '../../core/services/pdf.service';
           <p class="text-sm text-slate-500">Individual marksheet for the selected student.</p>
         </div>
         <div>
-          <button (click)="downloadPdf()" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Download PDF</button>
+          <button
+            (click)="downloadPdf()"
+            class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold"
+          >
+            Download PDF
+          </button>
         </div>
       </div>
 
       <div class="glass-panel p-4">
         <div *ngIf="student()" class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center font-bold">{{ student().name.charAt(0) }}</div>
+          <div
+            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center font-bold"
+          >
+            {{ student().name.charAt(0) }}
+          </div>
           <div>
             <div class="font-bold text-lg">{{ student().name }}</div>
-            <div class="text-xs text-slate-500">{{ student().id }} &bull; {{ student().email }}</div>
+            <div class="text-xs text-slate-500">
+              {{ student().id }} &bull; {{ student().email }}
+            </div>
             <div class="text-xs text-slate-500">{{ student().program }}</div>
           </div>
         </div>
@@ -47,13 +58,15 @@ import { PdfService } from '../../core/services/pdf.service';
               <td class="px-4 py-3 text-center font-bold">{{ g.grade }}</td>
             </tr>
             <tr *ngIf="grades().length === 0">
-              <td colspan="3" class="px-4 py-8 text-center text-slate-500">No grades found for this student.</td>
+              <td colspan="3" class="px-4 py-8 text-center text-slate-500">
+                No grades found for this student.
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  `
+  `,
 })
 export class MarksheetComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -65,7 +78,8 @@ export class MarksheetComponent implements OnInit {
   courses = signal<any[]>([]);
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('id') || '';
+    const id =
+      this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('id') || '';
     this.loadData(id);
   }
 
@@ -73,18 +87,20 @@ export class MarksheetComponent implements OnInit {
     const sid = studentId || '3';
 
     // Load student profile
-    this.http.get<any[]>('http://localhost:3000/students').subscribe(students => {
-      const match = students.find(s => s.id === sid);
+    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+      const match = students.find((s) => s.id === sid);
       if (match) this.student.set(match);
       else this.student.set({ id: sid, name: 'Unknown Student', email: '', program: '' });
     });
 
     // Load courses
-    this.http.get<any[]>('http://localhost:3000/courses').subscribe(data => this.courses.set(data || []));
+    this.http
+      .get<any[]>('http://localhost:8080/courses')
+      .subscribe((data) => this.courses.set(data || []));
 
     // Load grades
-    this.http.get<any[]>('http://localhost:3000/studentGrades').subscribe(data => {
-      const filtered = (data || []).filter(g => String(g.studentId) === String(sid));
+    this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((data) => {
+      const filtered = (data || []).filter((g) => String(g.studentId) === String(sid));
       this.grades.set(filtered);
     });
   }

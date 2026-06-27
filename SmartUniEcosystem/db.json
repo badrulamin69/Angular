@@ -60,14 +60,6 @@
       "universityId": "U1"
     },
     {
-      "id": "EMP-9999",
-      "name": "Sarah Connor",
-      "email": "sarah@smartuni.edu",
-      "password": "password",
-      "role": "Staff",
-      "universityId": "U1"
-    },
-    {
       "id": "sK14Ckb2oMc",
       "name": "Kamal Ahmed",
       "email": "kamal@gmail.com",
@@ -80,8 +72,75 @@
       "role": "Student",
       "password": "password",
       "id": "PdeH6fJKJg8"
+    },
+    {
+      "id": "Ku6BZ9iD2Uk",
+      "name": "HM Shobuj",
+      "email": "shobuj@gmail.com",
+      "password": "password",
+      "role": "Faculty Member",
+      "universityId": "U1"
+    },
+    {
+      "id": "3inAhnivmKg",
+      "name": "Shimul PK",
+      "email": "pk@gmail.com",
+      "password": "password",
+      "role": "Student",
+      "universityId": "U1"
+    },
+    {
+      "id": "FNNj2E9ZDoM",
+      "name": "Abul Hasan",
+      "email": "ah@gmail.com",
+      "password": "password",
+      "role": "Staff",
+      "universityId": "U1"
+    },
+    {
+      "id": "66JSQrEDMlw",
+      "name": "Emon Sarkar",
+      "email": "es@gmail.com",
+      "password": "password",
+      "role": "Faculty Member",
+      "universityId": "QY2ZdCtXO2Q"
     }
   ],
+  "features": [
+    {
+      "id": "f1",
+      "title": "University ERP",
+      "description": "Streamline administrative workflows, faculty management, and campus operations with a unified intelligent system.",
+      "icon": "svg-erp",
+      "color": "from-blue-500 to-cyan-400"
+    },
+    {
+      "id": "f2",
+      "title": "Intelligent LMS",
+      "description": "Next-generation learning management with interactive courses, real-time collaboration, and automated assessments.",
+      "icon": "svg-lms",
+      "color": "from-mit-red to-orange-500"
+    },
+    {
+      "id": "f3",
+      "title": "Examination Engine",
+      "description": "Secure, proctored digital examinations with automated grading and detailed performance analytics.",
+      "icon": "svg-exam",
+      "color": "from-emerald-500 to-teal-400"
+    },
+    {
+      "id": "f4",
+      "title": "Financial Management",
+      "description": "Comprehensive tuition tracking, payroll, grants management, and real-time financial reporting.",
+      "icon": "svg-finance",
+      "color": "from-purple-500 to-pink-500"
+    }
+  ],
+  "heroContent": {
+    "eyebrow": "Next-Gen Academic OS v2.0",
+    "title": "Transform Universities Into Intelligent Digital Campuses",
+    "description": "Enterprise ERP + LMS ecosystem for modern higher education institutions. Unify data, automate workflows, and elevate the learning experience with AI-powered analytics."
+  },
   "staffProfiles": [
     {
       "id": "SP1",
@@ -95,13 +154,43 @@
     },
     {
       "id": "SP2",
-      "userId": "EMP-9999",
+      "userId": null,
       "designation": "Admin Coordinator",
       "department": "Registrar Office",
       "joiningDate": "2024-03-10",
       "salary": 3500,
       "phone": "+1-555-0202",
       "address": "456 Office Plaza, NY"
+    },
+    {
+      "id": "2rWgxIaAsG8",
+      "userId": "Ku6BZ9iD2Uk",
+      "designation": "Lecturer ",
+      "department": "Department of Bengali",
+      "joiningDate": "2026-06-27",
+      "salary": 4500,
+      "phone": "",
+      "address": ""
+    },
+    {
+      "id": "zI1-FbEZMJc",
+      "userId": "FNNj2E9ZDoM",
+      "designation": "Section Officer",
+      "department": "Department of English",
+      "joiningDate": "2026-06-27",
+      "salary": 4000,
+      "phone": "",
+      "address": ""
+    },
+    {
+      "id": "v1bQqzYzJgM",
+      "userId": "66JSQrEDMlw",
+      "designation": "Teacher",
+      "department": "Department of Management",
+      "joiningDate": "2026-06-27",
+      "salary": 3500,
+      "phone": "",
+      "address": ""
     }
   ],
   "attendance": [
@@ -115,7 +204,7 @@
     },
     {
       "id": "A2",
-      "userId": "EMP-9999",
+      "userId": null,
       "date": "2026-05-15",
       "status": "Present",
       "checkIn": "09:00 AM",
@@ -160,6 +249,13 @@
       "location": "Chittagong, Bangladesh",
       "status": "Active",
       "totalStudents": 40000
+    },
+    {
+      "id": "QY2ZdCtXO2Q",
+      "name": "Smart University",
+      "location": "Dhanmondy",
+      "status": "Active",
+      "totalStudents": 10000
     }
   ],
   "faculties": [
@@ -327,6 +423,13 @@
       "name": "Department of Civil Engineering (CE)",
       "bnName": "পুরকৌশল বা সিভিল ইঞ্জিনিয়ারিং বিভাগ",
       "universityId": "U1"
+    },
+    {
+      "id": "Z-QeqcluhrA",
+      "name": "IT",
+      "bnName": "আইটি",
+      "facultyId": "F5",
+      "universityId": "QY2ZdCtXO2Q"
     }
   ],
   "courses": [
@@ -438,10 +541,10 @@
       "gpa": 0
     },
     {
-      "id": "jGC2h-JnzVs",
-      "name": "Kamal Ahmed",
-      "email": "kamal@gmail.com",
-      "program": "Computer Science",
+      "id": "A-W8kUtRoSo",
+      "name": "Shimul PK",
+      "email": "pk@gmail.com",
+      "program": "B.Sc. in Computer Science",
       "status": "Active",
       "gpa": 0
     }
@@ -971,15 +1074,15 @@
       "id": "N1",
       "userId": "3",
       "message": "Your registration for Fall Semester is pending advisor approval.",
-      "read": false,
+      "read": true,
       "timestamp": "2026-05-12T10:00:00Z"
     }
   ],
   "systemStats": {
-    "totalUniversities": 42,
-    "totalStudents": 1250000,
-    "totalRevenue": 4500000,
-    "activeUsers": 89000
+    "totalUniversities": 43,
+    "totalStudents": 1260000,
+    "totalRevenue": 4525000,
+    "activeUsers": 90000
   },
   "invoices": [
     {
@@ -1306,6 +1409,13 @@
       "time": "5 hours ago",
       "timestamp": "2026-06-07T11:53:22Z",
       "type": "error"
+    },
+    {
+      "title": "New university onboarded: Smart University",
+      "time": "Just now",
+      "timestamp": "2026-06-27T09:56:00.173Z",
+      "type": "success",
+      "id": "GqHRxzfME-U"
     }
   ],
   "facultySettings": [

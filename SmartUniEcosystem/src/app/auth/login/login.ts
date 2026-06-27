@@ -8,7 +8,7 @@ import { AuthService } from '../../core/auth/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './login.html'
+  templateUrl: './login.html',
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -17,7 +17,7 @@ export class LoginComponent {
 
   loginForm = this.fb.group({
     email: ['super@smartuni.edu', [Validators.required, Validators.email]],
-    password: ['password', Validators.required]
+    password: ['password', Validators.required],
   });
 
   isLoading = false;
@@ -27,9 +27,9 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
-      
+
       const { email, password } = this.loginForm.value;
-      
+
       this.authService.login(email!, password!).subscribe({
         next: () => {
           this.isLoading = false;
@@ -39,9 +39,20 @@ export class LoginComponent {
             this.router.navigate(['/admin/dashboard']);
           } else if (role === 'Student') {
             this.router.navigate(['/student/dashboard']);
-          } else if (role === 'Faculty Member' || role === 'Professor' || role === 'Lecturer' || role === 'Advisor') {
+          } else if (
+            role === 'Faculty Member' ||
+            role === 'Professor' ||
+            role === 'Lecturer' ||
+            role === 'Advisor'
+          ) {
             this.router.navigate(['/faculty/dashboard']);
-          } else if (role === 'Accounts Officer' || role === 'Librarian' || role === 'Admission Officer' || role === 'General Staff' || role === 'Registrar Officer') {
+          } else if (
+            role === 'Accounts Officer' ||
+            role === 'Librarian' ||
+            role === 'Admission Officer' ||
+            role === 'General Staff' ||
+            role === 'Registrar Officer'
+          ) {
             this.router.navigate(['/staff/dashboard']);
           } else {
             this.router.navigate(['/admin/dashboard']); // Fallback
@@ -50,7 +61,7 @@ export class LoginComponent {
         error: (err) => {
           this.isLoading = false;
           this.errorMessage = 'Invalid credentials. Please try again.';
-        }
+        },
       });
     }
   }

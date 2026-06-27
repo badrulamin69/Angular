@@ -9,15 +9,16 @@ import { DynamicAction, IconResolverService } from '../../../core/services/icon-
   imports: [CommonModule, RouterModule],
   template: `
     <ng-container *ngIf="action">
-      <a *ngIf="action.externalUrl && !action.route"
-         [href]="action.externalUrl"
-         target="_blank"
-         rel="noreferrer"
-         [attr.title]="action.tooltip"
-         [attr.aria-label]="action.ariaLabel || action.label"
-         [ngClass]="buttonClasses"
-         class="dynamic-action-button inline-flex items-center justify-center gap-2 transition-all"
-         >
+      <a
+        *ngIf="action.externalUrl && !action.route"
+        [href]="action.externalUrl"
+        target="_blank"
+        rel="noreferrer"
+        [attr.title]="action.tooltip"
+        [attr.aria-label]="action.ariaLabel || action.label"
+        [ngClass]="buttonClasses"
+        class="dynamic-action-button inline-flex items-center justify-center gap-2 transition-all"
+      >
         <ng-container *ngIf="hasIcon && iconPosition === 'left'">
           <span [innerHTML]="iconSvg"></span>
         </ng-container>
@@ -27,15 +28,17 @@ import { DynamicAction, IconResolverService } from '../../../core/services/icon-
         </ng-container>
       </a>
 
-      <button *ngIf="!action.externalUrl || action.route"
-              type="button"
-              [routerLink]="action.route"
-              [disabled]="action.disabled"
-              [attr.title]="action.tooltip"
-              [attr.aria-label]="action.ariaLabel || action.label"
-              [ngClass]="buttonClasses"
-              class="dynamic-action-button inline-flex items-center justify-center gap-2 transition-all"
-              (click)="handleClick($event)">
+      <button
+        *ngIf="!action.externalUrl || action.route"
+        type="button"
+        [routerLink]="action.route"
+        [disabled]="action.disabled"
+        [attr.title]="action.tooltip"
+        [attr.aria-label]="action.ariaLabel || action.label"
+        [ngClass]="buttonClasses"
+        class="dynamic-action-button inline-flex items-center justify-center gap-2 transition-all"
+        (click)="handleClick($event)"
+      >
         <ng-container *ngIf="hasIcon && iconPosition === 'left'">
           <span [innerHTML]="iconSvg"></span>
         </ng-container>
@@ -65,8 +68,8 @@ import { DynamicAction, IconResolverService } from '../../../core/services/icon-
         opacity: 0.55;
         cursor: not-allowed;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class DynamicActionButtonComponent {
   @Input() action?: DynamicAction | any;
@@ -83,18 +86,34 @@ export class DynamicActionButtonComponent {
   get buttonClasses(): string {
     const type = this.iconResolver.resolveButtonType(this.action?.type);
     const size = this.action?.size ?? 'md';
-    const base = 'inline-flex items-center justify-center gap-2 font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-950';
-    const sizeClass = size === 'sm' ? 'px-3 py-1.5 text-xs' : size === 'lg' ? 'px-5 py-2.5 text-base' : 'px-4 py-2 text-sm';
+    const base =
+      'inline-flex items-center justify-center gap-2 font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-950';
+    const sizeClass =
+      size === 'sm'
+        ? 'px-3 py-1.5 text-xs'
+        : size === 'lg'
+          ? 'px-5 py-2.5 text-base'
+          : 'px-4 py-2 text-sm';
     const typeClass = {
       primary: 'bg-mit-red text-white hover:bg-primary-700 dark:bg-mit-red dark:hover:bg-red-700',
       danger: 'bg-rose-600 text-white hover:bg-rose-700',
       success: 'bg-emerald-600 text-white hover:bg-emerald-700',
-      outline: 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800',
-      ghost: 'bg-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900',
-      secondary: 'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800'
+      outline:
+        'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800',
+      ghost:
+        'bg-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900',
+      secondary:
+        'bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800',
     }[type];
 
-    return [base, sizeClass, typeClass, this.action?.disabled ? 'opacity-60 cursor-not-allowed' : ''].filter(Boolean).join(' ');
+    return [
+      base,
+      sizeClass,
+      typeClass,
+      this.action?.disabled ? 'opacity-60 cursor-not-allowed' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 
   get iconSvg(): string {

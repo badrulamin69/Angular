@@ -7,7 +7,7 @@ import { PdfService } from '../../core/services/pdf.service';
   selector: 'app-analytics-showcase',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './analytics-showcase.html'
+  templateUrl: './analytics-showcase.html',
 })
 export class AnalyticsShowcase {
   private pdfService = inject(PdfService);

@@ -12,15 +12,15 @@ import { Pricing } from '../../components/pricing/pricing';
   selector: 'app-home',
   standalone: true,
   imports: [
-    Hero, 
-    Features, 
-    Ecosystem, 
-    LmsShowcase, 
-    AnalyticsShowcase, 
-    LiveClass, 
-    Testimonials, 
-    Pricing
+    Hero,
+    Features,
+    Ecosystem,
+    LmsShowcase,
+    AnalyticsShowcase,
+    LiveClass,
+    Testimonials,
+    Pricing,
   ],
-  templateUrl: './home.html'
+  templateUrl: './home.html',
 })
 export class Home {}

@@ -10,19 +10,19 @@ import { AuthService } from '../../core/auth/auth.service';
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive, ThemeToggleComponent],
-  templateUrl: './navbar.html'
+  templateUrl: './navbar.html',
 })
 export class Navbar {
   themeService = inject(ThemeService);
   authService = inject(AuthService);
   private http = inject(HttpClient);
-  
+
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
   faculties = signal<any[]>([]);
-  
+
   user = computed(() => this.authService.currentUser());
-  
+
   // Mega menu states
   activeMenu = signal<string | null>(null);
 
@@ -32,7 +32,7 @@ export class Navbar {
   }
 
   loadFaculties() {
-    this.http.get<any[]>('http://localhost:3000/faculties').subscribe(data => {
+    this.http.get<any[]>('http://localhost:8080/faculties').subscribe((data) => {
       this.faculties.set(data);
     });
   }
@@ -49,13 +49,13 @@ export class Navbar {
   }
 
   toggleMobileMenu() {
-    this.isMobileMenuOpen.update(v => !v);
+    this.isMobileMenuOpen.update((v) => !v);
   }
-  
+
   openMenu(menu: string) {
     this.activeMenu.set(menu);
   }
-  
+
   closeMenu() {
     this.activeMenu.set(null);
   }

@@ -28,35 +28,37 @@ export interface Session {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FacultySettingsService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://localhost:8080';
 
   // Fetch Settings for a specific user
   getSettings(userId: string): Observable<FacultySettings> {
-    return this.http.get<FacultySettings[]>(`${this.baseUrl}/faculty-settings?userId=${userId}`).pipe(
-      map(settings => {
-        if (settings && settings.length > 0) {
-          return settings[0];
-        }
-        // Fallback default settings object
-        return {
-          id: '1',
-          userId: userId,
-          theme: 'light',
-          sidebarCollapsed: false,
-          emailNotifications: true,
-          assignmentNotifications: true,
-          examNotifications: true,
-          messageNotifications: true,
-          profileVisibility: true,
-          phoneVisibility: false,
-          lastUpdated: new Date().toISOString()
-        };
-      })
-    );
+    return this.http
+      .get<FacultySettings[]>(`${this.baseUrl}/faculty-settings?userId=${userId}`)
+      .pipe(
+        map((settings) => {
+          if (settings && settings.length > 0) {
+            return settings[0];
+          }
+          // Fallback default settings object
+          return {
+            id: '1',
+            userId: userId,
+            theme: 'light',
+            sidebarCollapsed: false,
+            emailNotifications: true,
+            assignmentNotifications: true,
+            examNotifications: true,
+            messageNotifications: true,
+            profileVisibility: true,
+            phoneVisibility: false,
+            lastUpdated: new Date().toISOString(),
+          };
+        }),
+      );
   }
 
   // Update Settings in both collections to keep db.json consistent
@@ -79,12 +81,12 @@ export class FacultySettingsService {
   // Terminate all sessions except current one
   deleteOtherSessions(userId: string, currentSessionId: string): Observable<any> {
     return this.getSessions(userId).pipe(
-      map(sessions => {
+      map((sessions) => {
         const deleteRequests = sessions
-          .filter(s => s.id !== currentSessionId)
-          .map(s => this.deleteSession(s.id));
+          .filter((s) => s.id !== currentSessionId)
+          .map((s) => this.deleteSession(s.id));
         return forkJoin(deleteRequests);
-      })
+      }),
     );
   }
 

@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 export type ThemeState = 'light' | 'dark';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
   currentTheme = signal<ThemeState>('light');
@@ -20,7 +20,7 @@ export class ThemeService {
 
   private initTheme() {
     const savedTheme = localStorage.getItem('theme') as ThemeState | null;
-    
+
     if (savedTheme === 'light' || savedTheme === 'dark') {
       this.currentTheme.set(savedTheme);
       this.applyTheme(savedTheme);
@@ -34,7 +34,7 @@ export class ThemeService {
   }
 
   toggleTheme() {
-    this.currentTheme.update(theme => {
+    this.currentTheme.update((theme) => {
       const newTheme = theme === 'dark' ? 'light' : 'dark';
       if (this.isBrowser) {
         localStorage.setItem('theme', newTheme);

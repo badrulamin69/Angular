@@ -9,15 +9,15 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-admin-layout',
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
-  templateUrl: './admin-layout.html'
+  templateUrl: './admin-layout.html',
 })
 export class AdminLayoutComponent implements OnInit {
   authService = inject(AuthService);
   http = inject(HttpClient);
   router = inject(Router);
-  
+
   user = computed(() => this.authService.currentUser());
-  
+
   isSidebarOpen = true;
   isDropdownOpen = false;
   isNotificationsOpen = signal(false);
@@ -25,7 +25,7 @@ export class AdminLayoutComponent implements OnInit {
   searchQuery = signal('');
 
   unreadNotificationsCount = computed(() => {
-    return this.notifications().filter(n => !n.read).length;
+    return this.notifications().filter((n) => !n.read).length;
   });
 
   ngOnInit() {
@@ -35,7 +35,7 @@ export class AdminLayoutComponent implements OnInit {
   loadNotifications() {
     const currentUser = this.user();
     if (currentUser) {
-      this.http.get<any[]>(`http://localhost:3000/notifications`).subscribe(data => {
+      this.http.get<any[]>(`http://localhost:8080/notifications`).subscribe((data) => {
         // Filter notifications by user or load all admin notifications
         this.notifications.set(data);
       });
@@ -65,24 +65,30 @@ export class AdminLayoutComponent implements OnInit {
   }
 
   markAsRead(id: string) {
-    this.http.patch<any>(`http://localhost:3000/notifications/${id}`, { read: true }).subscribe(() => {
-      this.notifications.update(list => list.map(n => n.id === id ? { ...n, read: true } : n));
-    });
+    this.http
+      .patch<any>(`http://localhost:8080/notifications/${id}`, { read: true })
+      .subscribe(() => {
+        this.notifications.update((list) =>
+          list.map((n) => (n.id === id ? { ...n, read: true } : n)),
+        );
+      });
   }
 
   clearAll() {
     // Mark all as read
-    const unread = this.notifications().filter(n => !n.read);
-    unread.forEach(n => {
-      this.http.patch<any>(`http://localhost:3000/notifications/${n.id}`, { read: true }).subscribe();
+    const unread = this.notifications().filter((n) => !n.read);
+    unread.forEach((n) => {
+      this.http
+        .patch<any>(`http://localhost:8080/notifications/${n.id}`, { read: true })
+        .subscribe();
     });
-    this.notifications.update(list => list.map(n => ({ ...n, read: true })));
+    this.notifications.update((list) => list.map((n) => ({ ...n, read: true })));
   }
 
   triggerSearch() {
     const q = this.searchQuery().trim().toLowerCase();
     if (!q) return;
-    
+
     // Perform navigation/search redirection based on keyword match
     if (q.includes('stud') || q.includes('enroll')) {
       this.router.navigate(['/admin/students'], { queryParams: { q } });
@@ -92,7 +98,12 @@ export class AdminLayoutComponent implements OnInit {
       this.router.navigate(['/admin/faculties'], { queryParams: { q } });
     } else if (q.includes('teacher') || q.includes('staff') || q.includes('emp')) {
       this.router.navigate(['/admin/teachers'], { queryParams: { q } });
-    } else if (q.includes('pay') || q.includes('invoice') || q.includes('finance') || q.includes('fee')) {
+    } else if (
+      q.includes('pay') ||
+      q.includes('invoice') ||
+      q.includes('finance') ||
+      q.includes('fee')
+    ) {
       this.router.navigate(['/admin/finance'], { queryParams: { q } });
     } else {
       // General dashboard filter or fallback

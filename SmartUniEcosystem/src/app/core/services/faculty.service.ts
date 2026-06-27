@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, switchMap, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FacultyService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://localhost:8080';
 
   getCourses(facultyId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/courses?instructorId=${facultyId}`);
@@ -20,13 +20,13 @@ export class FacultyService {
   getSubmissions(facultyId: string): Observable<any[]> {
     // Get courses first, then get submissions for those courses
     return this.getCourses(facultyId).pipe(
-      switchMap(courses => {
+      switchMap((courses) => {
         if (courses.length === 0) return of([]);
-        const courseIds = courses.map(c => c.id);
-        return this.http.get<any[]>(`${this.baseUrl}/submissions`).pipe(
-          map(submissions => submissions.filter(s => courseIds.includes(s.courseId)))
-        );
-      })
+        const courseIds = courses.map((c) => c.id);
+        return this.http
+          .get<any[]>(`${this.baseUrl}/submissions`)
+          .pipe(map((submissions) => submissions.filter((s) => courseIds.includes(s.courseId))));
+      }),
     );
   }
 
@@ -54,13 +54,13 @@ export class FacultyService {
     // In our mock db, enrollments link students to courseId (which is code in some places, id in others)
     // Let's assume enrollment.courseId matches course.code or course.id
     return this.http.get<any[]>(`${this.baseUrl}/enrollments?courseId=${courseCode}`).pipe(
-      switchMap(enrollments => {
+      switchMap((enrollments) => {
         if (enrollments.length === 0) return of([]);
-        const studentIds = enrollments.map(e => e.studentId);
-        return this.http.get<any[]>(`${this.baseUrl}/students`).pipe(
-          map(students => students.filter(s => studentIds.includes(s.id)))
-        );
-      })
+        const studentIds = enrollments.map((e) => e.studentId);
+        return this.http
+          .get<any[]>(`${this.baseUrl}/students`)
+          .pipe(map((students) => students.filter((s) => studentIds.includes(s.id))));
+      }),
     );
   }
 

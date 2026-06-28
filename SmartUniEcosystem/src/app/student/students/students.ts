@@ -1026,8 +1026,18 @@ export class StudentsComponent implements OnInit {
     }
 
     // Create new student
+    const selectedProgram = this.programs().find((p) => p.name === formValue.program);
+    let deptIdStr = '000';
+    if (selectedProgram && selectedProgram.departmentId) {
+      const numMatch = String(selectedProgram.departmentId).match(/\d+/);
+      if (numMatch) {
+        deptIdStr = numMatch[0].padStart(3, '0');
+      }
+    }
+
     const studentId =
-      'STU-' +
+      deptIdStr +
+      '-' +
       Math.floor(Math.random() * 10000)
         .toString()
         .padStart(4, '0');

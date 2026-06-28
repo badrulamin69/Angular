@@ -124,11 +124,20 @@ export class FacultiesComponent implements OnInit {
     this.isModalOpen.set(false);
   }
 
+  formatDeptId(id: string): string {
+    const numMatch = id.match(/\d+/);
+    if (numMatch) {
+      return numMatch[0].padStart(3, '0');
+    }
+    return id;
+  }
+
   saveDepartment() {
     if (this.deptForm.valid) {
       const formValue = this.deptForm.value;
+      const newIdNumber = this.departments().length + 1;
       const newDept: Department = {
-        id: 'D' + (this.departments().length + 1),
+        id: String(newIdNumber).padStart(3, '0'),
         name: formValue.name!,
         bnName: formValue.bnName!,
         facultyId: formValue.facultyId!,

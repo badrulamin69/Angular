@@ -106,7 +106,7 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () =>
-          import('./shared-portal/settings/settings').then((m) => m.SharedSettingsComponent),
+          import('./shared-portal/profile/profile').then((m) => m.SharedProfileComponent),
       },
       {
         path: 'settings',

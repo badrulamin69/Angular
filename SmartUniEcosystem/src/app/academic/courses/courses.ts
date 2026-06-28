@@ -225,6 +225,7 @@ interface Course {
               <option *ngFor="let dept of departments()" [value]="dept.name">
                 {{ dept.name }}
               </option>
+              <option value="Other">Other</option>
             </select>
           </div>
           <div class="grid grid-cols-2 gap-4">

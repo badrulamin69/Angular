@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-finance-billing',
@@ -228,7 +228,7 @@ export class FinanceBillingComponent implements OnInit {
   });
 
   isSuperAdmin = computed(() => {
-    const u = this.auth.currentUser();
+    const u: any = this.auth.currentUser();
     return u?.role === 'Super Admin';
   });
 

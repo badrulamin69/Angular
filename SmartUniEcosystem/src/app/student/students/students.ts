@@ -799,6 +799,30 @@ interface Student {
               <option *ngFor="let uni of universities()" [value]="uni.id">{{ uni.name }}</option>
             </select>
           </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5"
+              >Status</label
+            >
+            <select
+              formControlName="status"
+              class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white"
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Graduated">Graduated</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5"
+              >GPA</label
+            >
+            <input
+              type="number"
+              step="0.01"
+              formControlName="gpa"
+              class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white"
+            />
+          </div>
 
           <div
             class="pt-4 flex gap-3 justify-end border-t border-slate-200 dark:border-slate-700 mt-6"
@@ -846,6 +870,8 @@ export class StudentsComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     program: ['', Validators.required],
     universityId: ['', Validators.required],
+    status: ['Active', Validators.required],
+    gpa: [0.0, [Validators.required, Validators.min(0), Validators.max(4.0)]]
   });
 
   isEnrollmentModalOpen = signal(false);
@@ -927,7 +953,7 @@ export class StudentsComponent implements OnInit {
   openModal() {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
     const firstProg = this.programs().length > 0 ? this.programs()[0].name : '';
-    this.studentForm.reset({ program: firstProg, universityId: firstUni });
+    this.studentForm.reset({ program: firstProg, universityId: firstUni, status: 'Active', gpa: 0.0 });
     this.editingId.set(null);
     this.isModalOpen.set(true);
   }
@@ -939,6 +965,8 @@ export class StudentsComponent implements OnInit {
       email: student.email,
       program: student.program,
       universityId: '',
+      status: student.status,
+      gpa: student.gpa
     });
     this.editingId.set(student.id);
     this.isModalOpen.set(true);
@@ -960,6 +988,8 @@ export class StudentsComponent implements OnInit {
         name: formValue.name,
         email: formValue.email,
         program: formValue.program,
+        status: formValue.status,
+        gpa: formValue.gpa
       };
 
       this.http
@@ -1007,8 +1037,8 @@ export class StudentsComponent implements OnInit {
       name: formValue.name!,
       email: formValue.email!,
       program: formValue.program!,
-      status: 'Active',
-      gpa: 0.0,
+      status: (formValue.status as 'Active' | 'Inactive' | 'Graduated') || 'Active',
+      gpa: formValue.gpa || 0.0,
     };
 
     const newUser = {

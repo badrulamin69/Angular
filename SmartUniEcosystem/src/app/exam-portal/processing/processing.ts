@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { PdfService } from '../../core/services/pdf.service';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-exam-processing',
@@ -273,7 +273,7 @@ export class ExamProcessingComponent implements OnInit {
   searchStudentId = '';
 
   isSuperAdmin = computed(() => {
-    const u = this.auth.currentUser();
+    const u: any = this.auth.currentUser();
     return u?.role === 'Super Admin';
   });
 

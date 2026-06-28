@@ -37,7 +37,7 @@ export class FacultySettingsService {
   // Fetch Settings for a specific user
   getSettings(userId: string): Observable<FacultySettings> {
     return this.http
-      .get<FacultySettings[]>(`${this.baseUrl}/faculty-settings?userId=${userId}`)
+      .get<FacultySettings[]>(`${this.baseUrl}/facultySettings?userId=${userId}`)
       .pipe(
         map((settings) => {
           if (settings && settings.length > 0) {
@@ -63,7 +63,7 @@ export class FacultySettingsService {
 
   // Update Settings in both collections to keep db.json consistent
   updateSettings(id: string, settings: Partial<FacultySettings>): Observable<any> {
-    const p1 = this.http.patch(`${this.baseUrl}/faculty-settings/${id}`, settings);
+    const p1 = this.http.patch(`${this.baseUrl}/facultySettings/${id}`, settings);
     const p2 = this.http.patch(`${this.baseUrl}/facultySettings/${id}`, settings);
     return forkJoin([p1, p2]);
   }

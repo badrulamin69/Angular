@@ -16,8 +16,16 @@ public class FinancialRateController {
     private FinancialRateRepository repository;
     
     @GetMapping
-    public List<FinancialRate> get(FinancialRate probe) {
-        return repository.findAll(Example.of(probe));
+    public FinancialRate get() {
+        List<FinancialRate> list = repository.findAll();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    
+    @PatchMapping
+    public FinancialRate patchRoot(@RequestBody Map<String, Object> updates) {
+        List<FinancialRate> list = repository.findAll();
+        if (list.isEmpty()) return null;
+        return patch(list.get(0).getId(), updates);
     }
     
     @GetMapping("/{id}")

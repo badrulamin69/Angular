@@ -16,8 +16,16 @@ public class HeroContentController {
     private HeroContentRepository repository;
     
     @GetMapping
-    public List<HeroContent> get(HeroContent probe) {
-        return repository.findAll(Example.of(probe));
+    public HeroContent get() {
+        List<HeroContent> list = repository.findAll();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    
+    @PatchMapping
+    public HeroContent patchRoot(@RequestBody Map<String, Object> updates) {
+        List<HeroContent> list = repository.findAll();
+        if (list.isEmpty()) return null;
+        return patch(list.get(0).getId(), updates);
     }
     
     @GetMapping("/{id}")

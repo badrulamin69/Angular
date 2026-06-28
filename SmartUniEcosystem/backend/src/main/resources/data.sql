@@ -15,7 +15,7 @@ INSERT INTO "features" ("id", "title", "description", "icon", "color") VALUES ('
 INSERT INTO "features" ("id", "title", "description", "icon", "color") VALUES ('f2', 'Intelligent LMS', 'Next-generation learning management with interactive courses, real-time collaboration, and automated assessments.', 'svg-lms', 'from-mit-red to-orange-500');
 INSERT INTO "features" ("id", "title", "description", "icon", "color") VALUES ('f3', 'Examination Engine', 'Secure, proctored digital examinations with automated grading and detailed performance analytics.', 'svg-exam', 'from-emerald-500 to-teal-400');
 INSERT INTO "features" ("id", "title", "description", "icon", "color") VALUES ('f4', 'Financial Management', 'Comprehensive tuition tracking, payroll, grants management, and real-time financial reporting.', 'svg-finance', 'from-purple-500 to-pink-500');
-INSERT INTO "hero_content" ("eyebrow", "title", "description", "id") VALUES ('Next-Gen Academic OS v2.0', 'Transform Universities Into Intelligent Digital Campuses', 'Enterprise ERP + LMS ecosystem for modern higher education institutions. Unify data, automate workflows, and elevate the learning experience with AI-powered analytics.', 'auto-745872');
+INSERT INTO "hero_content" ("eyebrow", "title", "description", "id") VALUES ('Next-Gen Academic OS v2.0', 'Transform Universities Into Intelligent Digital Campuses', 'Enterprise ERP + LMS ecosystem for modern higher education institutions. Unify data, automate workflows, and elevate the learning experience with AI-powered analytics.', 'auto-636385');
 INSERT INTO "staff_profiles" ("id", "user_id", "designation", "department", "joining_date", "salary", "phone", "address") VALUES ('SP1', '_bUfEoxkwxo', 'Senior Lecturer', 'Computer Science', '2023-01-15', 5000, '+1-555-0101', '123 Academic Way, NY');
 INSERT INTO "staff_profiles" ("id", "user_id", "designation", "department", "joining_date", "salary", "phone", "address") VALUES ('SP2', NULL, 'Admin Coordinator', 'Registrar Office', '2024-03-10', 3500, '+1-555-0202', '456 Office Plaza, NY');
 INSERT INTO "staff_profiles" ("id", "user_id", "designation", "department", "joining_date", "salary", "phone", "address") VALUES ('2rWgxIaAsG8', 'Ku6BZ9iD2Uk', 'Lecturer ', 'Department of Bengali', '2026-06-27', 4500, '', '');
@@ -123,7 +123,7 @@ INSERT INTO "submissions" ("id", "assignment_id", "student_id", "student_name", 
 INSERT INTO "discussions" ("id", "course_id", "user_id", "title", "content", "date") VALUES ('D-01', 'CS-101', '3', 'Best resources for QuickSort?', 'Looking for some good visualizations for QuickSort algorithm.', '2026-05-15');
 INSERT INTO "replies" ("id", "discussion_id", "user_id", "content", "date") VALUES ('R-01', 'D-01', '_bUfEoxkwxo', 'Check out Visualgo.net, it has great animations!', '2026-05-15');
 INSERT INTO "notifications" ("id", "user_id", "message", "read", "timestamp") VALUES ('N1', '3', 'Your registration for Fall Semester is pending advisor approval.', true, '2026-05-12T10:00:00Z');
-INSERT INTO "system_stats" ("total_universities", "total_students", "total_revenue", "active_users", "id") VALUES (43, 1260000, 4525000, 90000, 'auto-522981');
+INSERT INTO "system_stats" ("total_universities", "total_students", "total_revenue", "active_users", "id") VALUES (43, 1260000, 4525000, 90000, 'auto-720391');
 INSERT INTO "invoices" ("id", "student_id", "student_name", "credits", "amount", "status", "date") VALUES ('INV-001', '3', 'Emon Sarker', 14, 2100, 'Paid', '2026-05-10');
 INSERT INTO "invoices" ("id", "student_id", "student_name", "credits", "amount", "status", "date") VALUES ('INV-002', 'dbZguN2EI5k', 'Abul Hasan', 18, 2700, 'Unpaid', '2026-05-12');
 INSERT INTO "applicants" ("id", "name", "email", "phone", "status", "applied_date") VALUES ('APP-001', 'Sarah Ahmed', 'sarah@example.com', '+8801711223344', 'Under Review', '2026-05-10');
@@ -148,7 +148,7 @@ INSERT INTO "buses" ("id", "route", "driver", "capacity", "registered") VALUES (
 INSERT INTO "buses" ("id", "route", "driver", "capacity", "registered") VALUES ('BUS-02', 'Route B (Uttara)', 'Karim', 40, 25);
 INSERT INTO "staff" ("id", "name", "email", "role") VALUES ('S-01', 'Admin User', 'admin@smartuni.edu', 'Super Admin');
 INSERT INTO "staff" ("id", "name", "email", "role") VALUES ('S-02', 'Admissions Head', 'admission@smartuni.edu', 'Admission Officer');
-INSERT INTO "financial_rates" ("undergrad_rate", "grad_rate", "facility_fee", "id") VALUES (150, 250, 200, 'auto-671494');
+INSERT INTO "financial_rates" ("undergrad_rate", "grad_rate", "facility_fee", "id") VALUES (150, 250, 200, 'auto-859053');
 INSERT INTO "exam_batches" ("id", "semester", "department", "total_courses", "graded_courses", "status") VALUES ('B-FALL-26', 'Fall 2026', 'Computer Science', 12, 8, 'In Progress');
 INSERT INTO "activity_logs" ("id", "title", "time", "timestamp", "type") VALUES ('1', 'New university boarded: Stanford', '2 minutes ago', '2026-06-07T16:51:22Z', 'info');
 INSERT INTO "activity_logs" ("id", "title", "time", "timestamp", "type") VALUES ('2', 'Database backup completed', '1 hour ago', '2026-06-07T15:53:22Z', 'success');

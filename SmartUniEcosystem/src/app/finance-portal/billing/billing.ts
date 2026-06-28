@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-finance-billing',
@@ -19,10 +20,13 @@ import { FormsModule } from '@angular/forms';
           </p>
         </div>
         <button
+          *ngIf="isSuperAdmin()"
           (click)="generateBulkInvoices()"
-          class="px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2"
+          [disabled]="isGenerating"
+          class="px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all font-bold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg
+            *ngIf="!isGenerating"
             xmlns="http://www.w3.org/2000/svg"
             width="18"
             height="18"
@@ -38,7 +42,11 @@ import { FormsModule } from '@angular/forms';
             <line x1="12" x2="12" y1="18" y2="12" />
             <line x1="9" x2="15" y1="15" y2="15" />
           </svg>
-          Generate Batch Invoices
+          <div
+            *ngIf="isGenerating"
+            class="animate-spin rounded-full h-4 w-4 border-2 border-slate-900 dark:border-white border-t-transparent"
+          ></div>
+          {{ isGenerating ? 'Generating...' : 'Generate Batch Invoices' }}
         </button>
       </div>
 
@@ -55,8 +63,9 @@ import { FormsModule } from '@angular/forms';
               >
               <input
                 type="number"
+                [disabled]="!isSuperAdmin()"
                 [(ngModel)]="rates()!.undergradRate"
-                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white disabled:opacity-75"
               />
             </div>
             <div>
@@ -65,8 +74,9 @@ import { FormsModule } from '@angular/forms';
               >
               <input
                 type="number"
+                [disabled]="!isSuperAdmin()"
                 [(ngModel)]="rates()!.gradRate"
-                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white disabled:opacity-75"
               />
             </div>
             <div>
@@ -75,11 +85,13 @@ import { FormsModule } from '@angular/forms';
               >
               <input
                 type="number"
+                [disabled]="!isSuperAdmin()"
                 [(ngModel)]="rates()!.facilityFee"
-                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white"
+                class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-emerald-500 text-sm font-bold text-slate-900 dark:text-white disabled:opacity-75"
               />
             </div>
             <button
+              *ngIf="isSuperAdmin()"
               (click)="updateRates()"
               class="w-full py-2 bg-emerald-500 text-white font-bold rounded-lg shadow-sm hover:bg-emerald-600 transition-colors text-sm"
             >
@@ -138,6 +150,7 @@ import { FormsModule } from '@angular/forms';
                     Status
                   </th>
                   <th
+                    *ngIf="isSuperAdmin()"
                     class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right"
                   >
                     Action
@@ -173,7 +186,7 @@ import { FormsModule } from '@angular/forms';
                       >{{ inv.status }}</span
                     >
                   </td>
-                  <td class="px-6 py-4 text-right">
+                  <td *ngIf="isSuperAdmin()" class="px-6 py-4 text-right">
                     <button
                       *ngIf="inv.status === 'Unpaid'"
                       (click)="logPayment(inv)"
@@ -201,15 +214,22 @@ import { FormsModule } from '@angular/forms';
 })
 export class FinanceBillingComponent implements OnInit {
   private http = inject(HttpClient);
+  private auth = inject(AuthService);
 
   invoices = signal<any[]>([]);
   rates = signal<any>(null);
   filterStatus = signal<'All' | 'Paid' | 'Unpaid'>('All');
+  isGenerating = false;
 
   filteredInvoices = computed(() => {
     const status = this.filterStatus();
     if (status === 'All') return this.invoices();
     return this.invoices().filter((i) => i.status === status);
+  });
+
+  isSuperAdmin = computed(() => {
+    const u = this.auth.currentUser();
+    return u?.role === 'Super Admin';
   });
 
   ngOnInit() {
@@ -242,7 +262,44 @@ export class FinanceBillingComponent implements OnInit {
   }
 
   generateBulkInvoices() {
-    // Simulation logic
-    alert('Bulk invoice generation process started for the new semester.');
+    this.isGenerating = true;
+    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+      const activeStudents = students.filter(s => s.status === 'Active');
+      let completed = 0;
+      let newInvoices: any[] = [];
+      const currentRates = this.rates() || { undergradRate: 300, facilityFee: 150 };
+      
+      if(activeStudents.length === 0) {
+        this.isGenerating = false;
+        alert('No active students found to bill.');
+        return;
+      }
+      
+      activeStudents.forEach(student => {
+        const defaultCredits = 15;
+        const total = (defaultCredits * currentRates.undergradRate) + currentRates.facilityFee;
+        
+        const invoice = {
+          id: 'INV-' + Math.floor(Math.random() * 900000 + 100000),
+          studentId: student.id,
+          studentName: student.name,
+          amount: total,
+          status: 'Unpaid',
+          date: new Date().toISOString().split('T')[0],
+          credits: defaultCredits
+        };
+
+        this.http.post('http://localhost:8080/invoices', invoice).subscribe((savedInv) => {
+          newInvoices.push(savedInv);
+          completed++;
+          if(completed === activeStudents.length) {
+            this.isGenerating = false;
+            this.invoices.update(prev => [...prev, ...newInvoices]);
+            alert(`Successfully generated ${completed} new invoices for the semester!`);
+          }
+        });
+      });
+    });
   }
 }
+

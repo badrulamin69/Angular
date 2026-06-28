@@ -16,8 +16,16 @@ public class SystemStatController {
     private SystemStatRepository repository;
     
     @GetMapping
-    public List<SystemStat> get(SystemStat probe) {
-        return repository.findAll(Example.of(probe));
+    public SystemStat get() {
+        List<SystemStat> list = repository.findAll();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    
+    @PatchMapping
+    public SystemStat patchRoot(@RequestBody Map<String, Object> updates) {
+        List<SystemStat> list = repository.findAll();
+        if (list.isEmpty()) return null;
+        return patch(list.get(0).getId(), updates);
     }
     
     @GetMapping("/{id}")

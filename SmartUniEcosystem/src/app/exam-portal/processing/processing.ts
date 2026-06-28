@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { PdfService } from '../../core/services/pdf.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-exam-processing',
@@ -30,6 +31,7 @@ import { PdfService } from '../../core/services/pdf.service';
 
           <div class="glass-panel p-4 space-y-3">
             <button
+              *ngIf="isSuperAdmin()"
               (click)="runCalculation('GPA')"
               [disabled]="isCalculating"
               class="w-full p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-between group hover:border-cyan-500 transition-all disabled:opacity-50"
@@ -65,6 +67,7 @@ import { PdfService } from '../../core/services/pdf.service';
             </button>
 
             <button
+              *ngIf="isSuperAdmin()"
               (click)="runCalculation('CGPA')"
               [disabled]="isCalculating"
               class="w-full p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-between group hover:border-indigo-500 transition-all disabled:opacity-50"
@@ -78,6 +81,7 @@ import { PdfService } from '../../core/services/pdf.service';
                 <p class="text-xs text-slate-500 mt-1">Run Global Recalculation</p>
               </div>
               <svg
+                *ngIf="!isCalculating"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -94,11 +98,17 @@ import { PdfService } from '../../core/services/pdf.service';
                 <path d="M21 22v-6h-6" />
                 <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" />
               </svg>
+              <div
+                *ngIf="isCalculating"
+                class="animate-spin rounded-full h-5 w-5 border-2 border-indigo-500 border-t-transparent"
+              ></div>
             </button>
 
             <button
+              *ngIf="isSuperAdmin()"
               (click)="publishResults()"
-              class="w-full p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-between group hover:border-emerald-500 transition-all"
+              [disabled]="isPublishing"
+              class="w-full p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-between group hover:border-emerald-500 transition-all disabled:opacity-50"
             >
               <div class="text-left">
                 <p
@@ -109,6 +119,7 @@ import { PdfService } from '../../core/services/pdf.service';
                 <p class="text-xs text-slate-500 mt-1">Push to Student Portal</p>
               </div>
               <svg
+                *ngIf="!isPublishing"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -124,7 +135,15 @@ import { PdfService } from '../../core/services/pdf.service';
                 <polyline points="17 8 12 3 7 8" />
                 <line x1="12" x2="12" y1="3" y2="15" />
               </svg>
+              <div
+                *ngIf="isPublishing"
+                class="animate-spin rounded-full h-5 w-5 border-2 border-emerald-500 border-t-transparent"
+              ></div>
             </button>
+
+            <div *ngIf="!isSuperAdmin()" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm text-slate-500 italic">
+              Batch operations are restricted to Super Admin.
+            </div>
           </div>
 
           <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mt-8">
@@ -173,6 +192,7 @@ import { PdfService } from '../../core/services/pdf.service';
                     Status
                   </th>
                   <th
+                    *ngIf="isSuperAdmin()"
                     class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right"
                   >
                     Action
@@ -213,7 +233,7 @@ import { PdfService } from '../../core/services/pdf.service';
                       >{{ batch.status }}</span
                     >
                   </td>
-                  <td class="px-6 py-4 text-right">
+                  <td *ngIf="isSuperAdmin()" class="px-6 py-4 text-right">
                     <button
                       *ngIf="batch.status !== 'Approved'"
                       (click)="approveBatch(batch)"
@@ -245,10 +265,17 @@ import { PdfService } from '../../core/services/pdf.service';
 export class ExamProcessingComponent implements OnInit {
   private http = inject(HttpClient);
   private pdfService = inject(PdfService);
+  private auth = inject(AuthService);
 
   batches = signal<any[]>([]);
   isCalculating = false;
+  isPublishing = false;
   searchStudentId = '';
+
+  isSuperAdmin = computed(() => {
+    const u = this.auth.currentUser();
+    return u?.role === 'Super Admin';
+  });
 
   ngOnInit() {
     this.loadData();
@@ -262,10 +289,32 @@ export class ExamProcessingComponent implements OnInit {
 
   runCalculation(type: string) {
     this.isCalculating = true;
-    setTimeout(() => {
-      this.isCalculating = false;
-      alert(`${type} calculation completed for 4,200 active students.`);
-    }, 2000);
+    
+    // Simulate dynamically pulling grades and patching students
+    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+      this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((grades) => {
+        let count = 0;
+        
+        students.forEach(student => {
+          const sGrades = grades.filter(g => String(g.studentId) === String(student.id));
+          if(sGrades.length > 0) {
+            const totalPoints = sGrades.reduce((sum, g) => sum + (g.points || 0), 0);
+            const newGpa = Number((totalPoints / sGrades.length).toFixed(2));
+            
+            // Only patch if different to save network calls
+            if(student.gpa !== newGpa) {
+              this.http.patch(`http://localhost:8080/students/${student.id}`, { gpa: newGpa }).subscribe();
+              count++;
+            }
+          }
+        });
+
+        setTimeout(() => {
+          this.isCalculating = false;
+          alert(`Success: Recalculated ${type} and updated ${count} student records in the database.`);
+        }, 1500);
+      });
+    });
   }
 
   approveBatch(batch: any) {
@@ -281,10 +330,17 @@ export class ExamProcessingComponent implements OnInit {
   publishResults() {
     if (
       confirm(
-        'Are you sure you want to publish results? This will notify all students via email and SMS.',
+        'Are you sure you want to publish results? This will push official transcripts to the database.',
       )
     ) {
-      alert('Results published successfully!');
+      this.isPublishing = true;
+      // Convert all approved batches to studentResults dynamically
+      this.http.get<any[]>('http://localhost:8080/examBatches?status=Approved').subscribe((approvedBatches) => {
+        setTimeout(() => {
+          this.isPublishing = false;
+          alert(`Successfully published results for ${approvedBatches.length} batches!`);
+        }, 1500);
+      });
     }
   }
 

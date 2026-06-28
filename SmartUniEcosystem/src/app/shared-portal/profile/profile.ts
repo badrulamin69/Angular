@@ -1,13 +1,14 @@
 import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 
 interface Activity {
   id: string;
-  action: string;
-  description: string;
-  timestamp: Date;
-  icon: string;
+  title: string;
+  time: string;
+  timestamp: string;
+  type: string;
 }
 
 @Component({
@@ -39,15 +40,18 @@ interface Activity {
           
           <div *ngFor="let activity of activities()" class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
             <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+               
+               <svg *ngIf="activity.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><polyline points="20 6 9 17 4 12"></polyline></svg>
+               <svg *ngIf="activity.type === 'warning'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+               <svg *ngIf="activity.type !== 'success' && activity.type !== 'warning'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-500"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             </div>
             
             <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60 bg-white/50 dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow">
               <div class="flex items-center justify-between mb-1">
-                <h4 class="font-bold text-slate-900 dark:text-white">{{ activity.action }}</h4>
+                <h4 class="font-bold text-slate-900 dark:text-white">{{ activity.title }}</h4>
                 <time class="text-[10px] font-bold text-slate-400 uppercase">{{ activity.timestamp | date:'MMM d, h:mm a' }}</time>
               </div>
-              <p class="text-sm text-slate-500">{{ activity.description }}</p>
+              <p class="text-sm text-slate-500">{{ activity.time }}</p>
             </div>
           </div>
 
@@ -62,40 +66,14 @@ interface Activity {
 })
 export class SharedProfileComponent implements OnInit {
   private authService = inject(AuthService);
-  user = computed(() => this.authService.currentUser());
+  private http = inject(HttpClient);
   
+  user = computed(() => this.authService.currentUser());
   activities = signal<Activity[]>([]);
 
   ngOnInit() {
-    this.activities.set([
-      {
-        id: '1',
-        action: 'System Login',
-        description: 'Successfully authenticated into the enterprise system from desktop device.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 30),
-        icon: 'login'
-      },
-      {
-        id: '2',
-        action: 'Generated Invoices',
-        description: 'Batch generated bulk invoices for Computer Science students.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3),
-        icon: 'file'
-      },
-      {
-        id: '3',
-        action: 'Processed Exams',
-        description: 'Approved and published final term grades for Faculty of Science.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
-        icon: 'check'
-      },
-      {
-        id: '4',
-        action: 'Updated Profile',
-        description: 'Changed notification preferences to enable SMS alerts.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48),
-        icon: 'settings'
-      }
-    ]);
+    this.http.get<Activity[]>('http://localhost:8080/activityLogs').subscribe((data) => {
+      this.activities.set(data);
+    });
   }
 }

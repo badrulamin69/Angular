@@ -22,58 +22,22 @@ import { environment } from '../../../environments/environment';
   template: `
     <div class="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-950 px-4">
       <div class="max-w-4xl mx-auto">
-        <!-- Progress Header -->
+        <!-- Page Header -->
         <div class="glass-panel p-8 mb-8 animate-fade-in">
-          <div class="flex justify-between items-center mb-8">
-            <div>
-              <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                University Application
-              </h1>
-              <p class="text-slate-500 text-sm">
-                Step {{ currentStep() }} of 5: {{ getStepTitle() }}
-              </p>
-            </div>
-            <div class="hidden md:flex gap-2">
-              <div
-                *ngFor="let s of [1, 2, 3, 4, 5]"
-                [class]="
-                  'w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ' +
-                  (currentStep() === s
-                    ? 'bg-mit-red text-white scale-110'
-                    : currentStep() > s
-                      ? 'bg-green-500 text-white'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-400')
-                "
-              >
-                <svg
-                  *ngIf="currentStep() > s"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-                <span *ngIf="currentStep() <= s">{{ s }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
-            <div
-              class="bg-mit-red h-full transition-all duration-500"
-              [style.width.%]="(currentStep() / 5) * 100"
-            ></div>
+          <div>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              University Application
+            </h1>
+            <p class="text-slate-500 text-sm mt-2">
+              Please fill out all the sections below to submit your application.
+            </p>
           </div>
         </div>
 
         <form [formGroup]="appForm" (ngSubmit)="submitApplication()" class="space-y-8">
-          <!-- Step 1: Personal Information -->
-          <div *ngIf="currentStep() === 1" class="glass-panel p-8 space-y-6 animate-fade-in-up">
+          <!-- Section 1: Personal Information -->
+          <div class="glass-panel p-8 space-y-6 animate-fade-in-up mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 mb-6">1. Personal Information</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="col-span-2">
                 <label
@@ -83,7 +47,8 @@ import { environment } from '../../../environments/environment';
                 <input
                   type="text"
                   formControlName="fullName"
-                  class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium"
+                  placeholder="Write your full name"
+                  class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium placeholder-slate-400 dark:placeholder-slate-500"
                 />
                 <p
                   *ngIf="appForm.get('fullName')?.invalid && appForm.get('fullName')?.touched"
@@ -133,26 +98,46 @@ import { environment } from '../../../environments/environment';
             </div>
           </div>
 
-          <!-- Step 2: Academic Background -->
-          <div *ngIf="currentStep() === 2" class="glass-panel p-8 space-y-6 animate-fade-in-up">
+          <!-- Section 2: Academic Background -->
+          <div class="glass-panel p-8 space-y-6 animate-fade-in-up mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 mb-6">2. Academic Background</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="col-span-2">
+              <div class="col-span-1">
                 <label
                   class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider"
-                  >Previous Institution</label
+                  >SSC Institution</label
                 >
                 <input
                   type="text"
-                  formControlName="previousInst"
+                  formControlName="sscInst"
                   class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium"
                 />
                 <p
                   *ngIf="
-                    appForm.get('previousInst')?.invalid && appForm.get('previousInst')?.touched
+                    appForm.get('sscInst')?.invalid && appForm.get('sscInst')?.touched
                   "
                   class="text-xs text-rose-500 mt-1"
                 >
-                  Previous institution is required.
+                  SSC institution is required.
+                </p>
+              </div>
+              <div class="col-span-1">
+                <label
+                  class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider"
+                  >HSC Institution</label
+                >
+                <input
+                  type="text"
+                  formControlName="hscInst"
+                  class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium"
+                />
+                <p
+                  *ngIf="
+                    appForm.get('hscInst')?.invalid && appForm.get('hscInst')?.touched
+                  "
+                  class="text-xs text-rose-500 mt-1"
+                >
+                  HSC institution is required.
                 </p>
               </div>
               <div>
@@ -194,8 +179,9 @@ import { environment } from '../../../environments/environment';
             </div>
           </div>
 
-          <!-- Step 3: Program Selection -->
-          <div *ngIf="currentStep() === 3" class="glass-panel p-8 space-y-6 animate-fade-in-up">
+          <!-- Section 3: Program Selection -->
+          <div class="glass-panel p-8 space-y-6 animate-fade-in-up mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 mb-6">3. Program Selection</h2>
             <div>
               <label
                 class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider"
@@ -207,6 +193,7 @@ import { environment } from '../../../environments/environment';
               >
                 <option value="">Select Faculty</option>
                 <option *ngFor="let f of faculties()" [value]="f.id">{{ f.name }}</option>
+                <option value="others">Others (Extra Course)</option>
               </select>
               <p
                 *ngIf="appForm.get('facultyId')?.invalid && appForm.get('facultyId')?.touched"
@@ -229,6 +216,7 @@ import { environment } from '../../../environments/environment';
                 <option *ngFor="let d of availableDepartments()" [value]="d.id">
                   {{ d.name }}
                 </option>
+                <option value="others">Others</option>
               </select>
               <p
                 *ngIf="appForm.get('departmentId')?.invalid && appForm.get('departmentId')?.touched"
@@ -248,7 +236,7 @@ import { environment } from '../../../environments/environment';
                 class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl outline-none focus:ring-2 focus:ring-mit-red text-slate-900 dark:text-white font-medium"
               >
                 <option value="">Select Program</option>
-                <option *ngFor="let p of availablePrograms()" [value]="p.id">{{ p.name }}</option>
+                <option *ngFor="let p of availablePrograms()" [value]="p.id">{{ p.name || p.title }}</option>
               </select>
               <p
                 *ngIf="appForm.get('programId')?.invalid && appForm.get('programId')?.touched"
@@ -259,8 +247,9 @@ import { environment } from '../../../environments/environment';
             </div>
           </div>
 
-          <!-- Step 4: Document Upload Simulation -->
-          <div *ngIf="currentStep() === 4" class="glass-panel p-8 space-y-6 animate-fade-in-up">
+          <!-- Section 4: Document Upload Simulation -->
+          <div class="glass-panel p-8 space-y-6 animate-fade-in-up mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 mb-6">4. Documents</h2>
             <div
               class="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center group hover:border-mit-red/50 transition-all"
             >
@@ -292,12 +281,15 @@ import { environment } from '../../../environments/environment';
               </p>
               <button
                 type="button"
+                (click)="fileInput.click()"
                 class="px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold"
               >
                 Select Files
               </button>
+              <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" accept=".pdf,image/*" />
             </div>
             <div
+              *ngIf="uploadedFile() as file"
               class="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 rounded-2xl"
             >
               <div
@@ -319,17 +311,18 @@ import { environment } from '../../../environments/environment';
               </div>
               <div>
                 <p class="text-sm font-bold text-green-800 dark:text-green-400">
-                  Academic_Documents.pdf
+                  {{ file.name }}
                 </p>
                 <p class="text-xs text-green-600 dark:text-green-500">
-                  2.4 MB • Successfully uploaded
+                  {{ file.sizeMB }} MB • Successfully uploaded
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- Step 5: Review & Submit -->
-          <div *ngIf="currentStep() === 5" class="glass-panel p-8 space-y-8 animate-fade-in-up">
+          <!-- Section 5: Review & Submit -->
+          <div class="glass-panel p-8 space-y-8 animate-fade-in-up mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 mb-6">5. Final Review</h2>
             <div class="bg-mit-red/5 p-6 rounded-2xl border border-mit-red/10">
               <h3 class="text-lg font-bold text-mit-red mb-4">Final Review</h3>
               <div class="grid grid-cols-2 gap-y-4 text-sm">
@@ -368,28 +361,9 @@ import { environment } from '../../../environments/environment';
           </div>
 
           <!-- Navigation -->
-          <div class="flex justify-between pt-8">
-            <button
-              type="button"
-              *ngIf="currentStep() > 1"
-              (click)="prevStep()"
-              class="px-10 py-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 rounded-2xl font-black hover:bg-slate-50 transition-all"
-            >
-              Previous
-            </button>
-            <div class="flex-1"></div>
-            <button
-              type="button"
-              *ngIf="currentStep() < 5"
-              [disabled]="!isStepValid(currentStep())"
-              (click)="nextStep()"
-              class="px-12 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:hover:scale-100"
-            >
-              Next Step
-            </button>
+          <div class="flex justify-end pt-4 pb-12">
             <button
               type="submit"
-              *ngIf="currentStep() === 5"
               [disabled]="appForm.invalid || isGenerating()"
               class="px-12 py-4 bg-mit-red text-white rounded-2xl font-black shadow-2xl shadow-mit-red/40 hover:scale-105 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
@@ -491,11 +465,17 @@ import { environment } from '../../../environments/environment';
               >
                 Academic Credentials
               </h3>
-              <div class="grid grid-cols-3 gap-4 text-sm">
+              <div class="grid grid-cols-4 gap-4 text-sm">
                 <div>
-                  <p class="text-[9px] font-black text-slate-400 uppercase">Previous Institution</p>
+                  <p class="text-[9px] font-black text-slate-400 uppercase">SSC Inst.</p>
                   <p class="font-bold text-slate-800">
-                    {{ appForm.value.previousInst || 'Not Entered' }}
+                    {{ appForm.value.sscInst || 'Not Entered' }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-[9px] font-black text-slate-400 uppercase">HSC Inst.</p>
+                  <p class="font-bold text-slate-800">
+                    {{ appForm.value.hscInst || 'Not Entered' }}
                   </p>
                 </div>
                 <div>
@@ -571,9 +551,9 @@ import { environment } from '../../../environments/environment';
                     </svg>
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-slate-800">Academic_Documents.pdf</p>
+                    <p class="text-xs font-bold text-slate-800">{{ uploadedFile()?.name || 'No Document Attached' }}</p>
                     <p class="text-[10px] text-slate-400">
-                      2.4 MB • Uploaded & Attached to Application
+                      {{ uploadedFile()?.sizeMB || '0' }} MB • Uploaded & Attached to Application
                     </p>
                   </div>
                 </div>
@@ -653,13 +633,14 @@ export class ApplyComponent implements OnInit {
 
   @ViewChild('printReceipt') receiptElement!: ElementRef;
 
-  currentStep = signal(1);
   faculties = signal<any[]>([]);
   departments = signal<any[]>([]);
   programs = signal<any[]>([]);
+  courses = signal<any[]>([]);
   availableDepartments = signal<any[]>([]);
   availablePrograms = signal<any[]>([]);
 
+  uploadedFile = signal<{ name: string; sizeMB: string } | null>(null);
   isGenerating = signal(false);
   receiptNo = signal(Math.floor(100000 + Math.random() * 900000));
   applicantNo = signal(Math.floor(100 + Math.random() * 900));
@@ -671,7 +652,8 @@ export class ApplyComponent implements OnInit {
     fullName: ['', Validators.required],
     dob: ['', Validators.required],
     gender: ['', Validators.required],
-    previousInst: ['', Validators.required],
+    sscInst: ['', Validators.required],
+    hscInst: ['', Validators.required],
     sscGpa: ['', [Validators.required, Validators.min(0), Validators.max(5)]],
     hscGpa: ['', [Validators.required, Validators.min(0), Validators.max(5)]],
     facultyId: ['', Validators.required],
@@ -686,10 +668,12 @@ export class ApplyComponent implements OnInit {
       faculties: this.http.get<any[]>(`${environment.apiUrl}/faculties`),
       departments: this.http.get<any[]>(`${environment.apiUrl}/departments`),
       programs: this.http.get<any[]>(`${environment.apiUrl}/programs`),
-    }).subscribe(({ faculties, departments, programs }) => {
+      courses: this.http.get<any[]>(`${environment.apiUrl}/courses`),
+    }).subscribe(({ faculties, departments, programs, courses }) => {
       this.faculties.set(faculties);
       this.departments.set(departments);
       this.programs.set(programs);
+      this.courses.set(courses);
 
       // Initialize dropdown lists in case of pre-populated data (e.g. going back/forth in wizard)
       this.initializeAvailableOptions();
@@ -697,7 +681,9 @@ export class ApplyComponent implements OnInit {
 
     // Reactive subscriptions for cascading select boxes
     this.appForm.get('facultyId')?.valueChanges.subscribe((facultyId) => {
-      if (facultyId) {
+      if (facultyId === 'others') {
+        this.availableDepartments.set([]);
+      } else if (facultyId) {
         const filteredDepts = this.departments().filter((d) => d.facultyId === facultyId);
         this.availableDepartments.set(filteredDepts);
       } else {
@@ -709,7 +695,9 @@ export class ApplyComponent implements OnInit {
     });
 
     this.appForm.get('departmentId')?.valueChanges.subscribe((departmentId) => {
-      if (departmentId) {
+      if (departmentId === 'others') {
+        this.availablePrograms.set(this.courses());
+      } else if (departmentId) {
         const filteredProgs = this.programs().filter((p) => p.departmentId === departmentId);
         this.availablePrograms.set(filteredProgs);
       } else {
@@ -718,111 +706,62 @@ export class ApplyComponent implements OnInit {
       this.appForm.get('programId')?.setValue('', { emitEvent: false });
     });
 
-    // Prepopulate user details if logged in
-    const currentUser = this.authService.currentUser();
-    if (currentUser) {
-      this.appForm.patchValue({
-        fullName: currentUser.name,
-      });
-    }
+    // Removed prepopulation so the watermark placeholder is visible by default
+    // const currentUser = this.authService.currentUser();
+    // if (currentUser) {
+    //   this.appForm.patchValue({
+    //     fullName: currentUser.name,
+    //   });
+    // }
   }
 
   initializeAvailableOptions() {
     const facultyId = this.appForm.get('facultyId')?.value;
-    if (facultyId) {
+    if (facultyId === 'others') {
+      this.availableDepartments.set([]);
+    } else if (facultyId) {
       const filteredDepts = this.departments().filter((d) => d.facultyId === facultyId);
       this.availableDepartments.set(filteredDepts);
-
-      const departmentId = this.appForm.get('departmentId')?.value;
-      if (departmentId) {
-        const filteredProgs = this.programs().filter((p) => p.departmentId === departmentId);
-        this.availablePrograms.set(filteredProgs);
-      }
     }
-  }
 
-  getStepTitle() {
-    const titles = [
-      'Personal Info',
-      'Academic Records',
-      'Program Choice',
-      'Documents',
-      'Review & Submit',
-    ];
-    return titles[this.currentStep() - 1];
+    const departmentId = this.appForm.get('departmentId')?.value;
+    if (departmentId === 'others') {
+      this.availablePrograms.set(this.courses());
+    } else if (departmentId) {
+      const filteredProgs = this.programs().filter((p) => p.departmentId === departmentId);
+      this.availablePrograms.set(filteredProgs);
+    }
   }
 
   getProgramName(id: any) {
     if (!id) return 'Not Selected';
-    return this.programs().find((p) => p.id === id)?.name || id;
+    const prog = this.programs().find((p) => p.id === id);
+    if (prog) return prog.name;
+    const course = this.courses().find((c) => c.id === id);
+    if (course) return course.title;
+    return id;
   }
 
   getFacultyName(id: any) {
     if (!id) return 'Not Selected';
+    if (id === 'others') return 'Others (Extra Course)';
     return this.faculties().find((f) => f.id === id)?.name || id;
   }
 
   getDepartmentName(id: any) {
     if (!id) return 'Not Selected';
+    if (id === 'others') return 'Others';
     return this.departments().find((d) => d.id === id)?.name || id;
   }
 
-  isStepValid(step: number): boolean {
-    if (step === 1) {
-      return (
-        (this.appForm.get('fullName')?.valid ?? false) &&
-        (this.appForm.get('dob')?.valid ?? false) &&
-        (this.appForm.get('gender')?.valid ?? false)
-      );
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.uploadedFile.set({
+        name: file.name,
+        sizeMB: (file.size / (1024 * 1024)).toFixed(2)
+      });
     }
-    if (step === 2) {
-      return (
-        (this.appForm.get('previousInst')?.valid ?? false) &&
-        (this.appForm.get('sscGpa')?.valid ?? false) &&
-        (this.appForm.get('hscGpa')?.valid ?? false)
-      );
-    }
-    if (step === 3) {
-      return (
-        (this.appForm.get('facultyId')?.valid ?? false) &&
-        (this.appForm.get('departmentId')?.valid ?? false) &&
-        (this.appForm.get('programId')?.valid ?? false)
-      );
-    }
-    if (step === 4) {
-      return true; // simulation upload is always valid
-    }
-    return true;
-  }
-
-  nextStep() {
-    if (this.isStepValid(this.currentStep())) {
-      this.currentStep.update((s) => s + 1);
-    } else {
-      this.markStepControlsAsTouched(this.currentStep());
-    }
-  }
-
-  markStepControlsAsTouched(step: number) {
-    if (step === 1) {
-      this.appForm.get('fullName')?.markAsTouched();
-      this.appForm.get('dob')?.markAsTouched();
-      this.appForm.get('gender')?.markAsTouched();
-    }
-    if (step === 2) {
-      this.appForm.get('previousInst')?.markAsTouched();
-      this.appForm.get('sscGpa')?.markAsTouched();
-      this.appForm.get('hscGpa')?.markAsTouched();
-    }
-    if (step === 3) {
-      this.appForm.get('facultyId')?.markAsTouched();
-      this.appForm.get('departmentId')?.markAsTouched();
-      this.appForm.get('programId')?.markAsTouched();
-    }
-  }
-
-  prevStep() {
-    this.currentStep.update((s) => s - 1);
   }
 
   async submitApplication() {
@@ -868,7 +807,8 @@ export class ApplyComponent implements OnInit {
         fullName: formVal.fullName,
         dob: formVal.dob,
         gender: formVal.gender,
-        previousInst: formVal.previousInst,
+        sscInst: formVal.sscInst,
+        hscInst: formVal.hscInst,
         sscGpa: Number(formVal.sscGpa),
         hscGpa: Number(formVal.hscGpa),
         facultyId: formVal.facultyId,

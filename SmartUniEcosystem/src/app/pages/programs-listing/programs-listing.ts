@@ -81,8 +81,7 @@ import { environment } from '../../../environments/environment';
                     {{ prog.name }}
                   </h3>
                   <p class="text-sm text-slate-500 mb-8 leading-relaxed">
-                    A comprehensive curriculum designed to provide deep theoretical knowledge and
-                    practical industry skills.
+                    {{ prog.description || 'A comprehensive curriculum designed to provide deep theoretical knowledge and practical industry skills.' }}
                   </p>
                 </div>
 

@@ -66,18 +66,11 @@ import { ContentService } from '../../core/services/content.service';
                     'Manage departments, faculties, and human resources with enterprise-grade precision. Our centralized system ensures data integrity across all administrative layers.'
                 }}
               </p>
-              <div class="flex gap-4">
+              <div class="flex gap-4" *ngIf="modules()[0]?.tags">
                 <span
+                  *ngFor="let tag of modules()[0].tags"
                   class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold rounded-lg uppercase tracking-wider"
-                  >Payroll</span
-                >
-                <span
-                  class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold rounded-lg uppercase tracking-wider"
-                  >Inventory</span
-                >
-                <span
-                  class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold rounded-lg uppercase tracking-wider"
-                  >Audit Logs</span
+                  >{{ tag }}</span
                 >
               </div>
             </div>

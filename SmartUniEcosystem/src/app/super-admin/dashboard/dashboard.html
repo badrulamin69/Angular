@@ -438,7 +438,7 @@
 </div>
 
 <!-- Onboard University Modal -->
-<div *ngIf="isOnboardModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+<div *ngIf="isOnboardModalOpen()" class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-24">
   <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeOnboardModal()"></div>
   <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
     <div class="flex items-center justify-between mb-6">
@@ -545,7 +545,7 @@
 </div>
 
 <!-- Salary Modal -->
-<div *ngIf="isSalaryModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+<div *ngIf="isSalaryModalOpen()" class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-24">
   <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeSalaryModal()"></div>
   <div class="glass-panel w-full max-w-md p-6 relative z-10 animate-fade-in-up">
     <div class="flex items-center justify-between mb-6">
@@ -650,7 +650,7 @@
 </div>
 
 <!-- View All Logs Modal -->
-<div *ngIf="isLogsModalOpen()" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+<div *ngIf="isLogsModalOpen()" class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-24">
   <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="closeLogsModal()"></div>
   <div
     class="glass-panel w-full max-w-2xl p-6 relative z-10 animate-fade-in-up flex flex-col max-h-[80vh]"

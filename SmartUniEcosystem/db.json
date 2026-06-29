@@ -1298,6 +1298,22 @@
       "applicantId": "APP-236",
       "status": "Pending",
       "appliedDate": "2026-06-08T07:02:53.280Z"
+    },
+    {
+      "fullName": "Shahran",
+      "dob": "1989-10-31",
+      "gender": "Male",
+      "sscInst": "sdfg",
+      "hscInst": "sdfg",
+      "sscGpa": 4.88,
+      "hscGpa": 4.23,
+      "facultyId": "F2",
+      "departmentId": "D6",
+      "programId": "P-13",
+      "id": "XK6F5X7a5Sc",
+      "applicantId": "APP-607",
+      "status": "Pending",
+      "appliedDate": "2026-06-29T12:16:50.780Z"
     }
   ],
   "books": [
@@ -1468,19 +1484,20 @@
       "current": false
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json",
   "testimonials": [
     {
       "quote": "This platform completely transformed how we manage our multi-campus university. The AI analytics alone saved us millions in optimized resource allocation.",
       "name": "Dr. Sarah Jenkins",
       "role": "University President",
-      "org": "Global Tech University"
+      "org": "Global Tech University",
+      "id": "J0RWdOsTuW0"
     },
     {
       "quote": "The LMS is incredibly intuitive. Student engagement has increased by 40% since we migrated to Academy Management ecosystem.",
       "name": "Prof. James Wilson",
       "role": "Head of Computer Science",
-      "org": "Innovation Institute"
+      "org": "Innovation Institute",
+      "id": "Wo_Pt-YHKtA"
     }
   ],
   "lmsShowcase": [
@@ -1488,19 +1505,22 @@
       "title": "Advanced Machine Learning",
       "instructor": "Dr. Alan Turing",
       "progress": 75,
-      "image": "bg-blue-500"
+      "image": "bg-blue-500",
+      "id": "92DilTnfWcA"
     },
     {
       "title": "Quantum Computing Fundamentals",
       "instructor": "Dr. Richard Feynman",
       "progress": 30,
-      "image": "bg-purple-500"
+      "image": "bg-purple-500",
+      "id": "0up7IkmZ4_M"
     },
     {
       "title": "Enterprise Architecture",
       "instructor": "Prof. Grace Hopper",
       "progress": 90,
-      "image": "bg-emerald-500"
+      "image": "bg-emerald-500",
+      "id": "ij_vmyWSVSI"
     }
   ],
   "examQuestions": [
@@ -1511,7 +1531,8 @@
         "Stack",
         "Tree",
         "Graph"
-      ]
+      ],
+      "id": "kdbWr2iIYsI"
     },
     {
       "text": "What is the time complexity of binary search?",
@@ -1520,7 +1541,8 @@
         "O(n)",
         "O(log n)",
         "O(n^2)"
-      ]
+      ],
+      "id": "4efD7kGLqE0"
     },
     {
       "text": "Which of the following is a stable sorting algorithm?",
@@ -1529,29 +1551,35 @@
         "Merge Sort",
         "Heap Sort",
         "Selection Sort"
-      ]
+      ],
+      "id": "bPlON-4nWws"
     }
   ],
   "platformModules": [
     {
       "title": "Centralized ERP",
       "description": "Manage departments, faculties, and human resources with enterprise-grade precision and unified administrative controls.",
-      "icon": "erp"
+      "icon": "erp",
+      "tags": ["Payroll", "Inventory", "Audit Logs"], "id": "wYexmKFZ2Aw"
     },
     {
       "title": "Deep Analytics",
       "description": "Predict student performance and institutional growth with real-time dashboards and AI-driven insights.",
-      "icon": "analytics"
+      "icon": "analytics",
+      "id": "cVdAOf0ByiQ"
     },
     {
       "title": "Adaptive LMS",
       "description": "A flexible learning environment with collaborative discussions, secure assignments, and live classroom experiences.",
-      "icon": "lms"
+      "icon": "lms",
+      "id": "hAVGZ6oWhas"
     },
     {
       "title": "Transparent Treasury",
       "description": "Automated billing, scholarship management, and multi-currency tuition processing for seamless finance operations.",
-      "icon": "finance"
+      "icon": "finance",
+      "id": "QApnSLO9DXM"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

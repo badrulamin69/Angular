@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-pricing',
@@ -17,7 +18,7 @@ export class Pricing implements OnInit {
   plans = signal<any[]>([]);
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/pricingPlans').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/pricingPlans`).subscribe((data) => {
       this.plans.set(data);
     });
   }

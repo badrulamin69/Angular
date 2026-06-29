@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-finance-billing',
@@ -238,22 +239,22 @@ export class FinanceBillingComponent implements OnInit {
 
   loadData() {
     this.http
-      .get<any[]>('http://localhost:8080/invoices')
+      .get<any[]>(`${environment.apiUrl}/invoices`)
       .subscribe((data) => this.invoices.set(data));
     this.http
-      .get<any>('http://localhost:8080/financialRates')
+      .get<any>(`${environment.apiUrl}/financialRates`)
       .subscribe((data) => this.rates.set(data));
   }
 
   updateRates() {
-    this.http.patch('http://localhost:8080/financialRates', this.rates()).subscribe(() => {
+    this.http.patch(`${environment.apiUrl}/financialRates`, this.rates()).subscribe(() => {
       alert('Global rates updated successfully!');
     });
   }
 
   logPayment(invoice: any) {
     this.http
-      .patch(`http://localhost:8080/invoices/${invoice.id}`, { status: 'Paid' })
+      .patch(`${environment.apiUrl}/invoices/${invoice.id}`, { status: 'Paid' })
       .subscribe((res) => {
         this.invoices.update((prev) =>
           prev.map((i) => (i.id === invoice.id ? { ...i, status: 'Paid' } : i)),
@@ -263,22 +264,22 @@ export class FinanceBillingComponent implements OnInit {
 
   generateBulkInvoices() {
     this.isGenerating = true;
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
-      const activeStudents = students.filter(s => s.status === 'Active');
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
+      const activeStudents = students.filter((s) => s.status === 'Active');
       let completed = 0;
       let newInvoices: any[] = [];
       const currentRates = this.rates() || { undergradRate: 300, facilityFee: 150 };
-      
-      if(activeStudents.length === 0) {
+
+      if (activeStudents.length === 0) {
         this.isGenerating = false;
         alert('No active students found to bill.');
         return;
       }
-      
-      activeStudents.forEach(student => {
+
+      activeStudents.forEach((student) => {
         const defaultCredits = 15;
-        const total = (defaultCredits * currentRates.undergradRate) + currentRates.facilityFee;
-        
+        const total = defaultCredits * currentRates.undergradRate + currentRates.facilityFee;
+
         const invoice = {
           id: 'INV-' + Math.floor(Math.random() * 900000 + 100000),
           studentId: student.id,
@@ -286,15 +287,15 @@ export class FinanceBillingComponent implements OnInit {
           amount: total,
           status: 'Unpaid',
           date: new Date().toISOString().split('T')[0],
-          credits: defaultCredits
+          credits: defaultCredits,
         };
 
-        this.http.post('http://localhost:8080/invoices', invoice).subscribe((savedInv) => {
+        this.http.post(`${environment.apiUrl}/invoices`, invoice).subscribe((savedInv) => {
           newInvoices.push(savedInv);
           completed++;
-          if(completed === activeStudents.length) {
+          if (completed === activeStudents.length) {
             this.isGenerating = false;
-            this.invoices.update(prev => [...prev, ...newInvoices]);
+            this.invoices.update((prev) => [...prev, ...newInvoices]);
             alert(`Successfully generated ${completed} new invoices for the semester!`);
           }
         });
@@ -302,4 +303,3 @@ export class FinanceBillingComponent implements OnInit {
     });
   }
 }
-

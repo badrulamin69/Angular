@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { forkJoin } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-teachers',
@@ -597,8 +598,8 @@ export class TeachersComponent implements OnInit {
 
   loadData() {
     forkJoin({
-      users: this.http.get<any[]>('http://localhost:8080/users'),
-      profiles: this.http.get<any[]>('http://localhost:8080/staffProfiles'),
+      users: this.http.get<any[]>(`${environment.apiUrl}/users`),
+      profiles: this.http.get<any[]>(`${environment.apiUrl}/staffProfiles`),
     }).subscribe(({ users, profiles }) => {
       const filtered = users
         .filter((u) => u.role === 'Faculty Member' || u.role === 'Staff')
@@ -608,10 +609,10 @@ export class TeachersComponent implements OnInit {
         });
       this.teachers.set(filtered);
     });
-    this.http.get<any[]>('http://localhost:8080/universities').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/universities`).subscribe((data) => {
       this.universities.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/departments').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/departments`).subscribe((data) => {
       this.departments.set(data);
     });
   }
@@ -649,7 +650,7 @@ export class TeachersComponent implements OnInit {
         universityId: formValue.universityId,
       };
 
-      this.http.post<any>('http://localhost:8080/users', newTeacher).subscribe((res) => {
+      this.http.post<any>(`${environment.apiUrl}/users`, newTeacher).subscribe((res) => {
         const department =
           this.departments().find((d) => d.id === formValue.departmentId)?.name || '';
         const staffProfile = {
@@ -667,7 +668,7 @@ export class TeachersComponent implements OnInit {
           address: '',
         };
 
-        this.http.post<any>('http://localhost:8080/staffProfiles', staffProfile).subscribe(
+        this.http.post<any>(`${environment.apiUrl}/staffProfiles`, staffProfile).subscribe(
           () => {
             this.teachers.update((t) => [...t, res]);
             this.closeModal();
@@ -683,7 +684,7 @@ export class TeachersComponent implements OnInit {
 
   deleteTeacher(id: string) {
     if (confirm('Are you sure you want to remove this faculty member?')) {
-      this.http.delete(`http://localhost:8080/users/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/users/${id}`).subscribe(() => {
         this.teachers.update((t) => t.filter((teacher) => teacher.id !== id));
       });
     }
@@ -695,7 +696,7 @@ export class TeachersComponent implements OnInit {
     this.teacherTasks.set([]);
 
     this.http
-      .get<any[]>(`http://localhost:8080/staffProfiles?userId=${teacher.id}`)
+      .get<any[]>(`${environment.apiUrl}/staffProfiles?userId=${teacher.id}`)
       .subscribe((data) => {
         if (data && data.length > 0) {
           this.teacherProfile.set(data[0]);
@@ -703,7 +704,7 @@ export class TeachersComponent implements OnInit {
       });
 
     this.http
-      .get<any[]>(`http://localhost:8080/tasks?assignedTo=${teacher.id}`)
+      .get<any[]>(`${environment.apiUrl}/tasks?assignedTo=${teacher.id}`)
       .subscribe((data) => {
         this.teacherTasks.set(data);
       });
@@ -729,7 +730,7 @@ export class TeachersComponent implements OnInit {
 
     const updatedProfile = { ...profile, salary: this.editSalaryValue };
     this.http
-      .patch(`http://localhost:8080/staffProfiles/${profile.id}`, { salary: this.editSalaryValue })
+      .patch(`${environment.apiUrl}/staffProfiles/${profile.id}`, { salary: this.editSalaryValue })
       .subscribe(() => {
         this.teacherProfile.set(updatedProfile);
         this.editingSalary.set(false);
@@ -750,7 +751,7 @@ export class TeachersComponent implements OnInit {
     event.stopPropagation();
     if (!teacher.profileId) return;
     this.http
-      .patch(`http://localhost:8080/staffProfiles/${teacher.profileId}`, {
+      .patch(`${environment.apiUrl}/staffProfiles/${teacher.profileId}`, {
         salary: this.editRowSalaryValue,
       })
       .subscribe(() => {

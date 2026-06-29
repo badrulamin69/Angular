@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FacultyService } from '../../core/services/faculty.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-faculty-advising',
@@ -150,11 +151,11 @@ export class FacultyAdvisingComponent implements OnInit {
   atRiskStudents = signal<any[]>([]);
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/studentApplications').subscribe((apps) => {
+    this.http.get<any[]>(`${environment.apiUrl}/studentApplications`).subscribe((apps) => {
       this.pendingApprovals.set(apps.filter((a) => a.status === 'In Review' || a.status === 'New'));
     });
 
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       // Logic for at-risk: GPA < 2.5 or GPA = 0 (new)
       this.atRiskStudents.set(students.filter((s) => s.gpa < 2.5 && s.gpa > 0));
     });
@@ -162,7 +163,7 @@ export class FacultyAdvisingComponent implements OnInit {
 
   approve(id: string) {
     this.http
-      .patch(`http://localhost:8080/studentApplications/${id}`, { status: 'Accepted' })
+      .patch(`${environment.apiUrl}/studentApplications/${id}`, { status: 'Accepted' })
       .subscribe(() => {
         this.pendingApprovals.update((apps) => apps.filter((a) => a.id !== id));
         alert('Application approved!');

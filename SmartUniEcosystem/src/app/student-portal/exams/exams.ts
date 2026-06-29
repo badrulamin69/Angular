@@ -1,5 +1,6 @@
-import { Component, signal, computed, effect } from '@angular/core';
+import { Component, signal, computed, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentService } from '../../core/services/content.service';
 
 @Component({
   selector: 'app-student-exams',
@@ -153,7 +154,7 @@ import { CommonModule } from '@angular/common';
               CS-101: Midterm Quiz 1
             </h2>
             <p class="text-slate-500 font-medium">
-              Question {{ currentQuestion() + 1 }} of {{ questions.length }}
+              Question {{ currentQuestion() + 1 }} of {{ questions().length }}
             </p>
           </div>
           <div class="flex flex-col items-end">
@@ -173,11 +174,11 @@ import { CommonModule } from '@angular/common';
 
         <div class="mb-8">
           <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 leading-relaxed mb-6">
-            {{ questions[currentQuestion()].text }}
+            {{ questions()[currentQuestion()].text }}
           </h3>
           <div class="space-y-3">
             <label
-              *ngFor="let option of questions[currentQuestion()].options; let i = index"
+              *ngFor="let option of questions()[currentQuestion()].options; let i = index"
               class="flex items-center p-4 border rounded-xl cursor-pointer transition-all hover:bg-slate-50 dark:hover:bg-slate-800/50"
               [ngClass]="{
                 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-500':
@@ -211,7 +212,7 @@ import { CommonModule } from '@angular/common';
           </button>
 
           <button
-            *ngIf="currentQuestion() < questions.length - 1"
+            *ngIf="currentQuestion() < questions().length - 1"
             (click)="nextQuestion()"
             class="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
           >
@@ -219,7 +220,7 @@ import { CommonModule } from '@angular/common';
           </button>
 
           <button
-            *ngIf="currentQuestion() === questions.length - 1"
+            *ngIf="currentQuestion() === questions().length - 1"
             (click)="submitExam()"
             class="px-8 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold shadow-lg shadow-green-500/30 transition-all flex items-center gap-2 animate-pulse"
           >
@@ -244,27 +245,22 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
 })
-export class StudentExamsComponent {
+export class StudentExamsComponent implements OnInit {
+  private contentService = inject(ContentService);
+
   activeExam = signal(false);
   currentQuestion = signal(0);
   selectedAnswers = signal<number[]>([]);
   timeRemaining = signal(1800); // 30 minutes in seconds
   timerInterval: any;
 
-  questions = [
-    {
-      text: 'Which data structure uses LIFO (Last In First Out)?',
-      options: ['Queue', 'Stack', 'Tree', 'Graph'],
-    },
-    {
-      text: 'What is the time complexity of binary search?',
-      options: ['O(1)', 'O(n)', 'O(log n)', 'O(n^2)'],
-    },
-    {
-      text: 'Which of the following is a stable sorting algorithm?',
-      options: ['Quick Sort', 'Merge Sort', 'Heap Sort', 'Selection Sort'],
-    },
-  ];
+  questions = signal<any[]>([]);
+
+  ngOnInit() {
+    this.contentService.getExamQuestions().subscribe((data) => {
+      this.questions.set(data);
+    });
+  }
 
   formattedTime = computed(() => {
     const m = Math.floor(this.timeRemaining() / 60);
@@ -274,7 +270,7 @@ export class StudentExamsComponent {
 
   startExam() {
     this.activeExam.set(true);
-    this.selectedAnswers.set(new Array(this.questions.length).fill(null));
+    this.selectedAnswers.set(new Array(this.questions().length).fill(null));
     this.timerInterval = setInterval(() => {
       if (this.timeRemaining() > 0) {
         this.timeRemaining.update((t) => t - 1);
@@ -291,7 +287,7 @@ export class StudentExamsComponent {
   }
 
   nextQuestion() {
-    if (this.currentQuestion() < this.questions.length - 1) {
+    if (this.currentQuestion() < this.questions().length - 1) {
       this.currentQuestion.update((q) => q + 1);
     }
   }

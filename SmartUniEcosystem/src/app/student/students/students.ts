@@ -5,6 +5,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { PdfService } from '../../core/services/pdf.service';
+import { environment } from '../../../environments/environment';
 
 interface Student {
   id: string;
@@ -871,7 +872,7 @@ export class StudentsComponent implements OnInit {
     program: ['', Validators.required],
     universityId: ['', Validators.required],
     status: ['Active', Validators.required],
-    gpa: [0.0, [Validators.required, Validators.min(0), Validators.max(4.0)]]
+    gpa: [0.0, [Validators.required, Validators.min(0), Validators.max(4.0)]],
   });
 
   isEnrollmentModalOpen = signal(false);
@@ -919,19 +920,19 @@ export class StudentsComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<Student[]>('http://localhost:8080/students').subscribe((data) => {
+    this.http.get<Student[]>(`${environment.apiUrl}/students`).subscribe((data) => {
       this.students.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/universities').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/universities`).subscribe((data) => {
       this.universities.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/programs').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/programs`).subscribe((data) => {
       this.programs.set(data);
       if (data.length > 0 && !this.studentForm.get('program')?.value) {
         this.studentForm.get('program')?.setValue(data[0].name);
       }
     });
-    this.http.get<any[]>('http://localhost:8080/courses').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((data) => {
       this.courses.set(data);
     });
   }
@@ -953,7 +954,12 @@ export class StudentsComponent implements OnInit {
   openModal() {
     const firstUni = this.universities().length > 0 ? this.universities()[0].id : '';
     const firstProg = this.programs().length > 0 ? this.programs()[0].name : '';
-    this.studentForm.reset({ program: firstProg, universityId: firstUni, status: 'Active', gpa: 0.0 });
+    this.studentForm.reset({
+      program: firstProg,
+      universityId: firstUni,
+      status: 'Active',
+      gpa: 0.0,
+    });
     this.editingId.set(null);
     this.isModalOpen.set(true);
   }
@@ -966,7 +972,7 @@ export class StudentsComponent implements OnInit {
       program: student.program,
       universityId: '',
       status: student.status,
-      gpa: student.gpa
+      gpa: student.gpa,
     });
     this.editingId.set(student.id);
     this.isModalOpen.set(true);
@@ -989,11 +995,11 @@ export class StudentsComponent implements OnInit {
         email: formValue.email,
         program: formValue.program,
         status: formValue.status,
-        gpa: formValue.gpa
+        gpa: formValue.gpa,
       };
 
       this.http
-        .patch<Student>(`http://localhost:8080/students/${editing}`, updatedStudent)
+        .patch<Student>(`${environment.apiUrl}/students/${editing}`, updatedStudent)
         .subscribe(
           (res) => {
             // Also patch user record if exists
@@ -1002,7 +1008,7 @@ export class StudentsComponent implements OnInit {
               email: formValue.email,
               universityId: formValue.universityId,
             };
-            this.http.patch(`http://localhost:8080/users/${editing}`, updatedUser).subscribe(
+            this.http.patch(`${environment.apiUrl}/users/${editing}`, updatedUser).subscribe(
               () => {
                 this.students.update((list) =>
                   list.map((s) => (s.id === editing ? { ...s, ...res } : s)),
@@ -1061,8 +1067,8 @@ export class StudentsComponent implements OnInit {
     };
 
     // Atomic-like operation (Sequential for mock DB)
-    this.http.post<Student>('http://localhost:8080/students', newStudent).subscribe((res) => {
-      this.http.post('http://localhost:8080/users', newUser).subscribe(() => {
+    this.http.post<Student>(`${environment.apiUrl}/students`, newStudent).subscribe((res) => {
+      this.http.post(`${environment.apiUrl}/users`, newUser).subscribe(() => {
         this.students.update((s) => [...s, res]);
         this.closeModal();
       });
@@ -1076,8 +1082,8 @@ export class StudentsComponent implements OnInit {
         'Are you sure you want to remove this student? This will also revoke their login access.',
       )
     ) {
-      this.http.delete(`http://localhost:8080/students/${id}`).subscribe(() => {
-        this.http.delete(`http://localhost:8080/users/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/students/${id}`).subscribe(() => {
+        this.http.delete(`${environment.apiUrl}/users/${id}`).subscribe(() => {
           this.students.update((s) => s.filter((student) => student.id !== id));
         });
       });
@@ -1090,13 +1096,13 @@ export class StudentsComponent implements OnInit {
     this.studentGrades.set([]);
 
     this.http
-      .get<any[]>(`http://localhost:8080/enrollments?studentId=${student.id}`)
+      .get<any[]>(`${environment.apiUrl}/enrollments?studentId=${student.id}`)
       .subscribe((data) => {
         this.studentEnrollments.set(data);
       });
 
     this.http
-      .get<any[]>(`http://localhost:8080/studentGrades?studentId=${student.id}`)
+      .get<any[]>(`${environment.apiUrl}/studentGrades?studentId=${student.id}`)
       .subscribe((data) => {
         this.studentGrades.set(data);
       });
@@ -1148,7 +1154,7 @@ export class StudentsComponent implements OnInit {
     const editingId = this.editingEnrollmentId();
 
     if (editingId) {
-      this.http.patch(`http://localhost:8080/enrollments/${editingId}`, val).subscribe(() => {
+      this.http.patch(`${environment.apiUrl}/enrollments/${editingId}`, val).subscribe(() => {
         this.studentEnrollments.update((list) =>
           list.map((e) => (e.id === editingId ? { ...e, ...val } : e)),
         );
@@ -1160,7 +1166,7 @@ export class StudentsComponent implements OnInit {
         studentId: student.id,
         ...val,
       };
-      this.http.post('http://localhost:8080/enrollments', newEnrollment).subscribe((res) => {
+      this.http.post(`${environment.apiUrl}/enrollments`, newEnrollment).subscribe((res) => {
         this.studentEnrollments.update((list) => [...list, res]);
         this.closeEnrollmentModal();
       });
@@ -1169,7 +1175,7 @@ export class StudentsComponent implements OnInit {
 
   deleteEnrollment(id: string) {
     if (confirm('Are you sure you want to remove this course enrollment?')) {
-      this.http.delete(`http://localhost:8080/enrollments/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/enrollments/${id}`).subscribe(() => {
         this.studentEnrollments.update((list) => list.filter((e) => e.id !== id));
       });
     }
@@ -1200,7 +1206,7 @@ export class StudentsComponent implements OnInit {
     const editingId = this.editingGradeId();
 
     if (editingId) {
-      this.http.patch(`http://localhost:8080/studentGrades/${editingId}`, val).subscribe(() => {
+      this.http.patch(`${environment.apiUrl}/studentGrades/${editingId}`, val).subscribe(() => {
         this.studentGrades.update((list) =>
           list.map((g) => (g.id === editingId ? { ...g, ...val } : g)),
         );
@@ -1213,7 +1219,7 @@ export class StudentsComponent implements OnInit {
         studentId: student.id,
         ...val,
       };
-      this.http.post('http://localhost:8080/studentGrades', newGrade).subscribe((res) => {
+      this.http.post(`${environment.apiUrl}/studentGrades`, newGrade).subscribe((res) => {
         this.studentGrades.update((list) => [...list, res]);
         this.closeGradeModal();
         this.updateStudentGpa();
@@ -1223,7 +1229,7 @@ export class StudentsComponent implements OnInit {
 
   deleteGrade(id: string) {
     if (confirm('Are you sure you want to remove this grade?')) {
-      this.http.delete(`http://localhost:8080/studentGrades/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/studentGrades/${id}`).subscribe(() => {
         this.studentGrades.update((list) => list.filter((g) => g.id !== id));
         this.updateStudentGpa();
       });
@@ -1245,7 +1251,7 @@ export class StudentsComponent implements OnInit {
     const newGpa = totalCredits > 0 ? totalPoints / totalCredits : 0;
 
     this.http
-      .patch(`http://localhost:8080/students/${student.id}`, { gpa: newGpa })
+      .patch(`${environment.apiUrl}/students/${student.id}`, { gpa: newGpa })
       .subscribe(() => {
         this.selectedStudent.set({ ...student, gpa: newGpa });
         this.students.update((list) =>

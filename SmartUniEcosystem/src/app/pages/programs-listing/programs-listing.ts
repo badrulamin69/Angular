@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-programs-listing',
@@ -158,13 +159,13 @@ export class ProgramsListingComponent implements OnInit {
 
   ngOnInit() {
     this.http
-      .get<any[]>('http://localhost:8080/programs')
+      .get<any[]>(`${environment.apiUrl}/programs`)
       .subscribe((data) => this.programs.set(data));
     this.http
-      .get<any[]>('http://localhost:8080/departments')
+      .get<any[]>(`${environment.apiUrl}/departments`)
       .subscribe((data) => this.departments.set(data));
     this.http
-      .get<any[]>('http://localhost:8080/faculties')
+      .get<any[]>(`${environment.apiUrl}/faculties`)
       .subscribe((data) => this.faculties.set(data));
   }
 

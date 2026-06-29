@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-staff-admissions',
@@ -443,16 +444,16 @@ export class StaffAdmissionsComponent implements OnInit {
   ngOnInit() {
     this.loadApplications();
     this.http
-      .get<any[]>('http://localhost:8080/programs')
+      .get<any[]>(`${environment.apiUrl}/programs`)
       .subscribe((data) => this.programs.set(data));
-    this.http.get<any[]>('http://localhost:8080/universities').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/universities`).subscribe((data) => {
       this.universities.set(data);
       if (data.length) this.enrollUniversityId = data[0].id;
     });
   }
 
   loadApplications() {
-    this.http.get<any[]>('http://localhost:8080/applications').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/applications`).subscribe((data) => {
       this.applications.set(data);
     });
   }
@@ -462,7 +463,7 @@ export class StaffAdmissionsComponent implements OnInit {
   }
 
   updateStatus(id: string, status: string) {
-    this.http.patch(`http://localhost:8080/applications/${id}`, { status }).subscribe(() => {
+    this.http.patch(`${environment.apiUrl}/applications/${id}`, { status }).subscribe(() => {
       this.applications.update((apps) => apps.map((a) => (a.id === id ? { ...a, status } : a)));
     });
   }
@@ -516,8 +517,8 @@ export class StaffAdmissionsComponent implements OnInit {
       role: 'Student',
       universityId: this.enrollUniversityId,
     };
-    this.http.post('http://localhost:8080/students', newStudent).subscribe(() => {
-      this.http.post('http://localhost:8080/users', newUser).subscribe(() => {
+    this.http.post(`${environment.apiUrl}/students`, newStudent).subscribe(() => {
+      this.http.post(`${environment.apiUrl}/users`, newUser).subscribe(() => {
         this.closeEnrollModal();
       });
     });

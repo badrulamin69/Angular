@@ -1468,5 +1468,90 @@
       "current": false
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "$schema": "./node_modules/json-server/schema.json",
+  "testimonials": [
+    {
+      "quote": "This platform completely transformed how we manage our multi-campus university. The AI analytics alone saved us millions in optimized resource allocation.",
+      "name": "Dr. Sarah Jenkins",
+      "role": "University President",
+      "org": "Global Tech University"
+    },
+    {
+      "quote": "The LMS is incredibly intuitive. Student engagement has increased by 40% since we migrated to Academy Management ecosystem.",
+      "name": "Prof. James Wilson",
+      "role": "Head of Computer Science",
+      "org": "Innovation Institute"
+    }
+  ],
+  "lmsShowcase": [
+    {
+      "title": "Advanced Machine Learning",
+      "instructor": "Dr. Alan Turing",
+      "progress": 75,
+      "image": "bg-blue-500"
+    },
+    {
+      "title": "Quantum Computing Fundamentals",
+      "instructor": "Dr. Richard Feynman",
+      "progress": 30,
+      "image": "bg-purple-500"
+    },
+    {
+      "title": "Enterprise Architecture",
+      "instructor": "Prof. Grace Hopper",
+      "progress": 90,
+      "image": "bg-emerald-500"
+    }
+  ],
+  "examQuestions": [
+    {
+      "text": "Which data structure uses LIFO (Last In First Out)?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Tree",
+        "Graph"
+      ]
+    },
+    {
+      "text": "What is the time complexity of binary search?",
+      "options": [
+        "O(1)",
+        "O(n)",
+        "O(log n)",
+        "O(n^2)"
+      ]
+    },
+    {
+      "text": "Which of the following is a stable sorting algorithm?",
+      "options": [
+        "Quick Sort",
+        "Merge Sort",
+        "Heap Sort",
+        "Selection Sort"
+      ]
+    }
+  ],
+  "platformModules": [
+    {
+      "title": "Centralized ERP",
+      "description": "Manage departments, faculties, and human resources with enterprise-grade precision and unified administrative controls.",
+      "icon": "erp"
+    },
+    {
+      "title": "Deep Analytics",
+      "description": "Predict student performance and institutional growth with real-time dashboards and AI-driven insights.",
+      "icon": "analytics"
+    },
+    {
+      "title": "Adaptive LMS",
+      "description": "A flexible learning environment with collaborative discussions, secure assignments, and live classroom experiences.",
+      "icon": "lms"
+    },
+    {
+      "title": "Transparent Treasury",
+      "description": "Automated billing, scholarship management, and multi-currency tuition processing for seamless finance operations.",
+      "icon": "finance"
+    }
+  ]
 }

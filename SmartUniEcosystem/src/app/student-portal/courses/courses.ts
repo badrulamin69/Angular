@@ -1,6 +1,7 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-courses',
@@ -174,7 +175,7 @@ export class StudentCoursesComponent implements OnInit {
   courses = signal<any[]>([]);
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/courses').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((data) => {
       this.courses.set(data);
     });
   }

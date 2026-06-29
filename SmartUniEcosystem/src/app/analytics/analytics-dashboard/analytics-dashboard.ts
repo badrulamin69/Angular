@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-analytics-dashboard',
@@ -238,10 +239,10 @@ export class AnalyticsDashboardComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<any>('http://localhost:8080/systemStats').subscribe((data) => {
+    this.http.get<any>(`${environment.apiUrl}/systemStats`).subscribe((data) => {
       this.stats.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/invoices').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/invoices`).subscribe((data) => {
       this.invoices.set(data);
     });
   }

@@ -13,6 +13,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { forkJoin } from 'rxjs';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-apply',
@@ -682,9 +683,9 @@ export class ApplyComponent implements OnInit {
   ngOnInit() {
     // Load all static academic catalogs in parallel
     forkJoin({
-      faculties: this.http.get<any[]>('http://localhost:8080/faculties'),
-      departments: this.http.get<any[]>('http://localhost:8080/departments'),
-      programs: this.http.get<any[]>('http://localhost:8080/programs'),
+      faculties: this.http.get<any[]>(`${environment.apiUrl}/faculties`),
+      departments: this.http.get<any[]>(`${environment.apiUrl}/departments`),
+      programs: this.http.get<any[]>(`${environment.apiUrl}/programs`),
     }).subscribe(({ faculties, departments, programs }) => {
       this.faculties.set(faculties);
       this.departments.set(departments);
@@ -879,7 +880,7 @@ export class ApplyComponent implements OnInit {
         appliedDate: new Date().toISOString(),
       };
 
-      this.http.post('http://localhost:8080/applications', application).subscribe({
+      this.http.post(`${environment.apiUrl}/applications`, application).subscribe({
         next: () => {
           alert(
             'PROPERLY GENERATED: Your Application has been submitted successfully and receipt downloaded!',

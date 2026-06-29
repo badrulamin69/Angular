@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ContentService } from './content.service';
+import { environment } from '../../../environments/environment';
 
 describe('ContentService', () => {
   let service: ContentService;
@@ -25,7 +26,7 @@ describe('ContentService', () => {
       expect(features[0].title).toContain('University');
     });
 
-    const req = httpMock.expectOne('http://localhost:8080/features');
+    const req = httpMock.expectOne(`${environment.apiUrl}/features`);
     req.flush('error', { status: 500, statusText: 'Server Error' });
   });
 });

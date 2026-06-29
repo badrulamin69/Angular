@@ -5,6 +5,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { RouterModule } from '@angular/router';
 import { PdfService } from '../../core/services/pdf.service';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -527,7 +528,7 @@ export class StaffDashboardComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/applications').subscribe((apps) => {
+    this.http.get<any[]>(`${environment.apiUrl}/applications`).subscribe((apps) => {
       this.recentApps.set(apps.slice(-5).reverse());
       this.stats.update((s) => ({
         ...s,
@@ -535,20 +536,20 @@ export class StaffDashboardComponent implements OnInit {
       }));
     });
 
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       this.allStudents.set(students);
       this.stats.update((s) => ({ ...s, totalStudents: students.length }));
     });
 
-    this.http.get<any[]>('http://localhost:8080/invoices').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/invoices`).subscribe((data) => {
       this.invoices.set(data);
     });
 
-    this.http.get<any[]>('http://localhost:8080/hostelRooms').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/hostelRooms`).subscribe((data) => {
       this.hostelRooms.set(data);
     });
 
-    this.http.get<any[]>('http://localhost:8080/activityLogs').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/activityLogs`).subscribe((data) => {
       this.activityLogs.set(
         data
           .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -585,7 +586,7 @@ export class StaffDashboardComponent implements OnInit {
       timestamp: new Date().toISOString(),
       type: 'success',
     };
-    this.http.post<any>('http://localhost:8080/activityLogs', newLog).subscribe((saved) => {
+    this.http.post<any>(`${environment.apiUrl}/activityLogs`, newLog).subscribe((saved) => {
       this.activityLogs.update((logs) => [saved, ...logs].slice(0, 6));
     });
 

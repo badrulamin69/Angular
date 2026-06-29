@@ -1,13 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, switchMap, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FacultyService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = `${environment.apiUrl}`;
 
   getCourses(facultyId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/courses?instructorId=${facultyId}`);

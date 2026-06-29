@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { PdfService } from '../../core/services/pdf.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-finance',
@@ -1005,7 +1006,7 @@ export class StudentFinanceComponent implements OnInit {
   loadData() {
     const user = this.authService.currentUser();
     if (!user) return;
-    this.http.get<any[]>('http://localhost:8080/invoices').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/invoices`).subscribe((data) => {
       this.invoices.set(data.filter((i) => i.studentId === user.id));
     });
   }
@@ -1088,7 +1089,7 @@ export class StudentFinanceComponent implements OnInit {
       const unpaid = this.invoices().filter((i) => i.status === 'Unpaid');
       unpaid.forEach((inv) => {
         this.http
-          .patch(`http://localhost:8080/invoices/${inv.id}`, {
+          .patch(`${environment.apiUrl}/invoices/${inv.id}`, {
             status: 'Paid',
             tranId: txnId,
             paidDate: new Date().toISOString(),

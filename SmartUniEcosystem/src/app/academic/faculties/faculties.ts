@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
 import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
 import { DynamicAction } from '../../core/services/icon-resolver.service';
+import { environment } from '../../../environments/environment';
 
 interface Faculty {
   id: string;
@@ -91,13 +92,13 @@ export class FacultiesComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<Department[]>('http://localhost:8080/departments').subscribe((data) => {
+    this.http.get<Department[]>(`${environment.apiUrl}/departments`).subscribe((data) => {
       this.departments.set(data);
     });
-    this.http.get<Faculty[]>('http://localhost:8080/faculties').subscribe((data) => {
+    this.http.get<Faculty[]>(`${environment.apiUrl}/faculties`).subscribe((data) => {
       this.faculties.set(data);
     });
-    this.http.get<University[]>('http://localhost:8080/universities').subscribe((data) => {
+    this.http.get<University[]>(`${environment.apiUrl}/universities`).subscribe((data) => {
       this.universities.set(data);
     });
   }
@@ -144,7 +145,7 @@ export class FacultiesComponent implements OnInit {
         universityId: formValue.universityId!,
       };
 
-      this.http.post<Department>('http://localhost:8080/departments', newDept).subscribe((res) => {
+      this.http.post<Department>(`${environment.apiUrl}/departments`, newDept).subscribe((res) => {
         this.departments.update((d) => [...d, res]);
         this.closeModal();
       });
@@ -153,7 +154,7 @@ export class FacultiesComponent implements OnInit {
 
   deleteDepartment(id: string) {
     if (confirm('Are you sure you want to delete this department?')) {
-      this.http.delete(`http://localhost:8080/departments/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/departments/${id}`).subscribe(() => {
         this.departments.update((d) => d.filter((dept) => dept.id !== id));
       });
     }

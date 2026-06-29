@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -132,11 +133,11 @@ export class StudentDashboardComponent implements OnInit {
   totalCredits = signal<number>(0);
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/notifications?userId=3').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/notifications?userId=3`).subscribe((data) => {
       this.notifications.set(data);
     });
 
-    this.http.get<any[]>('http://localhost:8080/courses?status=Active').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/courses?status=Active`).subscribe((data) => {
       this.courses.set(data);
       this.activeCourses.set(data.length);
       const credits = data.reduce((sum, c) => sum + (c.credits || 0), 0);

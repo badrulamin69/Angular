@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PdfService } from '../../core/services/pdf.service';
 import { forkJoin } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface SystemStats {
   totalUniversities: number;
@@ -182,15 +183,15 @@ export class SuperAdminDashboardComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<SystemStats>('http://localhost:8080/systemStats').subscribe((data) => {
+    this.http.get<SystemStats>(`${environment.apiUrl}/systemStats`).subscribe((data) => {
       this.stats.set(data);
     });
-    this.http.get<ActivityLog[]>('http://localhost:8080/activityLogs').subscribe((data) => {
+    this.http.get<ActivityLog[]>(`${environment.apiUrl}/activityLogs`).subscribe((data) => {
       this.activityLogs.set(data);
     });
     forkJoin({
-      users: this.http.get<any[]>('http://localhost:8080/users'),
-      profiles: this.http.get<any[]>('http://localhost:8080/staffProfiles'),
+      users: this.http.get<any[]>(`${environment.apiUrl}/users`),
+      profiles: this.http.get<any[]>(`${environment.apiUrl}/staffProfiles`),
     }).subscribe(({ users, profiles }) => {
       const combined = users.map((u) => {
         const profile = profiles.find((p) => p.userId === u.id);
@@ -247,7 +248,7 @@ export class SuperAdminDashboardComponent implements OnInit {
       };
 
       // 1. Post to universities endpoint
-      this.http.post('http://localhost:8080/universities', newUni).subscribe(() => {
+      this.http.post(`${environment.apiUrl}/universities`, newUni).subscribe(() => {
         // 2. Add an Activity Log
         const newLog: ActivityLog = {
           title: `New university onboarded: ${formVal.name}`,
@@ -257,7 +258,7 @@ export class SuperAdminDashboardComponent implements OnInit {
         };
 
         this.http
-          .post<ActivityLog>('http://localhost:8080/activityLogs', newLog)
+          .post<ActivityLog>(`${environment.apiUrl}/activityLogs`, newLog)
           .subscribe((savedLog) => {
             this.activityLogs.update((logs) => [savedLog, ...logs]);
 
@@ -272,7 +273,7 @@ export class SuperAdminDashboardComponent implements OnInit {
               };
 
               this.http
-                .patch<SystemStats>('http://localhost:8080/systemStats', updatedStats)
+                .patch<SystemStats>(`${environment.apiUrl}/systemStats`, updatedStats)
                 .subscribe((resStats) => {
                   this.stats.set(resStats);
                   this.closeOnboardModal();
@@ -323,7 +324,7 @@ export class SuperAdminDashboardComponent implements OnInit {
 
       if (emp && emp.profileId) {
         this.http
-          .patch(`http://localhost:8080/staffProfiles/${emp.profileId}`, {
+          .patch(`${environment.apiUrl}/staffProfiles/${emp.profileId}`, {
             salary: formVal.salary,
             designation: formVal.designation,
             department: formVal.department,

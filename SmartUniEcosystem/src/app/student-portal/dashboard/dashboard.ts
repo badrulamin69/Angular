@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -304,10 +305,10 @@ export class StudentDashboardComponent implements OnInit {
     if (!currentUser) return;
 
     // Fetch Enrollments and link with Course Titles
-    this.http.get<any[]>('http://localhost:8080/enrollments').subscribe((enrolls) => {
+    this.http.get<any[]>(`${environment.apiUrl}/enrollments`).subscribe((enrolls) => {
       const studentEnrolls = enrolls.filter((e) => e.studentId === currentUser.id);
 
-      this.http.get<any[]>('http://localhost:8080/courses').subscribe((courses) => {
+      this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((courses) => {
         const enriched = studentEnrolls.map((e) => ({
           ...e,
           courseTitle: courses.find((c) => c.code === e.courseId)?.title || e.courseId,
@@ -317,7 +318,7 @@ export class StudentDashboardComponent implements OnInit {
     });
 
     // Fetch Grades
-    this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((grades) => {
+    this.http.get<any[]>(`${environment.apiUrl}/studentGrades`).subscribe((grades) => {
       this.grades.set(grades.filter((g) => g.studentId === currentUser.id));
     });
   }

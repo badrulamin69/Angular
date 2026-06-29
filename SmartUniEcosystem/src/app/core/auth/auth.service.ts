@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id: string;
@@ -22,7 +23,7 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/users';
+  private apiUrl = `${environment.apiUrl}/users`;
   private readonly storageKey = 'smartuni_user';
 
   // Angular Signal for reactive state management

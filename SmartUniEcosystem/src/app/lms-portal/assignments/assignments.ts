@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lms-assignments',
@@ -152,16 +153,16 @@ export class LmsAssignmentsComponent implements OnInit {
     if (!currentUser) return;
 
     // Fetch enrolled courses first to filter assignments
-    this.http.get<any[]>('http://localhost:8080/enrollments').subscribe((enrolls) => {
+    this.http.get<any[]>(`${environment.apiUrl}/enrollments`).subscribe((enrolls) => {
       const myCourseIds = enrolls
         .filter((e) => e.studentId === currentUser.id)
         .map((e) => e.courseId);
 
-      this.http.get<any[]>('http://localhost:8080/assignments').subscribe((data) => {
+      this.http.get<any[]>(`${environment.apiUrl}/assignments`).subscribe((data) => {
         this.assignments.set(data.filter((a) => myCourseIds.includes(a.courseId)));
       });
 
-      this.http.get<any[]>('http://localhost:8080/submissions').subscribe((subs) => {
+      this.http.get<any[]>(`${environment.apiUrl}/submissions`).subscribe((subs) => {
         this.submissions.set(subs.filter((s) => s.studentId === currentUser.id));
       });
     });
@@ -183,7 +184,7 @@ export class LmsAssignmentsComponent implements OnInit {
       grade: null,
     };
 
-    this.http.post<any>('http://localhost:8080/submissions', sub).subscribe((res) => {
+    this.http.post<any>(`${environment.apiUrl}/submissions`, sub).subscribe((res) => {
       this.submissions.update((s) => [...s, res]);
       alert('Assignment submitted successfully!');
     });

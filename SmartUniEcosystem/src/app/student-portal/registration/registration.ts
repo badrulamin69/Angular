@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { forkJoin, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-registration',
@@ -247,7 +248,7 @@ export class StudentRegistrationComponent implements OnInit {
   selectedCourses = signal<any[]>([]);
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/courses').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((data) => {
       this.availableCourses.set(data);
     });
   }
@@ -285,7 +286,7 @@ export class StudentRegistrationComponent implements OnInit {
     }));
     // Post all enrollments, then create an invoice and redirect to payment
     const requests = registrations.map((r) =>
-      this.http.post('http://localhost:8080/enrollments', r),
+      this.http.post(`${environment.apiUrl}/enrollments`, r),
     );
 
     forkJoin(requests.length ? requests : [of(null)]).subscribe({
@@ -307,7 +308,7 @@ export class StudentRegistrationComponent implements OnInit {
           createdAt: new Date().toISOString(),
         };
 
-        this.http.post('http://localhost:8080/invoices', invoice).subscribe(
+        this.http.post(`${environment.apiUrl}/invoices`, invoice).subscribe(
           () => {
             // Redirect to payment server with dynamic amount and student info
             const params = new URLSearchParams({

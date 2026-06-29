@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-finance-dashboard',
@@ -481,11 +482,11 @@ export class FinanceDashboardComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.http.get<any>('http://localhost:8080/systemStats').subscribe((data) => {
+    this.http.get<any>(`${environment.apiUrl}/systemStats`).subscribe((data) => {
       this.stats.set(data);
     });
 
-    this.http.get<any[]>('http://localhost:8080/invoices').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/invoices`).subscribe((data) => {
       this.invoices.set(data);
       const pending = data
         .filter((i) => i.status === 'Pending' || i.status === 'Unpaid' || i.status === 'Overdue')
@@ -493,7 +494,7 @@ export class FinanceDashboardComponent implements OnInit {
       this.pendingDues.set(pending);
     });
 
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((data) => {
       this.students.set(data);
     });
   }

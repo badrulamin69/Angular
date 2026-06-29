@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DynamicActionButtonComponent } from '../../shared/components/dynamic-action-button/dynamic-action-button.component';
+import { environment } from '../../../environments/environment';
 
 interface Course {
   id?: string;
@@ -332,10 +333,10 @@ export class CoursesComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<Course[]>('http://localhost:8080/courses').subscribe((data) => {
+    this.http.get<Course[]>(`${environment.apiUrl}/courses`).subscribe((data) => {
       this.courses.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/departments').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/departments`).subscribe((data) => {
       this.departments.set(data);
     });
   }
@@ -379,7 +380,7 @@ export class CoursesComponent implements OnInit {
       if (editId) {
         // PATCH existing
         this.http
-          .patch<Course>(`http://localhost:8080/courses/${editId}`, courseData)
+          .patch<Course>(`${environment.apiUrl}/courses/${editId}`, courseData)
           .subscribe((res) => {
             this.courses.update((list) =>
               list.map((c) => (c.id === editId ? { ...c, ...res } : c)),
@@ -389,7 +390,7 @@ export class CoursesComponent implements OnInit {
       } else {
         // POST new
         courseData.enrolled = 0;
-        this.http.post<Course>('http://localhost:8080/courses', courseData).subscribe((res) => {
+        this.http.post<Course>(`${environment.apiUrl}/courses`, courseData).subscribe((res) => {
           this.courses.update((c) => [...c, res]);
           this.closeModal();
         });
@@ -399,7 +400,7 @@ export class CoursesComponent implements OnInit {
 
   deleteCourse(id: string) {
     if (confirm('Are you sure you want to delete this course?')) {
-      this.http.delete(`http://localhost:8080/courses/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/courses/${id}`).subscribe(() => {
         this.courses.update((c) => c.filter((course) => course.id !== id));
       });
     }

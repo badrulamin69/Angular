@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PdfService } from '../../core/services/pdf.service';
+import { ContentService } from '../../core/services/content.service';
 
 @Component({
   selector: 'app-platform',
@@ -57,11 +58,13 @@ import { PdfService } from '../../core/services/pdf.service';
                 </svg>
               </div>
               <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-                Centralized ERP
+                {{ modules()[0].title || 'Centralized ERP' }}
               </h3>
               <p class="text-slate-600 dark:text-slate-400 mb-6">
-                Manage departments, faculties, and human resources with enterprise-grade precision.
-                Our centralized system ensures data integrity across all administrative layers.
+                {{
+                  modules()[0].description ||
+                    'Manage departments, faculties, and human resources with enterprise-grade precision. Our centralized system ensures data integrity across all administrative layers.'
+                }}
               </p>
               <div class="flex gap-4">
                 <span
@@ -102,10 +105,12 @@ import { PdfService } from '../../core/services/pdf.service';
                 <path d="M22 12A10 10 0 0 0 12 2v10z" />
               </svg>
             </div>
-            <h3 class="text-2xl font-bold mb-4">Deep Analytics</h3>
+            <h3 class="text-2xl font-bold mb-4">{{ modules()[1].title || 'Deep Analytics' }}</h3>
             <p class="text-slate-400 text-sm mb-8">
-              Predict student performance and institutional growth with our predictive AI engine.
-              Turn raw data into strategic insights.
+              {{
+                modules()[1].description ||
+                  'Predict student performance and institutional growth with our predictive AI engine. Turn raw data into strategic insights.'
+              }}
             </p>
             <div class="space-y-4">
               <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -140,10 +145,14 @@ import { PdfService } from '../../core/services/pdf.service';
                 <path d="M6 12v5c3 3 9 3 12 0v-5" />
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Adaptive LMS</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              {{ modules()[2].title || 'Adaptive LMS' }}
+            </h3>
             <p class="text-slate-600 dark:text-slate-400">
-              A learning environment that grows with the student. Collaborative discussions, secure
-              assignments, and live classrooms.
+              {{
+                modules()[2].description ||
+                  'A learning environment that grows with the student. Collaborative discussions, secure assignments, and live classrooms.'
+              }}
             </p>
           </div>
 
@@ -153,11 +162,13 @@ import { PdfService } from '../../core/services/pdf.service';
           >
             <div class="w-full md:w-1/2">
               <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-                Transparent Treasury
+                {{ modules()[3].title || 'Transparent Treasury' }}
               </h3>
               <p class="text-slate-600 dark:text-slate-400 mb-6">
-                Automated billing, dynamic scholarship allocation, and multi-currency support for
-                international tuition fees.
+                {{
+                  modules()[3].description ||
+                    'Automated billing, dynamic scholarship allocation, and multi-currency support for international tuition fees.'
+                }}
               </p>
               <div class="flex flex-wrap items-center gap-4">
                 <button
@@ -213,38 +224,26 @@ import { PdfService } from '../../core/services/pdf.service';
     </div>
   `,
 })
-export class PlatformComponent {
+export class PlatformComponent implements OnInit {
   private router = inject(Router);
   private pdfService = inject(PdfService);
+  private contentService = inject(ContentService);
+
+  readonly modules = signal<any[]>([{}, {}, {}, {}]); // default empty objects to prevent undefined errors during init
+
+  ngOnInit() {
+    this.contentService.getPlatformModules().subscribe((data) => {
+      if (data && data.length >= 4) {
+        this.modules.set(data);
+      }
+    });
+  }
 
   navigateTo(path: string) {
     this.router.navigateByUrl(path);
   }
 
   downloadPlatformSummary() {
-    const modules = [
-      {
-        title: 'Centralized ERP',
-        description:
-          'Manage departments, faculties, and human resources with enterprise-grade precision and unified administrative controls.',
-      },
-      {
-        title: 'Deep Analytics',
-        description:
-          'Predict student performance and institutional growth with real-time dashboards and AI-driven insights.',
-      },
-      {
-        title: 'Adaptive LMS',
-        description:
-          'A flexible learning environment with collaborative discussions, secure assignments, and live classroom experiences.',
-      },
-      {
-        title: 'Transparent Treasury',
-        description:
-          'Automated billing, scholarship management, and multi-currency tuition processing for seamless finance operations.',
-      },
-    ];
-
     this.pdfService.generateExecutiveAnalyticsSummary();
   }
 }

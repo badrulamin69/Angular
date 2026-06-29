@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { PdfService } from '../../core/services/pdf.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-transcript',
@@ -162,7 +163,7 @@ export class StudentTranscriptComponent implements OnInit {
     const studentId = user?.id || '3'; // Default to Emon Sarker (ID: 3)
 
     // Load student profile
-    this.http.get<any[]>(`http://localhost:8080/students`).subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       const match = students.find((s) => s.id === studentId);
       if (match) {
         this.student.set(match);
@@ -180,12 +181,12 @@ export class StudentTranscriptComponent implements OnInit {
     });
 
     // Load courses
-    this.http.get<any[]>('http://localhost:8080/courses').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((data) => {
       this.courses.set(data);
     });
 
     // Load grades
-    this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/studentGrades`).subscribe((data) => {
       const filtered = data.filter((g) => g.studentId === studentId);
       if (filtered.length > 0) {
         this.grades.set(filtered);

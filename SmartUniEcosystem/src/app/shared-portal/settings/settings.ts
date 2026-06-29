@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-shared-settings',
@@ -509,7 +510,7 @@ export class SharedSettingsComponent implements OnInit {
     const currentUser = this.user();
     if (!currentUser) return;
     this.http
-      .patch<any>(`http://localhost:8080/users/${currentUser.id}`, {
+      .patch<any>(`${environment.apiUrl}/users/${currentUser.id}`, {
         name: this.profileName,
         bio: this.bio,
       })
@@ -534,7 +535,7 @@ export class SharedSettingsComponent implements OnInit {
       return;
     }
     this.http
-      .patch<any>(`http://localhost:8080/users/${currentUser.id}`, { password: newPassword })
+      .patch<any>(`${environment.apiUrl}/users/${currentUser.id}`, { password: newPassword })
       .subscribe({
         next: () => {
           this.passwordForm.reset();

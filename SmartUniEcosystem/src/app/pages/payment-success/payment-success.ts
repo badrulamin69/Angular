@@ -4,6 +4,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-payment-success',
@@ -178,14 +179,14 @@ export class PaymentSuccessComponent implements OnInit {
 
   private markInvoicePaid(tranId: string) {
     if (!tranId) return;
-    this.http.get<any[]>(`http://localhost:8080/invoices?tranId=${tranId}`).subscribe(
+    this.http.get<any[]>(`${environment.apiUrl}/invoices?tranId=${tranId}`).subscribe(
       (invoices) => {
         if (invoices && invoices.length > 0) {
           const inv = invoices[0];
           this.amount = inv.amount || this.amount;
           if (inv.status !== 'paid') {
             this.http
-              .patch(`http://localhost:8080/invoices/${inv.id}`, { status: 'paid' })
+              .patch(`${environment.apiUrl}/invoices/${inv.id}`, { status: 'paid' })
               .subscribe({
                 next: () => console.log('Invoice marked paid:', inv.id),
                 error: (err) => console.error('Failed to update invoice status', err),

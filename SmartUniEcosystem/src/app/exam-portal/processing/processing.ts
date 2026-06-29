@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { PdfService } from '../../core/services/pdf.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-exam-processing',
@@ -141,7 +142,10 @@ import { AuthService } from '../../core/auth/auth.service';
               ></div>
             </button>
 
-            <div *ngIf="!isSuperAdmin()" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm text-slate-500 italic">
+            <div
+              *ngIf="!isSuperAdmin()"
+              class="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm text-slate-500 italic"
+            >
               Batch operations are restricted to Super Admin.
             </div>
           </div>
@@ -283,27 +287,29 @@ export class ExamProcessingComponent implements OnInit {
 
   loadData() {
     this.http
-      .get<any[]>('http://localhost:8080/examBatches')
+      .get<any[]>(`${environment.apiUrl}/examBatches`)
       .subscribe((data) => this.batches.set(data));
   }
 
   runCalculation(type: string) {
     this.isCalculating = true;
-    
+
     // Simulate dynamically pulling grades and patching students
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
-      this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((grades) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
+      this.http.get<any[]>(`${environment.apiUrl}/studentGrades`).subscribe((grades) => {
         let count = 0;
-        
-        students.forEach(student => {
-          const sGrades = grades.filter(g => String(g.studentId) === String(student.id));
-          if(sGrades.length > 0) {
+
+        students.forEach((student) => {
+          const sGrades = grades.filter((g) => String(g.studentId) === String(student.id));
+          if (sGrades.length > 0) {
             const totalPoints = sGrades.reduce((sum, g) => sum + (g.points || 0), 0);
             const newGpa = Number((totalPoints / sGrades.length).toFixed(2));
-            
+
             // Only patch if different to save network calls
-            if(student.gpa !== newGpa) {
-              this.http.patch(`http://localhost:8080/students/${student.id}`, { gpa: newGpa }).subscribe();
+            if (student.gpa !== newGpa) {
+              this.http
+                .patch(`${environment.apiUrl}/students/${student.id}`, { gpa: newGpa })
+                .subscribe();
               count++;
             }
           }
@@ -311,7 +317,9 @@ export class ExamProcessingComponent implements OnInit {
 
         setTimeout(() => {
           this.isCalculating = false;
-          alert(`Success: Recalculated ${type} and updated ${count} student records in the database.`);
+          alert(
+            `Success: Recalculated ${type} and updated ${count} student records in the database.`,
+          );
         }, 1500);
       });
     });
@@ -319,7 +327,7 @@ export class ExamProcessingComponent implements OnInit {
 
   approveBatch(batch: any) {
     this.http
-      .patch(`http://localhost:8080/examBatches/${batch.id}`, { status: 'Approved' })
+      .patch(`${environment.apiUrl}/examBatches/${batch.id}`, { status: 'Approved' })
       .subscribe(() => {
         this.batches.update((prev) =>
           prev.map((b) => (b.id === batch.id ? { ...b, status: 'Approved' } : b)),
@@ -335,12 +343,14 @@ export class ExamProcessingComponent implements OnInit {
     ) {
       this.isPublishing = true;
       // Convert all approved batches to studentResults dynamically
-      this.http.get<any[]>('http://localhost:8080/examBatches?status=Approved').subscribe((approvedBatches) => {
-        setTimeout(() => {
-          this.isPublishing = false;
-          alert(`Successfully published results for ${approvedBatches.length} batches!`);
-        }, 1500);
-      });
+      this.http
+        .get<any[]>(`${environment.apiUrl}/examBatches?status=Approved`)
+        .subscribe((approvedBatches) => {
+          setTimeout(() => {
+            this.isPublishing = false;
+            alert(`Successfully published results for ${approvedBatches.length} batches!`);
+          }, 1500);
+        });
     }
   }
 
@@ -353,13 +363,13 @@ export class ExamProcessingComponent implements OnInit {
     const studentId = this.searchStudentId;
 
     // Load student, grades, and courses from database
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       const match = students.find((s) => String(s.id) === String(studentId));
 
-      this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((grades) => {
+      this.http.get<any[]>(`${environment.apiUrl}/studentGrades`).subscribe((grades) => {
         const filteredGrades = grades.filter((g) => String(g.studentId) === String(studentId));
 
-        this.http.get<any[]>('http://localhost:8080/courses').subscribe((courses) => {
+        this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((courses) => {
           if (match) {
             this.pdfService.generateOfficialTranscript(match, filteredGrades, courses);
           } else {

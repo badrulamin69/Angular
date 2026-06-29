@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentService } from '../../core/services/content.service';
 
 @Component({
   selector: 'app-testimonials',
@@ -7,21 +8,11 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './testimonials.html',
 })
-export class Testimonials {
-  testimonials = [
-    {
-      quote:
-        'This platform completely transformed how we manage our multi-campus university. The AI analytics alone saved us millions in optimized resource allocation.',
-      name: 'Dr. Sarah Jenkins',
-      role: 'University President',
-      org: 'Global Tech University',
-    },
-    {
-      quote:
-        'The LMS is incredibly intuitive. Student engagement has increased by 40% since we migrated to Academy Management ecosystem.',
-      name: 'Prof. James Wilson',
-      role: 'Head of Computer Science',
-      org: 'Innovation Institute',
-    },
-  ];
+export class Testimonials implements OnInit {
+  private readonly contentService = inject(ContentService);
+  readonly testimonials = signal<any[]>([]);
+
+  ngOnInit() {
+    this.contentService.getTestimonials().subscribe((data) => this.testimonials.set(data));
+  }
 }

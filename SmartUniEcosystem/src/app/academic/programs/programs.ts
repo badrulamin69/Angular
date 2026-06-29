@@ -2,6 +2,7 @@ import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-programs',
@@ -249,11 +250,11 @@ export class ProgramsComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<any[]>('http://localhost:8080/programs').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/programs`).subscribe((data) => {
       this.programs.set(data);
       this.filteredPrograms.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/departments').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/departments`).subscribe((data) => {
       this.departments.set(data);
     });
   }
@@ -307,7 +308,7 @@ export class ProgramsComponent implements OnInit {
       if (editId) {
         // PATCH existing
         this.http
-          .patch<any>(`http://localhost:8080/programs/${editId}`, formVal)
+          .patch<any>(`${environment.apiUrl}/programs/${editId}`, formVal)
           .subscribe((res) => {
             this.programs.update((list) =>
               list.map((p) => (p.id === editId ? { ...p, ...res } : p)),
@@ -325,7 +326,7 @@ export class ProgramsComponent implements OnInit {
               .toString()
               .padStart(3, '0'),
         };
-        this.http.post<any>('http://localhost:8080/programs', newProg).subscribe((res) => {
+        this.http.post<any>(`${environment.apiUrl}/programs`, newProg).subscribe((res) => {
           this.programs.update((p) => [...p, res]);
           this.applyFilters();
           this.isModalOpen = false;
@@ -336,7 +337,7 @@ export class ProgramsComponent implements OnInit {
 
   deleteProgram(id: string) {
     if (confirm('Delete this program?')) {
-      this.http.delete(`http://localhost:8080/programs/${id}`).subscribe(() => {
+      this.http.delete(`${environment.apiUrl}/programs/${id}`).subscribe(() => {
         this.programs.update((p) => p.filter((prog) => prog.id !== id));
         this.applyFilters();
       });

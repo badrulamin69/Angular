@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lms-discussion',
@@ -205,10 +206,10 @@ export class LmsDiscussionComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get<any[]>('http://localhost:8080/discussions').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/discussions`).subscribe((data) => {
       this.discussions.set(data);
     });
-    this.http.get<any[]>('http://localhost:8080/replies').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/replies`).subscribe((data) => {
       this.replies.set(data);
     });
   }
@@ -240,7 +241,7 @@ export class LmsDiscussionComponent implements OnInit {
       date: new Date().toISOString().split('T')[0],
     };
 
-    this.http.post<any>('http://localhost:8080/discussions', topic).subscribe((res) => {
+    this.http.post<any>(`${environment.apiUrl}/discussions`, topic).subscribe((res) => {
       this.discussions.update((d) => [res, ...d]);
       this.isModalOpen = false;
     });
@@ -258,7 +259,7 @@ export class LmsDiscussionComponent implements OnInit {
       date: new Date().toISOString().split('T')[0],
     };
 
-    this.http.post<any>('http://localhost:8080/replies', reply).subscribe((res) => {
+    this.http.post<any>(`${environment.apiUrl}/replies`, reply).subscribe((res) => {
       this.replies.update((r) => [...r, res]);
       this.newReplyContent = '';
     });

@@ -4,6 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-registration',
@@ -471,7 +472,7 @@ export class StudentRegistrationComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:8080/departments').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/departments`).subscribe({
       next: (data) => {
         this.departments.set(data);
       },

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { PdfService } from '../../core/services/pdf.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-marksheet',
@@ -87,7 +88,7 @@ export class MarksheetComponent implements OnInit {
     const sid = studentId || '3';
 
     // Load student profile
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       const match = students.find((s) => s.id === sid);
       if (match) this.student.set(match);
       else this.student.set({ id: sid, name: 'Unknown Student', email: '', program: '' });
@@ -95,11 +96,11 @@ export class MarksheetComponent implements OnInit {
 
     // Load courses
     this.http
-      .get<any[]>('http://localhost:8080/courses')
+      .get<any[]>(`${environment.apiUrl}/courses`)
       .subscribe((data) => this.courses.set(data || []));
 
     // Load grades
-    this.http.get<any[]>('http://localhost:8080/studentGrades').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/studentGrades`).subscribe((data) => {
       const filtered = (data || []).filter((g) => String(g.studentId) === String(sid));
       this.grades.set(filtered);
     });

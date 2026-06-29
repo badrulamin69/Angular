@@ -1,6 +1,7 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-ecosystem',
@@ -16,10 +17,10 @@ export class Ecosystem {
 
   ngOnInit() {
     this.http
-      .get<any[]>('http://localhost:8080/faculties')
+      .get<any[]>(`${environment.apiUrl}/faculties`)
       .subscribe((data) => this.faculties.set(data));
     this.http
-      .get<any[]>('http://localhost:8080/departments')
+      .get<any[]>(`${environment.apiUrl}/departments`)
       .subscribe((data) => this.departments.set(data));
   }
 

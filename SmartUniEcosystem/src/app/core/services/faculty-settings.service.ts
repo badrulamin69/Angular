@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface FacultySettings {
   id: string;
@@ -32,7 +33,7 @@ export interface Session {
 })
 export class FacultySettingsService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = `${environment.apiUrl}`;
 
   // Fetch Settings for a specific user
   getSettings(userId: string): Observable<FacultySettings> {

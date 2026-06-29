@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface ContentItem {
   id?: string;
@@ -15,7 +16,7 @@ export interface ContentItem {
 })
 export class ContentService {
   private http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080';
+  private readonly apiUrl = `${environment.apiUrl}`;
 
   getFeatures() {
     return this.http.get<ContentItem[]>(`${this.apiUrl}/features`).pipe(
@@ -57,6 +58,22 @@ export class ContentService {
         color: 'from-emerald-500 to-teal-400',
       },
     ];
+  }
+
+  getTestimonials() {
+    return this.http.get<any[]>(`${this.apiUrl}/testimonials`).pipe(catchError(() => of([])));
+  }
+
+  getLmsShowcase() {
+    return this.http.get<any[]>(`${this.apiUrl}/lmsShowcase`).pipe(catchError(() => of([])));
+  }
+
+  getPlatformModules() {
+    return this.http.get<any[]>(`${this.apiUrl}/platformModules`).pipe(catchError(() => of([])));
+  }
+
+  getExamQuestions() {
+    return this.http.get<any[]>(`${this.apiUrl}/examQuestions`).pipe(catchError(() => of([])));
   }
 
   private getFallbackHeroContent() {

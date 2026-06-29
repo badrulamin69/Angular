@@ -2,6 +2,7 @@ import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lms-dashboard',
@@ -237,23 +238,23 @@ export class LmsDashboardComponent implements OnInit {
     const currentUser = this.user();
     if (!currentUser) return;
 
-    this.http.get<any[]>('http://localhost:8080/userProgress').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/userProgress`).subscribe((data) => {
       const userProgress = data.find((p) => p.userId === currentUser.id);
       this.progress.set(userProgress);
 
       if (userProgress) {
         // Fetch last course details
-        this.http.get<any[]>('http://localhost:8080/courses').subscribe((courses) => {
+        this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe((courses) => {
           this.lastCourse.set(courses.find((c) => c.code === userProgress.lastAccessedCourseId));
         });
         // Fetch last module details
-        this.http.get<any[]>('http://localhost:8080/courseContent').subscribe((modules) => {
+        this.http.get<any[]>(`${environment.apiUrl}/courseContent`).subscribe((modules) => {
           this.lastModule.set(modules.find((m) => m.id === userProgress.lastAccessedModuleId));
         });
       }
     });
 
-    this.http.get<any[]>('http://localhost:8080/enrollments').subscribe((enrolls) => {
+    this.http.get<any[]>(`${environment.apiUrl}/enrollments`).subscribe((enrolls) => {
       this.enrollments.set(enrolls.filter((e) => e.studentId === currentUser.id));
     });
   }

@@ -5,6 +5,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { AuthService } from '../../core/auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -32,7 +33,7 @@ export class Navbar {
   }
 
   loadFaculties() {
-    this.http.get<any[]>('http://localhost:8080/faculties').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/faculties`).subscribe((data) => {
       this.faculties.set(data);
     });
   }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
 import { PdfService } from '../../core/services/pdf.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-student-results',
@@ -298,7 +299,7 @@ export class StudentResultsComponent implements OnInit {
     const studentId = currentUser?.id || '3';
 
     // 1. Fetch Student Profile details
-    this.http.get<any[]>('http://localhost:8080/students').subscribe((students) => {
+    this.http.get<any[]>(`${environment.apiUrl}/students`).subscribe((students) => {
       const match = students.find((s) => String(s.id) === String(studentId));
       if (match) {
         this.student.set(match);
@@ -315,7 +316,7 @@ export class StudentResultsComponent implements OnInit {
     });
 
     // 2. Fetch Detailed Results
-    this.http.get<any[]>('http://localhost:8080/studentResults').subscribe((data) => {
+    this.http.get<any[]>(`${environment.apiUrl}/studentResults`).subscribe((data) => {
       const studentData = data.filter((r) => String(r.studentId) === String(studentId));
       this.allResults.set(studentData);
 

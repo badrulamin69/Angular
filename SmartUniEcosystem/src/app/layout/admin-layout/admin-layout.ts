@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
 import { AuthService } from '../../core/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-layout',
@@ -35,7 +36,7 @@ export class AdminLayoutComponent implements OnInit {
   loadNotifications() {
     const currentUser = this.user();
     if (currentUser) {
-      this.http.get<any[]>(`http://localhost:8080/notifications`).subscribe((data) => {
+      this.http.get<any[]>(`${environment.apiUrl}/notifications`).subscribe((data) => {
         // Filter notifications by user or load all admin notifications
         this.notifications.set(data);
       });
@@ -66,7 +67,7 @@ export class AdminLayoutComponent implements OnInit {
 
   markAsRead(id: string) {
     this.http
-      .patch<any>(`http://localhost:8080/notifications/${id}`, { read: true })
+      .patch<any>(`${environment.apiUrl}/notifications/${id}`, { read: true })
       .subscribe(() => {
         this.notifications.update((list) =>
           list.map((n) => (n.id === id ? { ...n, read: true } : n)),
@@ -79,7 +80,7 @@ export class AdminLayoutComponent implements OnInit {
     const unread = this.notifications().filter((n) => !n.read);
     unread.forEach((n) => {
       this.http
-        .patch<any>(`http://localhost:8080/notifications/${n.id}`, { read: true })
+        .patch<any>(`${environment.apiUrl}/notifications/${n.id}`, { read: true })
         .subscribe();
     });
     this.notifications.update((list) => list.map((n) => ({ ...n, read: true })));

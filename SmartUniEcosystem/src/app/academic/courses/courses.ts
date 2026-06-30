@@ -15,7 +15,7 @@ interface Course {
   enrolled: number;
   capacity: number;
 }
-
+` `
 @Component({
   selector: 'app-courses',
   standalone: true,

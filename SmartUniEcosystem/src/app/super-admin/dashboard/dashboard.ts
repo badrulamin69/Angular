@@ -238,51 +238,31 @@ export class SuperAdminDashboardComponent implements OnInit {
   saveOnboardUniversity() {
     if (this.onboardForm.valid) {
       const formVal = this.onboardForm.value;
-      const newUni = {
-        id: 'U' + (Math.floor(Math.random() * 1000) + 10),
-        name: formVal.name,
-        location: formVal.location,
-        status: formVal.status,
-        totalStudents: formVal.students,
-        salary: formVal.salary,
+
+      // 1. Static Activity Log
+      const newLog: ActivityLog = {
+        id: 'A' + Date.now(),
+        title: `New university onboarded: ${formVal.name}`,
+        time: 'Just now',
+        timestamp: new Date().toISOString(),
+        type: 'success',
       };
 
-      // 1. Post to universities endpoint
-      this.http.post(`${environment.apiUrl}/universities`, newUni).subscribe(() => {
-        // 2. Add an Activity Log
-        const newLog: ActivityLog = {
-          title: `New university onboarded: ${formVal.name}`,
-          time: 'Just now',
-          timestamp: new Date().toISOString(),
-          type: 'success',
+      this.activityLogs.update((logs) => [newLog, ...logs]);
+
+      // 2. Static Stats Update
+      const currentStats = this.stats();
+      if (currentStats) {
+        const updatedStats: SystemStats = {
+          totalUniversities: currentStats.totalUniversities + 1,
+          totalStudents: currentStats.totalStudents + (formVal.students || 0),
+          totalRevenue: currentStats.totalRevenue + 25000, // Simulate onboarding subscription revenue
+          activeUsers: currentStats.activeUsers + Math.floor((formVal.students || 0) * 0.1), // Simulate 10% active users
         };
+        this.stats.set(updatedStats);
+      }
 
-        this.http
-          .post<ActivityLog>(`${environment.apiUrl}/activityLogs`, newLog)
-          .subscribe((savedLog) => {
-            this.activityLogs.update((logs) => [savedLog, ...logs]);
-
-            // 3. Update stats
-            const currentStats = this.stats();
-            if (currentStats) {
-              const updatedStats: SystemStats = {
-                totalUniversities: currentStats.totalUniversities + 1,
-                totalStudents: currentStats.totalStudents + (formVal.students || 0),
-                totalRevenue: currentStats.totalRevenue + 25000, // Simulate onboarding subscription revenue
-                activeUsers: currentStats.activeUsers + Math.floor((formVal.students || 0) * 0.1), // Simulate 10% active users
-              };
-
-              this.http
-                .patch<SystemStats>(`${environment.apiUrl}/systemStats`, updatedStats)
-                .subscribe((resStats) => {
-                  this.stats.set(resStats);
-                  this.closeOnboardModal();
-                });
-            } else {
-              this.closeOnboardModal();
-            }
-          });
-      });
+      this.closeOnboardModal();
     }
   }
 
